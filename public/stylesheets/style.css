@@ -1,0 +1,108 @@
+body {
+  margin: auto;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: fit-content;
+  position: center;
+}
+
+/* TODO Collapse into topbar and stack on content box if window is less than 600px wide */
+#nav {
+  float: left;
+  background: lightgray;
+  height: 100vh;
+  width: 150px;
+  position: fixed;
+}
+
+#Logo {
+  text-align: center;
+  background: black;
+  color: blue;
+  padding: 15px 0 15px 0;
+}
+
+.NavButton {
+  padding: 10px 20px 10px 20px;
+  margin: 1px;
+  background: gray;
+}
+
+/* TODO Remove margin at 600px window or smaller */
+#activeContent {
+  float: right;
+  text-align: left;
+  background: azure;
+  margin-left: 150px;
+  height: 100%;
+}
+
+.editMode:hover {
+  box-shadow: 10px 10px ghostwhite;
+}
+
+.Profile {
+  max-width: 1350px;
+}
+
+.ProfileLead {
+  position: sticky;
+  top: 0;
+  color: White;
+  background: darkgrey;
+  overflow: hidden;
+  padding: 20px 20px 20px 20px;
+}
+
+.ProfileLeadLeft {
+  float: left;
+  text-align: left;
+  color: White;
+  background: darkgrey;
+}
+
+.ProfileLeadRight {
+  float: right;
+  text-align: right;
+  color: White;
+  background: darkgrey;
+}
+
+.ProfileSummary {
+  clear: both;
+}
+
+.ProfileBody {
+  padding: 20px 10px 10px 20px;
+}
+
+.ExpertiseContainer{
+  padding-top: 20px;
+}
+
+.ExperienceLead{
+  overflow: hidden;
+  padding: 15px;
+  background: lightgray;
+}
+
+.ExperienceLeadLeft{
+  float: left;
+}
+
+.ExperienceLeadRight{
+  float: right;
+}
+
+.ExperienceBody{
+  clear: both;
+  padding: 0 15px 0 15px;
+}
+
+a {
+  color: #00B7FF;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+}

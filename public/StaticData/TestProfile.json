@@ -1,0 +1,725 @@
+{
+  "type": "div",
+  "css": {
+    "classes": [
+      "Profile"
+    ]
+  },
+  "content": [
+    {
+      "type": "title",
+      "content": "About Me"
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "ProfileLead"
+        ]
+      },
+      "content": [
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "ProfileLeadLeft"
+            ]
+          },
+          "content": [
+            {
+              "type": "h1",
+              "css": {
+                "id": "name",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Ryan Rasey"
+              }
+            },
+            {
+              "type": "h2",
+              "css": {
+                "id" : "role",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Software Developer"
+              }
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "ProfileLeadRight"
+            ]
+          },
+          "content": [
+            {
+              "type": "h3",
+              "css": {
+                "id": "email",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Placeholder"
+              }
+            },
+            {
+              "type": "h3",
+              "css": {
+                "id": "linkedin",
+                "classes": ["linkedin"
+                ]
+              },
+              "content": {
+                "type": "a",
+                "props": {"href": "https://www.linkedin.com/in/ryan-rasey-930403a4/"},
+                "css": {
+                  "classes": ["linkedin"
+                  ]
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "content": "LinkedIn"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "h3",
+              "css": {
+                "id": "address",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Houston, Texas, USA"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "ProfileBody"
+        ]
+      },
+      "content": [
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "ProfileSummary"
+            ]
+          },
+          "content": [{
+            "type": "text",
+            "content": "Seasoned software development expert with extensive experience in leading API integrations and microservice architecture development, aimed at enhancing efficiency in telecom and financial sectors. Expert in integrating data feeds with machine learning to optimize customer-facing applications and improve business solutions. Proven track record in collaborating with cross-functional teams to develop and deploy innovative web solutions, ensuring alignment with business objectives and technical standards. Skilled in technical analysis, problem-solving, and facilitating seamless communication between technical and nontechnical stakeholders. Proficient in developing tailored web applications that streamline operations and empower businesses with actionable insights."
+          }]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "ExpertiseContainer"
+            ]
+          },
+          "content": [
+            {
+              "type": "h2",
+              "css": {
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Fields of Expertise"
+              }
+            },
+            {
+              "type": "ul",
+              "css": {
+                "classes": [
+                ]
+              },
+              "content": [
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Full-Stack Development"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Business Solution Optimization"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "API Integration"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Quality Assurance & Control"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Technical Analysis & Problem Solving"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Machine Learning Integration"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Web Application Development"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Cross-Functional Team Collaboration"
+                  }
+                },
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Expertise"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Microservice Architecture"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "ExperienceContainer"
+            ]
+          },
+          "content": [
+            {
+              "type": "h2",
+              "css": {
+                "id": "ExperienceHeader",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Experience"
+              }
+            },
+            {
+              "type": "div",
+              "css": {
+                "classes": [
+                  "Experience"
+                ]
+              },
+              "content": [
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceLead"
+                    ]
+                  },
+                  "content":[
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadLeft"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h3",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Senior Developer"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Infosys Ltd."
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadRight"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Irving, TX"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "2021 to Current"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceBody"
+                    ]
+                  },
+                  "content": [
+                    {
+                      "type": "p",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": {
+                        "type": "text",
+                        "content": "Lead development and implementation of API integrations within microservice architecture for a major telecoms company's marketing applications. Integrate data feeds into machine learning and artificial intelligence engines to enhance customer-facing applications. Oversee deployment, analysis, and resolution of production defects for telecom clients and clients in the financial sector. Partner with cross-functional teams to optimize web solutions aligned with business objectives. Ensure seamless interaction between system components through effective technical communication and documentation."
+                      }
+                    },
+                    {
+                      "type": "ul",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "li",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Minimized lead time by up to a week by designing an API for automating deployment of new marketing tiles to QA environment."
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "div",
+              "css": {
+                "classes": [
+                  "Experience"
+                ]
+              },
+              "content": [
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceLead"
+                    ]
+                  },
+                  "content":[
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadLeft"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h3",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Web Developer"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Wiserways LLC"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadRight"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Houston, TX"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "2019 to 2021"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceBody"
+                    ]
+                  },
+                  "content": [
+                    {
+                      "type": "p",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": {
+                        "type": "text",
+                        "content": "Spearheaded full-stack development of web applications for efficient project management and streamlined knowledge tracking, focusing on software development systems. Designed and introduced automatic detection and update mechanisms to drive internal consistency through interlinked records. Synergized with cross-functional teams to align application features with business requirements and enrich user experience. Integrated APIs to enhance functionality and promote seamless data exchange. Conducted technical analyses to solve complex problems and improve system performance."
+                      }
+                    },
+                    {
+                      "type": "ul",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "li",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Developed a ‘startup’ project sufficiently advanced to organize its own design notes; postponed due to marketability concerns."
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "div",
+              "css": {
+                "classes": [
+                  "Experience"
+                ]
+              },
+              "content": [
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceLead"
+                    ]
+                  },
+                  "content":[
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadLeft"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h3",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Small Business Consultant"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Freelance"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "div",
+                      "css": {
+                        "classes": [
+                          "ExperienceLeadRight"
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Houston, TX"
+                          }
+                        },
+                        {
+                          "type": "h5",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "2016 to 2019"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "css": {
+                    "classes": [
+                      "ExperienceBody"
+                    ]
+                  },
+                  "content": [
+                    {
+                      "type": "p",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": {
+                        "type": "text",
+                        "content": "Developed tailored web applications for small business clients to enhance operational efficiency and user engagement. Engineered remote scheduling systems to streamline appointment coordination for mobile service businesses, while boosting customer retention. Designed and implemented online business tools to assist in appraisal and analysis tasks, empowering clients with actionable insights. Focused on bridging communication between technical and non-technical stakeholders to enable alignment and clarity in project deliverables. Provided strategic consulting in business analysis and API development using expertise to support diverse client needs in competitive markets."
+                      }
+                    },
+                    {
+                      "type": "ul",
+                      "css": {
+                        "classes": [
+                        ]
+                      },
+                      "content": [
+                        {
+                          "type": "li",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Created self-service calculator app that reduced the time required for \"free sample\" appraisals from over two hours to less than five minutes for Cole & Company LLC."
+                          }
+                        },
+                        {
+                          "type": "li",
+                          "css": {
+                            "classes": [
+                            ]
+                          },
+                          "content": {
+                            "type": "text",
+                            "content": "Improved field coordination for Car Wash on Wheels by building remote scheduling system."
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "EducationContainer"
+            ]
+          },
+          "content": [
+            {
+              "type": "h2",
+              "css": {
+                "id": "educationHeader",
+                "classes": [
+                ]
+              },
+              "content": {
+                "type": "text",
+                "content": "Education"
+              }
+            },
+            {
+              "type": "ul",
+              "css": {
+                "classes": [
+                ]
+              },
+              "content": [
+                {
+                  "type": "li",
+                  "css": {
+                    "classes": [
+                      "Education"
+                    ]
+                  },
+                  "content": {
+                    "type": "text",
+                    "content": "Bachelor of Science in Computer Information Systems from University of Houston, Houston, TX"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

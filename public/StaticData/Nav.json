@@ -1,0 +1,108 @@
+{
+  "type": "div",
+  "css": {
+    "classes": [
+    ],
+    "id": "nav"
+  },
+  "content": [
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+        ],
+        "id": "Logo"
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Logo"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "About Me"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Blog"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Projects"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Gallery"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Photo"
+        }
+      ]
+    },
+    {
+      "type": "div",
+      "css": {
+        "classes": [
+          "NavButton"
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "content": "Games"
+        }
+      ]
+    }
+  ]
+}

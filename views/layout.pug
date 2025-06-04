@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    //title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    - var preloadString = typeof preload === "undefined" ? JSON.stringify({}) : JSON.stringify(preload);
+    script window.preloadContent = !{preloadString};
+    //script console.log(window.preloadContent);
+  body
+
+    div#root
+    script(src='/javascripts/bundle.js')
+    block content
+    block preload
+    //script window.getData("/StaticData/TestProfileTextNodes.json",window.setContent);

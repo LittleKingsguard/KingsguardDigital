@@ -1,0 +1,13 @@
+{
+  "type": "userPane",
+  "css": {
+    "classes": [
+      "userpanel"
+    ]
+  },
+  "content":[{
+    "type": "text",
+    "content": ""
+  }]
+
+}

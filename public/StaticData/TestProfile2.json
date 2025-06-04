@@ -1,0 +1,13 @@
+{
+  "type": "h1",
+  "css": {
+    "classes": [
+      "Error"
+    ]
+  },
+  "content":{
+    "type": "text",
+    "content": "Invalid Data"
+  }
+
+}
