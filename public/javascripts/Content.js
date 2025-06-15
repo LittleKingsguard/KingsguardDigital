@@ -1,7 +1,7 @@
 import React from "react";
 import addElements from "./Renderers/ContentRenderer.js"
 import {useReducer} from "react";
-import {dataContext, contentDispatchContext} from "./Contexts.js";
+import {dataContext,locationContext, contentDispatchContext} from "./Contexts.js";
 import {validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
 
@@ -21,13 +21,13 @@ export default class Content {
 
     static DisplayContent() {
         const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
+        Content.#content = content;
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
-            Content.#content = content;
             //console.log(addElements(content));
             return (
                 <contentDispatchContext.Provider value={dispatch}>
-                    {addElements(content)}
+                        {addElements(content)}
                 </contentDispatchContext.Provider>
             );
         }
@@ -49,7 +49,7 @@ export default class Content {
                 //TODO: Allow delete element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content[action.location[0]] = Content.deleteContent(action.location.slice(1), content[action.location[0]]);
+                    content = Content.deleteContent(action.location.slice(1), content);
                     console.log(content);
                     return dataCloner(content);
                 }
@@ -58,7 +58,7 @@ export default class Content {
                 //TODO: Allow insert element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content[action.location[0]] = Content.insertContent(action.location.slice(1), content[action.location[0]], action.content);
+                    content = Content.insertContent(action.location.slice(1), content, action.content);
                     console.log(content);
                     return dataCloner(content);
                 }
@@ -70,7 +70,7 @@ export default class Content {
                 //TODO Allow modify element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content[action.location[0]] = Content.modifyContent(action.location.slice(1), content[action.location[0]], action.content);
+                    content = Content.modifyContent(action.location.slice(1), content, action.content);
                     console.log(content);
                     return dataCloner(content);
                 }
@@ -96,7 +96,7 @@ export default class Content {
             if (index >= content.content.length) return content;
             if (location.length === 0){
                 console.log("Setting content to: " + data);
-                content.content = data;
+                content = data;
             }
             if (location.length === 1) {
                 console.log("Setting content to: " + data);
@@ -108,7 +108,7 @@ export default class Content {
             console.log("This was not Array");
             if (location.length === 0) {
                 console.log("Setting content to: " + data);
-                content.content = data;
+                content = data;
             }
             else {
                 if (index !== 0) return content;
@@ -156,7 +156,7 @@ export default class Content {
                 content.content.splice(index, 0, data);
                 break;
             case "arrayRecur":
-                if (!validateRecur(location, content)) break;
+                if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content[index] = this.insertContent(location.slice(1), content.content[index], data);
                 break;
@@ -170,7 +170,7 @@ export default class Content {
                 console.log("Setting object content to: " + content.content);
                 break;
             case "objectRecur":
-                if (!validateRecur(location, content)) break;
+                if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content = this.insertContent(location.slice(1), content.content, data);
                 break;
@@ -212,7 +212,7 @@ export default class Content {
                 content.content.splice(index, 1);
                 break;
             case "arrayRecur":
-                if (!validateRecur(location, content)) break;
+                if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content[index] = this.deleteContent(location.slice(1), content.content[index]);
                 break;
@@ -221,7 +221,7 @@ export default class Content {
                 content.content = [];
                 break;
             case "objectRecur":
-                if (!validateRecur(location, content)) break;
+                if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content = this.deleteContent(location.slice(1), content.content);
                 break;

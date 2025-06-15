@@ -114,6 +114,11 @@ export function buildTd(data){
     )
 }
 
+export function isTextContent(type){
+    let types = ["p","h1","h2","h3","h4","h5","h6","li","th","td", "div"];
+    return types.includes(type)
+}
+
 export default function textRenderer(data){
     switch (data.type) {
         case "p":

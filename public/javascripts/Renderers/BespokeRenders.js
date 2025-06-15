@@ -78,7 +78,7 @@ function userPane(data) {
         return logout(location, dispatch);
     };
     let onTestHandler = () => {
-        return deleteDispatch([1, 2, 1, 1, 0], dispatch);
+        return deleteDispatch([0, 1, 2, 1, 1, 0], dispatch);
     };
     return(
         <div  {...data.props} className={classnames} id={id}>

@@ -4,20 +4,41 @@ import addElements from "./ContentRenderer"
 import * as text from "./TextContentRenders";
 import * as media from "./MediaContentRenders";
 import {buildAnchor} from "./StructureContentRenders";
-import {locationContext} from "../Contexts";
+import {contentDispatchContext, locationContext} from "../Contexts";
 import {useContext} from "react";
+import {makeEditable} from "../Actions/ActionsHelpers";
+import {inputHandler} from "../Actions/NewContent";
 
 export function addText(data){
     if (!helpers.validateText('text', data)){
         return
     }
-    const location = useContext(locationContext);
     console.log(data.content);
-    return (
-        <span id={location.toString()} onDoubleClick={(e)=>{e.target.contentEditable = true}} onInput={(e)=>{console.log(e.target.id)}}>
+    if (data.content === "") data.content = "​";
+    const location = useContext(locationContext);
+    const dispatch = useContext(contentDispatchContext);
+    console.log(data.content);
+    console.log(data.css);
+    let onclickHandler = () => {
+        return makeEditable(data, location, dispatch);
+    };
+    let onInputHandler = (event) => {
+        return inputHandler(event.nativeEvent, data, location, dispatch);
+    };
+    if (data.css.classes.includes("editMode")) {
+        return (
+            <span id={location.toString()} contentEditable={true} onInput={onInputHandler}>
             {data.content}
         </span>
-    )
+        )
+    }
+    else {
+        return (
+            <span id={location.toString()} onDoubleClick={onclickHandler}>
+            {data.content}
+        </span>
+        )
+    }
 }
 export function addEmphasis(data){
     if (!helpers.validateInlineContents('em', data)){

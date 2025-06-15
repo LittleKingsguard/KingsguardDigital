@@ -13,7 +13,7 @@ export function classlist (css){
     if (Array.isArray(css.classes)){
         css.classes.forEach((className) => {classNames = classNames.concat(className, " ")});
     }
-    console.log("Classnames are: " + classNames + " and should be " + css.classes);
+    //console.log("Classnames are: " + classNames + " and should be " + css.classes);
     return classNames;
 }
 

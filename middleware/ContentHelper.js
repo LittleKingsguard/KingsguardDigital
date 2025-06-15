@@ -20,7 +20,15 @@ function addNavBar(data, user){
         const userNav = JSON.parse(JSON.stringify(nav));
         userNav.content.push(userWindow);
         data.css.id = "activeContent";
-        return [userNav,data];
+        let rootData = {
+            type: "div",
+            css:{
+                id: "rootContent",
+                classes: []
+            },
+            content:[userNav,data]
+        };
+        return new Content(rootData);
     }
     catch {
         console.log("Invalid data");

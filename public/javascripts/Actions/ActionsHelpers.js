@@ -1,3 +1,4 @@
+import Content from "../Content";
 
 
 export async function postFetch(url, data) {
@@ -48,7 +49,7 @@ export function deleteDispatch(location, dispatch){
     })
 }
 
-export function validateRecur(location, data){
+export function validateRecur(data, location){
     console.log("Validating recurrence at: " + location + " in data: ");
     console.log(data);
     let returnvalue = true;
@@ -73,6 +74,49 @@ export function validateLocation(location){
     return isNumber;
 }
 
+export function getContentAncestry(location){//takes location, returns array of all content nodes for which that node is a descendant, starting starting at itself and ending at root
+    if (!validateLocation(location)) return null;
+    if (Content.active === null) return null;
+    let activeLocation = location.slice(1);
+    let ancestryArray = [Content.active];
+    let ancestryIndex = 0;
+    activeLocation.forEach((index)=>{
+        ancestryArray.unshift(getContentChild(ancestryArray[0], index));
+        ancestryIndex++;
+    })
+    return ancestryArray;
+}
+
+export function getContentChild(data, index){
+    if (typeof data !== "object" || !Number.isInteger(index)) return null;
+    if (!Array.isArray(data.content) && index !== 0) return null;
+    if (!Array.isArray(data.content)) return data.content;
+    if (data.content.length <= index) return null;
+    return data.content[index];
+}
+
 export function dataCloner(data){
     return JSON.parse(JSON.stringify(data));
+}
+
+export function addClass(data, cssClass){ //data is content, cssClass is string containing name of class
+    if (typeof data.css === "undefined"){
+        data.css = {
+            classes: []
+        }
+    }
+    if (!Array.isArray(data.css.classes)){
+        data.css.classes = []
+    }
+    if (data.css.classes.includes(cssClass)) return data;
+    else {
+        data.css.classes.push(cssClass);
+        return data;
+    }
+
+}
+
+export function makeEditable(data, location, dispatch){
+    data = addClass(data, "editMode");
+    modifyDispatch(data, location, dispatch);
 }

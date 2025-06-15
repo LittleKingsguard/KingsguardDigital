@@ -13,11 +13,11 @@ import bespokeRenderer from "./BespokeRenders"
 export default function addElements(content){
     if (typeof content === "string") return content;
     if (typeof content !== "object") return;
-    const currentLocation = useContext(locationContext); //is empty array
+    let currentLocation = useContext(locationContext); //is empty array
+    console.log("Currentlocation: " + currentLocation.toString());
     let currentContent = useContext(dataContext); //is empty object
     if (Array.isArray(content)) {
         return content.map((content, i) => {
-            console.log(content);
             currentContent = content;
             return (
                 <dataContext.Provider value={content}>
@@ -29,8 +29,8 @@ export default function addElements(content){
         });
     }
     else {
-        console.log(content); //shows {type: 'div', css: {…}, content: Array(3)}
-        currentLocation.push(0);
+        //console.log(content); //shows {type: 'div', css: {…}, content: Array(3)}
+        currentLocation = currentLocation.concat([0]);
         return (
             <dataContext.Provider value={content}>
                 <locationContext.Provider value={currentLocation}>
@@ -44,17 +44,17 @@ export default function addElements(content){
 function BuildElements(){
     const location = useContext(locationContext);
     const data = useContext(dataContext);
-    //console.log(data.toString()); //shows {}
+    console.log(data); //shows {}
     let type = data.type;
     console.log("Building element: " + type);
     console.log(location); //shows [0]
-    //console.log(data);
+    console.log(data);
     let nonCSSList = ["text", "title"];
     if (typeof type !== 'string') return;
-    if (Content.active.editMode && !nonCSSList.includes(type) ) {
+    /*if (Content.active.editMode && !nonCSSList.includes(type) ) {
         console.log(data.css.classes);
         data.css.classes.push("editMode");
-    }
+    }*/
     let newElement = inlineRenderer(data);
     if (newElement === undefined) newElement = structureRenderer(data);
     if (newElement === undefined) newElement = textRenderer(data);

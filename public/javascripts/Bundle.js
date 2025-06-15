@@ -19344,13 +19344,27 @@ function loadDispatch(data, dispatch) {
     content: data
   });
 }
+function modifyDispatch(data, location, dispatch) {
+  dispatch({
+    type: "modify",
+    content: data,
+    location
+  });
+}
+function insertDispatch(data, location, dispatch) {
+  dispatch({
+    type: "insert",
+    content: data,
+    location
+  });
+}
 function deleteDispatch(location, dispatch) {
   dispatch({
     type: "delete",
     location
   });
 }
-function validateRecur(location, data) {
+function validateRecur(data, location) {
   console.log("Validating recurrence at: " + location + " in data: ");
   console.log(data);
   let returnvalue = true;
@@ -19372,8 +19386,46 @@ function validateLocation(location) {
   });
   return isNumber;
 }
+function getContentAncestry(location) {
+  if (!validateLocation(location)) return null;
+  if (Content.active === null) return null;
+  let activeLocation = location.slice(1);
+  let ancestryArray = [Content.active];
+  let ancestryIndex = 0;
+  activeLocation.forEach((index) => {
+    ancestryArray.unshift(getContentChild(ancestryArray[0], index));
+    ancestryIndex++;
+  });
+  return ancestryArray;
+}
+function getContentChild(data, index) {
+  if (typeof data !== "object" || !Number.isInteger(index)) return null;
+  if (!Array.isArray(data.content) && index !== 0) return null;
+  if (!Array.isArray(data.content)) return data.content;
+  if (data.content.length <= index) return null;
+  return data.content[index];
+}
 function dataCloner(data) {
   return JSON.parse(JSON.stringify(data));
+}
+function addClass(data, cssClass) {
+  if (typeof data.css === "undefined") {
+    data.css = {
+      classes: []
+    };
+  }
+  if (!Array.isArray(data.css.classes)) {
+    data.css.classes = [];
+  }
+  if (data.css.classes.includes(cssClass)) return data;
+  else {
+    data.css.classes.push(cssClass);
+    return data;
+  }
+}
+function makeEditable(data, location, dispatch) {
+  data = addClass(data, "editMode");
+  modifyDispatch(data, location, dispatch);
 }
 
 // public/javascripts/Actions/User.js
@@ -19421,7 +19473,6 @@ function classlist(css) {
       classNames = classNames.concat(className, " ");
     });
   }
-  console.log("Classnames are: " + classNames + " and should be " + css.classes);
   return classNames;
 }
 function validateTextElement(type, data) {
@@ -19547,6 +19598,10 @@ function buildTd(data) {
   let classnames = classlist(data.css);
   return /* @__PURE__ */ import_react2.default.createElement("td", { ...data.props, id, className: classnames }, addElements(data.content));
 }
+function isTextContent(type) {
+  let types = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "th", "td", "div"];
+  return types.includes(type);
+}
 function textRenderer(data) {
   switch (data.type) {
     case "p":
@@ -19625,17 +19680,107 @@ function mediaRenderer(data) {
 
 // public/javascripts/Renderers/InlineContentRenders.js
 var import_react5 = __toESM(require_react());
+
+// public/javascripts/Actions/NewContent.js
+var import_react_dom = __toESM(require_react_dom());
+function inputHandler(input, data, location, dispatch) {
+  let cursor = window.getSelection();
+  let cursorLocation = cursor.anchorOffset;
+  let inputType = input.inputType;
+  console.log(data);
+  console.log(location);
+  console.log(getContentAncestry(location));
+  switch (inputType) {
+    case "insertText":
+      overwriteContent(input, data, location, dispatch, cursorLocation);
+      break;
+    case "insertParagraph":
+      newLine(input, data, location, dispatch, cursorLocation);
+      break;
+    case "deleteContentBackward":
+      if (data.content === "\u200B") console.log("This node should be deleted");
+      overwriteContent(input, data, location, dispatch, cursorLocation);
+      break;
+  }
+}
+function overwriteContent(input, data, location, dispatch, cursorLocation) {
+  console.log(input.target.innerHTML);
+  data.content = input.target.innerText;
+  (0, import_react_dom.flushSync)(modifyDispatch(data, location, dispatch));
+  setCaretPosition(location.toString(), cursorLocation);
+}
+function newLine(input, data, location, dispatch, cursorLocation) {
+  const ancestry = getContentAncestry(location);
+  let parent = null;
+  let index = 0;
+  let targetLocation = [];
+  let newParent = {};
+  while (parent === null && index < ancestry.length) {
+    if (isTextContent(ancestry[index].type)) parent = ancestry[index];
+    else index++;
+  }
+  if (index === 1 && parent !== null) {
+    let remainingContents = input.target.childNodes[0].data;
+    let newLineContents = input.target.childNodes[2].data;
+    const childIndex = location.at(-1);
+    console.log(remainingContents);
+    console.log(newLineContents);
+    data.content = remainingContents;
+    const newTextContent = {
+      type: "text",
+      content: newLineContents,
+      css: {
+        classes: ["editMode"]
+      }
+    };
+    newParent = { ...parent, content: [newTextContent] };
+    targetLocation = [...location];
+    targetLocation[targetLocation.length - 2]++;
+    console.log("Target location is " + targetLocation);
+    location.pop();
+    location[location.length - 1]++;
+  }
+  (0, import_react_dom.flushSync)(insertDispatch(newParent, location, dispatch));
+  setCaretPosition(targetLocation.toString(), cursorLocation);
+}
+function setCaretPosition(elementID, caretPosition) {
+  const element = document.getElementById(elementID);
+  console.log("Setting position in " + elementID + " at position: " + caretPosition);
+  console.log(element);
+  if (element != null) {
+    selectElementContents(element, caretPosition);
+  }
+}
+function selectElementContents(element, caretPosition) {
+  const range = document.createRange();
+  range.setStart(element.childNodes[0], caretPosition);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+// public/javascripts/Renderers/InlineContentRenders.js
 function addText(data) {
   if (!validateText("text", data)) {
     return;
   }
-  const location = (0, import_react5.useContext)(locationContext);
   console.log(data.content);
-  return /* @__PURE__ */ import_react4.default.createElement("span", { id: location.toString(), onDoubleClick: (e) => {
-    e.target.contentEditable = true;
-  }, onInput: (e) => {
-    console.log(e.target.id);
-  } }, data.content);
+  if (data.content === "") data.content = "\u200B";
+  const location = (0, import_react5.useContext)(locationContext);
+  const dispatch = (0, import_react5.useContext)(contentDispatchContext);
+  console.log(data.content);
+  console.log(data.css);
+  let onclickHandler = () => {
+    return makeEditable(data, location, dispatch);
+  };
+  let onInputHandler = (event) => {
+    return inputHandler(event.nativeEvent, data, location, dispatch);
+  };
+  if (data.css.classes.includes("editMode")) {
+    return /* @__PURE__ */ import_react4.default.createElement("span", { id: location.toString(), contentEditable: true, onInput: onInputHandler }, data.content);
+  } else {
+    return /* @__PURE__ */ import_react4.default.createElement("span", { id: location.toString(), onDoubleClick: onclickHandler }, data.content);
+  }
 }
 function addEmphasis(data) {
   if (!validateInlineContents("em", data)) {
@@ -19915,7 +20060,7 @@ function userPane(data) {
     return logout(location, dispatch);
   };
   let onTestHandler = () => {
-    return deleteDispatch([1, 2, 1, 1, 0], dispatch);
+    return deleteDispatch([0, 1, 2, 1, 1, 0], dispatch);
   };
   return /* @__PURE__ */ import_react8.default.createElement("div", { ...data.props, className: classnames, id }, addElements(data.content), /* @__PURE__ */ import_react8.default.createElement("button", { id: "logoutButton", type: "button", onClick: onclickHandler }, "Logout"), /* @__PURE__ */ import_react8.default.createElement("button", { id: "testButton", type: "button", onClick: onTestHandler }, "Modify Test"));
 }
@@ -19934,32 +20079,29 @@ function bespokeRenderer(data) {
 function addElements(content) {
   if (typeof content === "string") return content;
   if (typeof content !== "object") return;
-  const currentLocation = (0, import_react11.useContext)(locationContext);
+  let currentLocation = (0, import_react11.useContext)(locationContext);
+  console.log("Currentlocation: " + currentLocation.toString());
   let currentContent = (0, import_react11.useContext)(dataContext);
   if (Array.isArray(content)) {
     return content.map((content2, i) => {
-      console.log(content2);
       currentContent = content2;
       return /* @__PURE__ */ import_react10.default.createElement(dataContext.Provider, { value: content2 }, /* @__PURE__ */ import_react10.default.createElement(locationContext.Provider, { value: currentLocation.concat([i]) }, /* @__PURE__ */ import_react10.default.createElement(BuildElements, null)));
     });
   } else {
-    console.log(content);
-    currentLocation.push(0);
+    currentLocation = currentLocation.concat([0]);
     return /* @__PURE__ */ import_react10.default.createElement(dataContext.Provider, { value: content }, /* @__PURE__ */ import_react10.default.createElement(locationContext.Provider, { value: currentLocation }, /* @__PURE__ */ import_react10.default.createElement(BuildElements, null)));
   }
 }
 function BuildElements() {
   const location = (0, import_react11.useContext)(locationContext);
   const data = (0, import_react11.useContext)(dataContext);
+  console.log(data);
   let type = data.type;
   console.log("Building element: " + type);
   console.log(location);
+  console.log(data);
   let nonCSSList = ["text", "title"];
   if (typeof type !== "string") return;
-  if (Content.active.editMode && !nonCSSList.includes(type)) {
-    console.log(data.css.classes);
-    data.css.classes.push("editMode");
-  }
   let newElement = inlineRenderer(data);
   if (newElement === void 0) newElement = structureRenderer(data);
   if (newElement === void 0) newElement = textRenderer(data);
@@ -19984,9 +20126,9 @@ var Content = class _Content {
   }
   static DisplayContent() {
     const [content, dispatch] = (0, import_react13.useReducer)(_Content.ContentReducer, window.preloadContent);
+    _Content.#content = content;
     if (content === null || Object.keys(content).length === 0) console.log("No content");
     else {
-      _Content.#content = content;
       return /* @__PURE__ */ import_react12.default.createElement(contentDispatchContext.Provider, { value: dispatch }, addElements(content));
     }
   }
@@ -19998,14 +20140,14 @@ var Content = class _Content {
       case "delete":
         console.log(content);
         if (validateLocation(action.location)) {
-          content[action.location[0]] = _Content.deleteContent(action.location.slice(1), content[action.location[0]]);
+          content = _Content.deleteContent(action.location.slice(1), content);
           console.log(content);
           return dataCloner(content);
         } else return content;
       case "insert":
         console.log(content);
         if (validateLocation(action.location)) {
-          content[action.location[0]] = _Content.insertContent(action.location.slice(1), content[action.location[0]], action.content);
+          content = _Content.insertContent(action.location.slice(1), content, action.content);
           console.log(content);
           return dataCloner(content);
         } else return content;
@@ -20014,7 +20156,7 @@ var Content = class _Content {
       case "modify":
         console.log(content);
         if (validateLocation(action.location)) {
-          content[action.location[0]] = _Content.modifyContent(action.location.slice(1), content[action.location[0]], action.content);
+          content = _Content.modifyContent(action.location.slice(1), content, action.content);
           console.log(content);
           return dataCloner(content);
         } else return content;
@@ -20037,7 +20179,7 @@ var Content = class _Content {
       if (index >= content.content.length) return content;
       if (location.length === 0) {
         console.log("Setting content to: " + data);
-        content.content = data;
+        content = data;
       }
       if (location.length === 1) {
         console.log("Setting content to: " + data);
@@ -20047,7 +20189,7 @@ var Content = class _Content {
       console.log("This was not Array");
       if (location.length === 0) {
         console.log("Setting content to: " + data);
-        content.content = data;
+        content = data;
       } else {
         if (index !== 0) return content;
         content.content = this.modifyContent(location.slice(1), content.content, data);
@@ -20091,7 +20233,7 @@ var Content = class _Content {
         content.content.splice(index, 0, data);
         break;
       case "arrayRecur":
-        if (!validateRecur(location, content)) break;
+        if (!validateRecur(content, location)) break;
         console.log("Recurring at index " + index);
         content.content[index] = this.insertContent(location.slice(1), content.content[index], data);
         break;
@@ -20105,7 +20247,7 @@ var Content = class _Content {
         console.log("Setting object content to: " + content.content);
         break;
       case "objectRecur":
-        if (!validateRecur(location, content)) break;
+        if (!validateRecur(content, location)) break;
         console.log("Recurring at index " + index);
         content.content = this.insertContent(location.slice(1), content.content, data);
         break;
@@ -20145,7 +20287,7 @@ var Content = class _Content {
         content.content.splice(index, 1);
         break;
       case "arrayRecur":
-        if (!validateRecur(location, content)) break;
+        if (!validateRecur(content, location)) break;
         console.log("Recurring at index " + index);
         content.content[index] = this.deleteContent(location.slice(1), content.content[index]);
         break;
@@ -20154,7 +20296,7 @@ var Content = class _Content {
         content.content = [];
         break;
       case "objectRecur":
-        if (!validateRecur(location, content)) break;
+        if (!validateRecur(content, location)) break;
         console.log("Recurring at index " + index);
         content.content = this.deleteContent(location.slice(1), content.content);
         break;
