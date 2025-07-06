@@ -19,7 +19,7 @@ export function inputHandler(input, data, location, dispatch){
             newLine(input, data, location, dispatch, cursorLocation);
             break;
         case "deleteContentBackward":
-            if (data.content === "​" || data.content === "") deleteText(data, location, dispatch); //TODO: Delete text node and cascade to parent if empty
+            if (data.content === "​" || data.content === "") deleteText(data, location, dispatch);
             overwriteContent(input, data, location, dispatch, cursorLocation);
             break;
         default:
