@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('kingsguarddigital:server');
 var http = require('http');
 
+console.log("App starting");
+
 /**
  * Get port from environment and store in Express.
  */

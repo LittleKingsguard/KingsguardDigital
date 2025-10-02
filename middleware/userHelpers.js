@@ -16,12 +16,15 @@ async function login(subPassword, user, res, next) {
                 user.sendLogin(res);
             } else {
                 console.log("Wrong password error");
+                res.send({error: "wrong password"});
             }
         }
     })
 }
 async function getUserData(Username, user) {
-    let userData = await sql` SELECT * FROM public."Users" WHERE "Username" = ${Username} `;
+    console.log("Getting user data: ");
+    let userData = await sql`SELECT * FROM public."Users" WHERE "Username" = ${Username} `;
+    console.log("This is the raw data from sql: " + JSON.stringify(userData));
     let singleUser  = userData.pop();
     console.log("This is the data from sql: " + JSON.stringify(singleUser));
     user.username = singleUser.Username;

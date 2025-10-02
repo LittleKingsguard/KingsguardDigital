@@ -7,10 +7,11 @@ export function inputHandler(input, data, location, dispatch){
     let cursor = window.getSelection();
     let cursorLocation = cursor.anchorOffset;
     let inputType = input.inputType;
+    console.log(inputType);
     console.log(data);
     console.log(location);
     console.log(getContentAncestry(location));
-    //console.log(data.content.substring(cursorLocation-2, cursorLocation-1));
+    console.log(data.content.substring(cursorLocation-2, cursorLocation-1));
     switch (inputType){
         case "insertText":
             overwriteContent(input, data, location, dispatch, cursorLocation);
@@ -27,7 +28,7 @@ export function inputHandler(input, data, location, dispatch){
             setCaretPosition(location.toString(), cursorLocation);
     }
 }
-
+//TODO: Reomve ZWSP from start/end of text string.
 function overwriteContent(input, data, location, dispatch, cursorLocation){
     console.log(input.target.innerHTML);
     data.content = input.target.innerText;

@@ -7,8 +7,7 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "build": "esbuild public/javascripts/Index.js --bundle --outfile=public/javascripts/Bundle.js --loader:.js=jsx --format=cjs --watch --tree-shaking=true",
-    "watch": "npm-watch"
+    "build": "esbuild public/javascripts/Index.js --bundle --outfile=public/javascripts/bundle.js --loader:.js=jsx --format=cjs --tree-shaking=true"
   },
   "dependencies": {
     "babel-preset-react": "^6.24.1",

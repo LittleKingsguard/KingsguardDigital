@@ -8,7 +8,8 @@ export async function login(username, password, location, dispatch) {//username/
     };
     const returnString = await postFetch(url, body);
     console.log(returnString);
-    loadDispatch(returnString, dispatch);
+    if (returnString.error) alert(returnString.error);
+    else loadDispatch(returnString, dispatch);
 }
 
 export async function register(username,email, password, location, dispatch) {//username/password/email are used for login. location is passed to dispatch
@@ -18,9 +19,12 @@ export async function register(username,email, password, location, dispatch) {//
         password: password,
         email: email
     };
+    console.log("Body sent: ");
+    console.log(body);
     const returnString = await postFetch(url, body);
     console.log(returnString);
-    loadDispatch(returnString, dispatch);
+    if (returnString.errorMessages) alert(returnString.errorMessages);
+    else loadDispatch(returnString, dispatch);
 }
 
 export async function logout(location, dispatch) {

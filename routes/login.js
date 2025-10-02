@@ -41,6 +41,7 @@ router.post('/new', async function(req, res, next) {
 
 /* POST user login. */
 router.post('/', async function(req, res, next) {
+    console.log("Request body received: ");
     console.log(req.body);
     let target = new user();
     try {

@@ -35,7 +35,7 @@ function buildLogin(data){
         let username = document.getElementById("registerUsername").value;
         let password = document.getElementById("registerPassword").value;
         let email = document.getElementById("registerEmail").value;
-        return register(username, password, email, location, dispatch);
+        return register(username, email, password, location, dispatch);
     };
     return (
         <div {...data.props} className={classnames} id={id}>
