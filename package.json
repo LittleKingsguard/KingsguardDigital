@@ -10,7 +10,6 @@
     "build": "esbuild public/javascripts/Index.js --bundle --outfile=public/javascripts/bundle.js --loader:.js=jsx --format=cjs --tree-shaking=true"
   },
   "dependencies": {
-    "@tinymce/tinymce-react": "^6.3.0",
     "babel-preset-react": "^6.24.1",
     "check-password-strength": "^3.0.0",
     "cookie-parser": "~1.4.4",

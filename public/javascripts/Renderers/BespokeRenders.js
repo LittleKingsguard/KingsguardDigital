@@ -74,11 +74,15 @@ function userPane(data) {
     let classnames = helpers.classlist(data.css);
     const location = useContext(locationContext);
     const dispatch = useContext(contentDispatchContext);
+    let testData = {
+        type: "editor",
+        content: "This should be editable"
+    }
     let onclickHandler = () => {
         return logout(location, dispatch);
     };
     let onTestHandler = () => {
-        return deleteDispatch([0, 1, 2, 1, 1, 0], dispatch);
+        return modifyDispatch(testData, [0, 1, 2, 1, 1, 0], dispatch);
     };
     return(
         <div  {...data.props} className={classnames} id={id}>
