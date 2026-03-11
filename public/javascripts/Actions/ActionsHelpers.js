@@ -96,6 +96,7 @@ export function getContentChild(data, index){
 }
 
 export function dataCloner(data){
+    alert("DataCloner ran");
     return JSON.parse(JSON.stringify(data));
 }
 

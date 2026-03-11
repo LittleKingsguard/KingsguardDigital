@@ -51,7 +51,8 @@ export default class Content {
                 if (validateLocation(action.location)) {
                     content = Content.deleteContent(action.location.slice(1), content);
                     console.log(content);
-                    return dataCloner(content);
+                    //return dataCloner(content);
+                    return content;
                 }
                 else return content;
             case "insert": //action has type, location, content. Location is Array as above, content is new element to be inserted at that position
@@ -72,7 +73,8 @@ export default class Content {
                 if (validateLocation(action.location)) {
                     content = Content.modifyContent(action.location.slice(1), content, action.content);
                     console.log(content);
-                    return dataCloner(content);
+                    //return dataCloner(content);
+                    return content;
                 }
                 else return content;
             default:
@@ -91,6 +93,41 @@ export default class Content {
         console.log("Checking location to modify: " + location + ", length: " + location.length);
         console.log(content);
         let index = location[0];
+        let caseType = null;
+        let newContent = {...content};
+        caseType = this.checkLocation(location, content);
+        console.log(caseType);
+
+        switch (caseType){
+            case "invalid":
+                break;
+            case "arrayAction":
+                console.log("Modifying content at index " + index);
+                content.content.splice(index, 1, data);
+                newContent.content = [...content.content];
+                break;
+            case "arrayRecur":
+                if (!validateRecur(content, location)) break;
+                console.log("Recurring at index " + index);
+                content.content[index] = this.modifyContent(location.slice(1), content.content[index], data);
+                newContent.content = [...content.content];
+                break;
+            case "objectAction":
+                console.log("Modifying content");
+                newContent.content = data;
+                break;
+            case "objectRecur":
+                if (!validateRecur(content, location)) break;
+                console.log("Recurring at index " + index);
+                content.content = this.modifyContent(location.slice(1), content.content, data);
+                newContent.content = {...content};
+                break;
+            default:
+                break;
+        }
+        console.log(newContent);
+        return newContent;
+        /*
         if (Array.isArray(content.content)){
             console.log("This was Array");
             if (index >= content.content.length) return content;
@@ -117,6 +154,7 @@ export default class Content {
         }
         console.log(content);
         return content;
+        */
     }
 
     /*
@@ -191,44 +229,56 @@ export default class Content {
         console.log(content);
         let index = location[0];
         let caseType = null;
-        if (location.length === 0) caseType = "invalid";
-        if (Array.isArray(content.content)){
-            if (index >= content.content.length) caseType = "invalid";
-            if (location.length === 1) caseType = "arrayDelete";
-            if (caseType === null) caseType = "arrayRecur";
-        }
-        else {
-            if (location.length === 1) caseType = "objectDelete";
-            if (location.length === 1 && index > 0) caseType = "invalid";
-            if (caseType === null) caseType = "objectRecur";
-        }
+        let newContent = {...content};
+        caseType = this.checkLocation(location, content);
         console.log(caseType);
 
         switch (caseType){
             case "invalid":
                 break;
-            case "arrayDelete":
+            case "arrayAction":
                 console.log("Deleting content at index " + index);
                 content.content.splice(index, 1);
+                newContent.content = [...content.content];
                 break;
             case "arrayRecur":
                 if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content[index] = this.deleteContent(location.slice(1), content.content[index]);
+                newContent.content = [...content.content];
                 break;
-            case "objectDelete":
+            case "objectAction":
                 console.log("Deleting content");
-                content.content = [];
+                newContent.content = [];
                 break;
             case "objectRecur":
                 if (!validateRecur(content, location)) break;
                 console.log("Recurring at index " + index);
                 content.content = this.deleteContent(location.slice(1), content.content);
+                newContent.content = {...content};
                 break;
             default:
                 break;
         }
-        console.log(content);
-        return content;
+        console.log(newContent);
+        return newContent;
+    }
+
+    static checkLocation(location, content){
+        let caseType = null;
+        let index = location[0];
+        if (location.length === 0) caseType = "invalid";
+        if (Array.isArray(content.content)){
+            if (index >= content.content.length) caseType = "invalid";
+            if (location.length === 1) caseType = "arrayAction";
+            if (caseType === null) caseType = "arrayRecur";
+        }
+        else {
+            if (location.length === 1) caseType = "objectAction";
+            if (location.length === 1 && index > 0) caseType = "invalid";
+            if (caseType === null) caseType = "objectRecur";
+        }
+        console.log(caseType);
+        return caseType;
     }
 }

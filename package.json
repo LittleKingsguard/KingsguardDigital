@@ -10,6 +10,7 @@
     "build": "esbuild public/javascripts/Index.js --bundle --outfile=public/javascripts/bundle.js --loader:.js=jsx --format=cjs --tree-shaking=true"
   },
   "dependencies": {
+    "@tinymce/tinymce-react": "^6.3.0",
     "babel-preset-react": "^6.24.1",
     "check-password-strength": "^3.0.0",
     "cookie-parser": "~1.4.4",
@@ -19,7 +20,7 @@
     "express": "^4.21.2",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "~1.9.1",
+    "morgan": "^1.10.1",
     "npm-watch": "^0.13.0",
     "postgres": "^3.4.5",
     "pug": "^3.0.3",
