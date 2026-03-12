@@ -118,6 +118,26 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
 }
 
 export function makeEditable(data, location, dispatch){
-    data = addClass(data, "editMode");
-    modifyDispatch(data, location, dispatch);
+    const ancestry = getContentAncestry(location);
+    console.log(JSON.stringify(data));
+    let foundDiv = false;
+    let divDepth = 0;
+    while (!foundDiv){
+        if (divDepth >= ancestry.length) break;
+        if(ancestry[divDepth].type === "div") foundDiv = true;
+        else divDepth++;
+    }
+    const targetLocation = location.slice(0 , location.length - divDepth);
+    console.log(targetLocation);
+    const targetElement = document.getElementById(targetLocation);
+    data.innerHTML = targetElement.innerHTML;
+    const classList = targetElement.classList;
+    let classArray = [];
+    for (const cssClass of classList){
+        classArray.push(cssClass);
+    }
+    data.css.classes = classArray;
+    data.type = "editor";
+    console.log(JSON.stringify(data));
+    modifyDispatch(data, targetLocation, dispatch);
 }

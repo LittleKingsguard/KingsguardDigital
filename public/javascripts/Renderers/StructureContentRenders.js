@@ -4,16 +4,18 @@ import addElements from "./ContentRenderer"
 import * as inline from "./InlineContentRenders";
 import * as text from "./TextContentRenders";
 import * as media from "./MediaContentRenders";
-import {contentDispatchContext} from "../Contexts";
+import {contentDispatchContext, locationContext} from "../Contexts";
 
 export function buildDiv(data){
     if (!helpers.validateStructureElement('div', data)){
         return
     }
-    let id = helpers.validateId(data.css);
+    //let id = helpers.validateId(data.css);
+
+    const location = useContext(locationContext);
     let classnames = helpers.classlist(data.css);
     return (
-        <div {...data.props} className={classnames} id={id}>
+        <div {...data.props} className={classnames} id={location.toString()}>
             {addElements(data.content) }
         </div>
     )

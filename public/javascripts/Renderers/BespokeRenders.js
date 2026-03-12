@@ -17,6 +17,7 @@ import {
     buildOutput, buildSelect,
     buildTextarea
 } from "./FormContentRenders";
+import { getContentAncestry } from "../Actions/ActionsHelpers";
 
 function buildLogin(data){
     console.log("Login ran");
@@ -110,13 +111,31 @@ function newElement() {
 
 function buildEditor(data){
     console.log("Build Editor ran");
+    const location = useContext(locationContext);
+    const ancestry = getContentAncestry(location);
+    let foundDiv = false;
+    let divDepth = 0;
+    let classnames = helpers.classlist(data.css);
+    while (!foundDiv){
+        if (divDepth >= ancestry.length) break;
+        if(ancestry[divDepth].type === "div") foundDiv = true;
+        else divDepth++;
+    }
+    const targetLocation = location.slice(0 , location.length - divDepth);
+    console.log(targetLocation);
+    const targetElement = document.getElementById(targetLocation);
     const handleChange = event => {
     // Handle content change
-    console.log(event.target.value);
+    console.log("Building editor: ");
+    ancestry.forEach((e)=>{
+        console.log(JSON.stringify(e));
+    })
   };
   return (
       <ContentEditable
-        html="<p>Editable content</p>"
+        html={data.innerHTML}
+        id={location.toString}
+        className={classnames}
         disabled={false}
         onChange={handleChange}
       />
