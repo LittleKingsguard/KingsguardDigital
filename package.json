@@ -24,6 +24,7 @@
     "postgres": "^3.4.5",
     "pug": "^3.0.3",
     "react": "^19.0.0",
+    "react-contenteditable": "^3.3.7",
     "react-dom": "^19.0.0"
   }
 }

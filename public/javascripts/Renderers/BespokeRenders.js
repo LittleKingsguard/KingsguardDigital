@@ -1,11 +1,13 @@
 import * as helpers from "./RenderHelpers";
 import React from "react";
+import ContentEditable from 'react-contenteditable';
 import addElements from "./ContentRenderer"
 import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
 import {modifyDispatch, insertDispatch, deleteDispatch} from "../Actions/ActionsHelpers";
+import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
     buildInput,
@@ -106,12 +108,29 @@ function newElement() {
     )
 }
 
+function buildEditor(data){
+    console.log("Build Editor ran");
+    const handleChange = event => {
+    // Handle content change
+    console.log(event.target.value);
+  };
+  return (
+      <ContentEditable
+        html="<p>Editable content</p>"
+        disabled={false}
+        onChange={handleChange}
+      />
+  );
+}
+
 export default function bespokeRenderer(data){
     switch (data.type) {
         case "login":
             return buildLogin(data);
         case "userPane":
             return userPane(data);
+        case "editor":
+            return buildEditor(data);
         default:
             return;
     }
