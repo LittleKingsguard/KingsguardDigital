@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -119,11 +119,23 @@ function buildEditToolbar(){
     const underlineAction = {
         cmd: "underline"
     }
+    const location = useContext(locationContext);
+    const dispatch = useContext(contentDispatchContext);
+    let targeting = ()=>{
+        return document.getElementById(location.toString());
+    }
+    const target = document.getElementById(location.toString());
+    console.log(location);
+    console.log
     return (
         <div style={{position: "relative", top: "-30px", margin: "0px 0px -30px 0px", height: "30px"}}>
             <button onClick={editButtonAction(boldAction)}>Bold</button>
             <button onClick={editButtonAction(emAction)}>Italic</button>
             <button onClick={editButtonAction(underlineAction)}>Underline</button>
+            <button onClick={()=>{console.log(location)}}>Location</button>
+            <button onClick={()=>{console.log(targeting())}}>Target</button>
+            <button onClick={()=>{console.log(targeting().id)}}>TargetID</button>
+            <button onClick={()=>{saveEditButtonAction(targeting(), location, dispatch)}}>Save</button>
         </div>
     )
 }
@@ -133,19 +145,24 @@ function buildEditor(data){
     const location = useContext(locationContext);
     const ancestry = getContentAncestry(location);
     let classnames = helpers.classlist(data.css);
-    const handleChange = event => {
+    const handleChange = (() => {
     // Handle content change
-    console.log("Building editor: ");
-    ancestry.forEach((e)=>{
-        console.log(JSON.stringify(e));
+    const target = document.getElementById(location.toString());
+    console.log("Editor Output: ");
+    console.log(location);
+    console.log(target);
+    let childNodes = target.childNodes;
+    console.log(childNodes.toString());
+    childNodes.forEach((e)=>{
+        console.log(e.toString());
     })
-  };
+    });
   return (
     <>
         {buildEditToolbar()}
       <ContentEditable
         html={data.innerHTML}
-        id={location.toString}
+        id={location.toString()}
         className={classnames}
         disabled={false}
         onChange={handleChange}

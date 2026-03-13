@@ -32,6 +32,11 @@ export function validateStructureElement(type, data){
 export function validateEmptyElement(type, data){
     return (data.type === type && typeof data.css === 'object' && typeof data.content === "undefined");
 }
+export function validateInlineElement(type, data){
+    let isValid = data.type === type && typeof data.css === 'object' && typeof data.content === 'object';
+    if (!isValid) return isValid;
+    return validateInlineContents(data.content);
+}
 export function validateInlineContents(contents){
     let isValid = true;
     let inlineTypes = ["text", "em", "strong", "a", "cite", "dfn", "mark", "span"];

@@ -25,23 +25,25 @@ export function addText(data){
     let onInputHandler = (event) => {
         return inputHandler(event.nativeEvent, data, location, dispatch);
     };
-    if (data.css.classes.includes("editMode")) {
-        return (
-            <span id={location.toString()} contentEditable={true} onInput={onInputHandler}>
-            {data.content}
-        </span>
-        )
+    return (
+        <span id={location.toString()} onDoubleClick={onclickHandler}>
+        {data.content}
+    </span>
+    )
+}
+export function addSpan(data){
+    if (!helpers.validateInlineElement('span', data)){
+        return
     }
-    else {
-        return (
-            <span id={location.toString()} onDoubleClick={onclickHandler}>
-            {data.content}
-        </span>
-        )
-    }
+    let id = helpers.validateId(data.css);
+    let classnames = helpers.classlist(data.css);
+    return (
+        <span {...data.props} id={id} className={classnames} >
+            {addElements(data.content) }</span>
+    )
 }
 export function addEmphasis(data){
-    if (!helpers.validateInlineContents('em', data)){
+    if (!helpers.validateInlineElement('em', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -52,7 +54,7 @@ export function addEmphasis(data){
     )
 }
 export function addStrong(data){
-    if (!helpers.validateInlineContents('strong', data)){
+    if (!helpers.validateInlineElement('strong', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -63,7 +65,7 @@ export function addStrong(data){
     )
 }
 export function addCite(data){
-    if (!helpers.validateInlineContents('cite', data)){
+    if (!helpers.validateInlineElement('cite', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -74,7 +76,7 @@ export function addCite(data){
     )
 }
 export function addMark(data){
-    if (!helpers.validateInlineContents('mark', data)){
+    if (!helpers.validateInlineElement('mark', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -85,7 +87,7 @@ export function addMark(data){
     )
 }
 export function addDfn(data){
-    if (!helpers.validateInlineContents('dfn', data)){
+    if (!helpers.validateInlineElement('dfn', data)){
         return
     }
 
@@ -111,6 +113,8 @@ export default function inlineRenderer(data){
             return addMark(data);
         case "dfn":
             return addDfn(data);
+        case "span":
+            return addSpan(data);
         default:
             return;
     }

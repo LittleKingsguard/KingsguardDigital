@@ -1,5 +1,5 @@
 import Content from "../Content";
-
+import { parseElement } from "../Parsers/ContentParser";
 
 export async function postFetch(url, data) {
     const bodyString = JSON.stringify(data);
@@ -147,4 +147,17 @@ export function editButtonAction(action){
         event.preventDefault(); // Avoids losing focus from the editable area
         document.execCommand(action.cmd, false, action.arg); // Send the command to the browser
     }
+}
+
+export function saveEditButtonAction(target, location, dispatch){
+    console.log(target.toString());
+    if (target.nodeType !== 1) {
+        console.log("Save not targeting an element");
+        return
+    }
+    console.log("Trying to save");
+    console.log(target.id);
+    let newContent = parseElement(target);
+    console.log(JSON.stringify(newContent));
+    modifyDispatch(newContent, location, dispatch);
 }
