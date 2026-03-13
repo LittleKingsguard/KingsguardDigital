@@ -141,3 +141,10 @@ export function makeEditable(data, location, dispatch){
     console.log(JSON.stringify(data));
     modifyDispatch(data, targetLocation, dispatch);
 }
+
+export function editButtonAction(action){
+    return (event) => {
+        event.preventDefault(); // Avoids losing focus from the editable area
+        document.execCommand(action.cmd, false, action.arg); // Send the command to the browser
+    }
+}

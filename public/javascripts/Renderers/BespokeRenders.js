@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -109,21 +109,30 @@ function newElement() {
     )
 }
 
+function buildEditToolbar(){
+    const boldAction = {
+        cmd: "bold"
+    }
+    const emAction = {
+        cmd: "italic"
+    }
+    const underlineAction = {
+        cmd: "underline"
+    }
+    return (
+        <div style={{position: "relative", top: "-30px", margin: "0px 0px -30px 0px", height: "30px"}}>
+            <button onClick={editButtonAction(boldAction)}>Bold</button>
+            <button onClick={editButtonAction(emAction)}>Italic</button>
+            <button onClick={editButtonAction(underlineAction)}>Underline</button>
+        </div>
+    )
+}
+
 function buildEditor(data){
     console.log("Build Editor ran");
     const location = useContext(locationContext);
     const ancestry = getContentAncestry(location);
-    let foundDiv = false;
-    let divDepth = 0;
     let classnames = helpers.classlist(data.css);
-    while (!foundDiv){
-        if (divDepth >= ancestry.length) break;
-        if(ancestry[divDepth].type === "div") foundDiv = true;
-        else divDepth++;
-    }
-    const targetLocation = location.slice(0 , location.length - divDepth);
-    console.log(targetLocation);
-    const targetElement = document.getElementById(targetLocation);
     const handleChange = event => {
     // Handle content change
     console.log("Building editor: ");
@@ -132,6 +141,8 @@ function buildEditor(data){
     })
   };
   return (
+    <>
+        {buildEditToolbar()}
       <ContentEditable
         html={data.innerHTML}
         id={location.toString}
@@ -139,6 +150,7 @@ function buildEditor(data){
         disabled={false}
         onChange={handleChange}
       />
+    </>
   );
 }
 
