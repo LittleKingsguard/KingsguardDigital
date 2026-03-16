@@ -129,6 +129,7 @@ export function makeEditable(data, location, dispatch){
     const targetLocation = location.slice(0 , location.length - divDepth);
     console.log(targetLocation);
     const targetElement = document.getElementById(targetLocation);
+    data = Content.getContentbyLocation(targetLocation);
     data.innerHTML = targetElement.innerHTML;/* 
     const classList = targetElement.classList;
     let classArray = [];

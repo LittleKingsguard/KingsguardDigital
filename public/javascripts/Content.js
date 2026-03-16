@@ -281,4 +281,37 @@ export default class Content {
         console.log(caseType);
         return caseType;
     }
+    static getContentbyLocation(location){
+        if (!validateLocation(location)) return nulll;
+        if (!validateRecur(this.#content,location)) return null;
+        return this.getContentbyLocationHelper(location.slice(1), this.#content);
+    }
+    static getContentbyLocationHelper(location, content){
+        let caseType = this.checkLocation(location, content);
+        let index = location[0];
+        console.log(`Location: ${location}`)
+
+        switch (caseType){
+            case "invalid":
+                return null;
+            case "arrayAction":
+                console.log("Retrieving content at index " + index);
+                return content.content[index];
+            case "arrayRecur":
+                if (!validateRecur(content, location)) return null;
+                console.log("Recurring at index " + index);
+                return this.getContentbyLocationHelper(location.slice(1), content.content[index]);
+            case "objectAction":
+                console.log("Retrieving content");
+                return content.content;
+            case "objectRecur":
+                if (!validateRecur(content, location)) return null;
+                console.log("Recurring at index " + index);
+                return this.getContentbyLocationHelper(location.slice(1), content.content);
+                break;
+            default:
+                return null;
+        }
+
+    }
 }
