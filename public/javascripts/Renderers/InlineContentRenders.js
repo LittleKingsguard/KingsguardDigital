@@ -26,7 +26,7 @@ export function addText(data){
         return inputHandler(event.nativeEvent, data, location, dispatch);
     };
     return (
-        <span id={location.toString()} onDoubleClick={onclickHandler}>
+        <span id={location.toString()} onDoubleClick={onclickHandler} className ="EditContainer">
         {data.content}
     </span>
     )
@@ -37,8 +37,9 @@ export function addSpan(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <span {...data.props} id={id} className={classnames} >
+        <span {...data.props} id={location.toString()} className={classnames} >
             {addElements(data.content) }</span>
     )
 }
@@ -48,8 +49,9 @@ export function addEmphasis(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <em {...data.props} id={id} className={classnames} >
+        <em {...data.props} id={location.toString()} className={classnames} >
             {addElements(data.content) }</em>
     )
 }
@@ -59,8 +61,9 @@ export function addStrong(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <strong {...data.props} id={id} className={classnames} >
+        <strong {...data.props} id={location.toString()} className={classnames} >
             {addElements(data.content) }</strong>
     )
 }
@@ -70,8 +73,9 @@ export function addCite(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <cite {...data.props} id={id} className={classnames} >
+        <cite {...data.props} id={location.toString()} className={classnames} >
             {addElements(data.content) }</cite>
     )
 }
@@ -81,8 +85,9 @@ export function addMark(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <mark {...data.props} id={id} className={classnames} >
+        <mark {...data.props} id={location.toString()} className={classnames} >
             {addElements(data.content) }</mark>
     )
 }
@@ -93,8 +98,9 @@ export function addDfn(data){
 
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
     return (
-        <dfn {...data.props} id={id} className={classnames} title={data.props.title} >
+        <dfn {...data.props} id={location.toString()} className={classnames} title={data.props.title} >
             {addElements(data.content) }</dfn>
     )
 }

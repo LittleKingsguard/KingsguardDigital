@@ -1,10 +1,26 @@
 
-import {parseElement} from "./ContentParser"
+import {parseElement, parseNodeList, parseCSS} from "./ContentParser"
 
 export function parseText(node){
     newContent = {
         type: "text",
         content: node.textContent
+    }
+    return newContent;
+}
+
+export function parseSpan(element){
+    const css = {
+        style: element.style,
+        classes: parseCSS(element.classList)
+        }
+    if (css.classes.includes("EditContainer")) return parseText(element);
+    let newContent = {
+        type: "span",
+        css: css
+    }
+    if (element.childNodes.length > 0){
+        newContent.content = parseNodeList(element.childNodes);
     }
     return newContent;
 }

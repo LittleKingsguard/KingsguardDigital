@@ -1,7 +1,7 @@
-import { parseText } from "./InlineContentParsers";
+import { parseText, parseSpan } from "./InlineContentParsers";
 
 //Creates new content array
-function parseNodeList(nodeList){
+export function parseNodeList(nodeList){
     if (nodeList === null || nodeList.length === 0) {
         console.log("No nodes");
         return;
@@ -36,16 +36,18 @@ export function parseElement(element){
 
 function checkSpecialHandling(element){
     const type = element.tagName;
-    switch (type) {
+    switch (type.toLowerCase()) {
         case "a": 
             return //TODO: link handling
         case "img":
             return //TODO: image handling
+        case "span":
+            return parseSpan(element);
         default:
             return {}
     }
 }
 
-function parseCSS(cssTokenList){
+export function parseCSS(cssTokenList){
     return cssTokenList.toString().split(" ");
 }

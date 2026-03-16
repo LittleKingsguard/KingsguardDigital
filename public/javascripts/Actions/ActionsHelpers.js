@@ -54,12 +54,11 @@ export function validateRecur(data, location){
     console.log(data);
     let returnvalue = true;
     if (Array.isArray(data.content)){
-        if (location[0] > data.content.length) returnvalue = false;
-        if (location[0] === data.content.length && location.length > 1) returnvalue = false;
+        if (location[0] >= data.content.length) returnvalue = false; //Prevents out of range error
     }
     else {
-        if (location[0] > 1) returnvalue = false;
-        if (location[0] === 1 && location.length > 1) returnvalue = false;
+        if (location[0] > 0) returnvalue = false; //Content object cannot have index greater than 1
+        if (location[0] === 0 && location.length > 1) returnvalue = false; //If object is contained Location cannot have more nesting layers
     }
     console.log("Is valid recurrence? " + returnvalue);
     return returnvalue;
@@ -130,13 +129,13 @@ export function makeEditable(data, location, dispatch){
     const targetLocation = location.slice(0 , location.length - divDepth);
     console.log(targetLocation);
     const targetElement = document.getElementById(targetLocation);
-    data.innerHTML = targetElement.innerHTML;
+    data.innerHTML = targetElement.innerHTML;/* 
     const classList = targetElement.classList;
     let classArray = [];
     for (const cssClass of classList){
         classArray.push(cssClass);
     }
-    data.css.classes = classArray;
+    data.css.classes = classArray; */
     data.type = "editor";
     console.log(JSON.stringify(data));
     modifyDispatch(data, targetLocation, dispatch);

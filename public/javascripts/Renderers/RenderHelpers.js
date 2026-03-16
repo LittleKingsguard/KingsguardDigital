@@ -9,6 +9,7 @@ export function validateId ( css ){
     }
 }
 export function classlist (css){
+    if (css === undefined) return "";
     let classNames = "";
     if (Array.isArray(css.classes)){
         css.classes.forEach((className) => {classNames = classNames.concat(className, " ")});
