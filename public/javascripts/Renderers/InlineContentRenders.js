@@ -44,7 +44,7 @@ export function addSpan(data){
     )
 }
 export function addEmphasis(data){
-    if (!helpers.validateInlineElement('em', data)){
+    if (!helpers.validateInlineElement('i', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -56,7 +56,7 @@ export function addEmphasis(data){
     )
 }
 export function addStrong(data){
-    if (!helpers.validateInlineElement('strong', data)){
+    if (!helpers.validateInlineElement('b', data)){
         return
     }
     let id = helpers.validateId(data.css);
@@ -109,9 +109,11 @@ export default function inlineRenderer(data){
     switch (data.type) {
         case "text":
             return addText(data);
-        case "em":
+        case "i":
             return addEmphasis(data);
         case "strong":
+            return addStrong(data);
+        case "b":
             return addStrong(data);
         case "cite":
             return addCite(data);

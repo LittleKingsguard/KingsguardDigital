@@ -1,6 +1,6 @@
 import React from "react";
 import Content from "../Content";
-import {dataContext, contentDispatchContext, locationContext} from "../Contexts";
+import {dataContext, contentDispatchContext, locationContext, parentContext} from "../Contexts";
 import {useContext} from "react";
 import * as helpers from "./RenderHelpers";
 import structureRenderer from "./StructureContentRenders";
@@ -18,13 +18,15 @@ export default function addElements(content){
     let currentContent = useContext(dataContext); //is empty object
     if (Array.isArray(content)) {
         return content.map((content, i) => {
-            currentContent = content;
+            content.parent = currentContent;
             return (
-                <dataContext.Provider value={content}>
-                    <locationContext.Provider value={currentLocation.concat([i])}>
-                        <BuildElements />
-                    </locationContext.Provider>
-                </dataContext.Provider>
+                <parentContext.Provider value={currentContent}>
+                    <dataContext.Provider value={content}>
+                        <locationContext.Provider value={currentLocation.concat([i])}>
+                            <BuildElements />
+                        </locationContext.Provider>
+                    </dataContext.Provider>
+                </parentContext.Provider>
             )
         });
     }

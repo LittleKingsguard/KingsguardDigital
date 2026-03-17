@@ -40,7 +40,7 @@ export function validateInlineElement(type, data){
 }
 export function validateInlineContents(contents){
     let isValid = true;
-    let inlineTypes = ["text", "em", "strong", "a", "cite", "dfn", "mark", "span"];
+    let inlineTypes = ["text", "i", "b", "a", "cite", "dfn", "mark", "span"];
     if (Array.isArray(contents)){
         contents.map((element) => {
             if (typeof element.type !== "string") {

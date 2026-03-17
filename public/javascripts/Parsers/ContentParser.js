@@ -1,51 +1,63 @@
 import { parseText, parseSpan } from "./InlineContentParsers";
+import Content from "../Content";
 
 //Creates new content array
-export function parseNodeList(nodeList){
+export function parseNodeList(nodeList, parentData){
     if (nodeList === null || nodeList.length === 0) {
         console.log("No nodes");
         return;
     }
-    let newContent = [];
+    if (parentData.content === undefined) parentData.content = [];
     nodeList.forEach((node)=>{
-        newContent.unshift(parseNode(node));
+        parseNode(node, parentData);
     })
-    return newContent;
 }
 
-function parseNode(node){
-    if (node.nodeType === 3) return parseText(node); //'3' is text node type
-    if (node.nodeType === 1) return parseElement(node); //'1' is element node type
+function parseNode(node, parentData){
+    if (node.nodeType === 3) parseText(node, parentData); //'3' is text node type
+    if (node.nodeType === 1) parseElement(node, parentData); //'1' is element node type
 }
 
-export function parseElement(element){
-    let newContent = checkSpecialHandling(element);
+export function parseElement(element, parentData){
+    let isSpecial = checkSpecialHandling(element, parentData);
+    console.log(`Is special?: ${isSpecial}`);
+    if (isSpecial) return;
+    
+    let newContent = {
+        type: element.tagName.toLowerCase(),
+        css: {
+            style: element.style,
+            classes: parseCSS(element.classList)
+        },
+        parent: Content.getContentbyLocation(location)
+    }
     console.log(newContent);
-    if (Object.keys(newContent).length !== 0) return newContent;
-    newContent.type = element.tagName.toLowerCase();
-    let css = {
-        style: element.style,
-        classes: parseCSS(element.classList)
-    }
-    newContent.css = css;
+    newContent.parent = parentData;
     if (element.childNodes.length > 0){
-        newContent.content = parseNodeList(element.childNodes);
+        parseNodeList(element.childNodes, newContent);
     }
-    return newContent;
+    parentData.content.push(newContent);
 }
 
-function checkSpecialHandling(element){
+function checkSpecialHandling(element, parentData){
     const type = element.tagName;
     switch (type.toLowerCase()) {
         case "a": 
-            return //TODO: link handling
+            return true; //TODO: link handling
         case "img":
-            return //TODO: image handling
+            return true; //TODO: image handling
         case "span":
-            return parseSpan(element);
+            parseSpan(element, parentData);
+            return true;
         default:
-            return {}
+            return false;
     }
+}
+
+export function parserEntry(element, location){
+    const parent = Content.getContentbyLocation(location);
+    parseElement(element, parent);
+    return parent.content.pop();
 }
 
 export function parseCSS(cssTokenList){

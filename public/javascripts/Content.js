@@ -1,7 +1,7 @@
 import React from "react";
 import addElements from "./Renderers/ContentRenderer.js"
 import {useReducer} from "react";
-import {dataContext,locationContext, contentDispatchContext} from "./Contexts.js";
+import {dataContext,locationContext, contentDispatchContext, parentContext} from "./Contexts.js";
 import {validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
 
@@ -27,7 +27,9 @@ export default class Content {
             //console.log(addElements(content));
             return (
                 <contentDispatchContext.Provider value={dispatch}>
+                    <parentContext.Provider value = {null}>
                         {addElements(content)}
+                    </parentContext.Provider>
                 </contentDispatchContext.Provider>
             );
         }
@@ -41,7 +43,8 @@ export default class Content {
             load does not need location as it is a full page change
          */
 
-        console.log("ContentReducer ran on action: " + JSON.stringify(action));
+        console.log("ContentReducer ran on action: ");
+        console.log(action);
         switch (action.type) {
             case "load": //action has: type, content. This is used for reloading new activeContent from server or creating a blank new page.
                 return action.content;
@@ -91,7 +94,8 @@ export default class Content {
     */
     static modifyContent(location, content, data){
         console.log("Checking location to modify: " + location + ", length: " + location.length);
-        console.log(content);
+        console.log("Modifying with: ")
+        console.log(data);
         let index = location[0];
         let caseType = null;
         let newContent = {...content};
@@ -282,7 +286,7 @@ export default class Content {
         return caseType;
     }
     static getContentbyLocation(location){
-        if (!validateLocation(location)) return nulll;
+        if (!validateLocation(location)) return null;
         if (!validateRecur(this.#content,location)) return null;
         return this.getContentbyLocationHelper(location.slice(1), this.#content);
     }

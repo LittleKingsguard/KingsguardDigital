@@ -1,31 +1,34 @@
 
 import {parseElement, parseNodeList, parseCSS} from "./ContentParser"
 
-export function parseText(node){
+export function parseText(node, parentData){
     newContent = {
         type: "text",
         content: node.textContent
     }
-    return newContent;
+    parentData.content.push(newContent);
 }
 
-export function parseSpan(element){
+export function parseSpan(element, parentData){
     const css = {
         style: element.style,
         classes: parseCSS(element.classList)
         }
-    if (css.classes.includes("EditContainer")) return parseText(element);
+    if (css.classes.includes("EditContainer")) {
+        parseNodeList(element.childNodes, parentData);
+        return;
+    }
     let newContent = {
         type: "span",
         css: css
     }
     if (element.childNodes.length > 0){
-        newContent.content = parseNodeList(element.childNodes);
+        parseNodeList(element.childNodes, newContent);
     }
-    return newContent;
+    parentData.content.push(newContent);
 }
 
-function parseEmphasis(data, newContent){
+function parseEmphasis(data, parentData){
     if (!helpers.validateInlineContents('em', data)){
         return
     }
@@ -36,7 +39,7 @@ function parseEmphasis(data, newContent){
             {addElements(data.content) }</em>
     )
 }
-function parseStrong(data, newContent){
+function parseStrong(data, parentData){
     if (!helpers.validateInlineContents('strong', data)){
         return
     }

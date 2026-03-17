@@ -1,5 +1,5 @@
 import Content from "../Content";
-import { parseElement } from "../Parsers/ContentParser";
+import { parseElement, parserEntry } from "../Parsers/ContentParser";
 
 export async function postFetch(url, data) {
     const bodyString = JSON.stringify(data);
@@ -118,7 +118,6 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
 
 export function makeEditable(data, location, dispatch){
     const ancestry = getContentAncestry(location);
-    console.log(JSON.stringify(data));
     let foundDiv = false;
     let divDepth = 0;
     while (!foundDiv){
@@ -138,7 +137,6 @@ export function makeEditable(data, location, dispatch){
     }
     data.css.classes = classArray; */
     data.type = "editor";
-    console.log(JSON.stringify(data));
     modifyDispatch(data, targetLocation, dispatch);
 }
 
@@ -157,7 +155,7 @@ export function saveEditButtonAction(target, location, dispatch){
     }
     console.log("Trying to save");
     console.log(target.id);
-    let newContent = parseElement(target);
-    console.log(JSON.stringify(newContent));
+    let newContent = parserEntry(target, location);
+    newContent.type = 'div';
     modifyDispatch(newContent, location, dispatch);
 }
