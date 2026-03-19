@@ -9,8 +9,9 @@ export default class Content {
 
     static #content;
     static setContent;
+    static #targeted;
     static set active(data) {
-        this.setContent(data);
+        //this.setContent(data);
         this.#content = data;
     }
     static get active(){
