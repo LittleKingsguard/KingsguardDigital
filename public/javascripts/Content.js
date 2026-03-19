@@ -2,7 +2,7 @@ import React from "react";
 import addElements from "./Renderers/ContentRenderer.js"
 import {useReducer} from "react";
 import {dataContext,locationContext, contentDispatchContext, parentContext} from "./Contexts.js";
-import {validateLocation} from "./Actions/ActionsHelpers.js";
+import {addClass, dropClass, validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
 
 export default class Content {
@@ -10,6 +10,16 @@ export default class Content {
     static #content;
     static setContent;
     static #targeted;
+    static set target(location){
+        let targetData = this.getContentbyLocation(location);
+        if (typeof targetData !== "object") return;
+        dropClass(this.#targeted, "selected")
+        targetData = addClass(targetData, "selected");
+        this.#targeted = targetData;
+    }
+    static get target(){
+        return this.#targeted;
+    }
     static set active(data) {
         //this.setContent(data);
         this.#content = data;
@@ -318,5 +328,52 @@ export default class Content {
                 return null;
         }
 
+    }
+    static getContentListByType(type){
+        if (typeof type !== "string") return null;
+        return this.getContentListByTypeHelper(type, this.#content, [0]);
+    }
+    static getContentListByTypeHelper(type, content, location){
+        let foundArray = [];
+        if (typeof content !== "object") return foundArray; //validation
+        if (content.type === type) foundArray.push({data: content, location: location});
+        if (typeof content.content !== "object") { //does not have checkable contents, so do not recurse
+            return foundArray;
+        }
+        if (!Array.isArray(content.content)) {//content.content is an object
+            let newLocation = location.concat([0]);
+            foundArray = foundArray.concat(this.getContentListByTypeHelper(type, content.content, newLocation));
+        }
+        else { //content.content is an array
+            content.content.forEach((data, index) => {
+                let newLocation = location.concat([index]);
+                foundArray = foundArray.concat(this.getContentListByTypeHelper(type, data, newLocation));
+            })
+        }
+        return foundArray;
+    }
+    static getContentListByClassName(className){
+        if (typeof className !== "string") return null;
+        return this.getContentListByClassNameHelper(className, this.#content, [0]);
+    }
+    static getContentListByClassNameHelper(className, content, location){
+        let foundArray = [];
+        if (typeof content !== "object") return foundArray; //validation
+        if (typeof content.css !== "object") return foundArray; //validation
+        if (content.css.classes.includes(className)) foundArray.push({data: content, location: location});
+        if (typeof content.content !== "object") { //does not have checkable contents, so do not recurse
+            return foundArray;
+        }
+        if (!Array.isArray(content.content)) {//content.content is an object
+            let newLocation = location.concat([0]);
+            foundArray = foundArray.concat(this.getContentListByClassNameHelper(className, content.content, newLocation));
+        }
+        else { //content.content is an array
+            content.content.forEach((data, index) => {
+                let newLocation = location.concat([index]);
+                foundArray = foundArray.concat(this.getContentListByClassNameHelper(className, data, newLocation));
+            })
+        }
+        return foundArray;
     }
 }

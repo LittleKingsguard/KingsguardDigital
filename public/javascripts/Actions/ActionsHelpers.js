@@ -116,6 +116,25 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
 
 }
 
+export function dropClass(data, cssClass){
+    if (typeof data === "undefined") return;
+    if (typeof data.css === "undefined"){
+        data.css = {
+            classes: []
+        }
+        return data;
+    }
+    if (!Array.isArray(data.css.classes)){
+        data.css.classes = []
+        return data;
+    }
+    console.log(`Is the css list an array? ${Array.isArray(data.css.classes)}`)
+    data.css.classes = data.css.classes.filter((e) => {
+        return e !== cssClass;
+    });
+    return data;
+}
+
 export function makeEditable(data, location, dispatch){
     const ancestry = getContentAncestry(location);
     let foundDiv = false;
@@ -158,4 +177,19 @@ export function saveEditButtonAction(target, location, dispatch){
     let newContent = parserEntry(target, location);
     newContent.type = 'div';
     modifyDispatch(newContent, location, dispatch);
+}
+
+export function addInspector(dispatch){
+    const existingInspectors = Content.getContentListByType("inspector");
+    if (existingInspectors.length > 0) return;
+    let navBarArray = Content.getContentListByClassName("navBar");
+    if (navBarArray.length !== 1) return;
+    let navBar = navBarArray[0].data;
+    let navBarLocation = navBarArray[0].location;
+    const inspector = {
+        type: "inspector",
+        css:{classes: []}
+    }
+    navBar.content.push(inspector);
+    modifyDispatch(navBar, navBarLocation, dispatch);
 }

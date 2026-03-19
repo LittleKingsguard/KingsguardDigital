@@ -19,12 +19,12 @@ function addNavBar(data, user){
         //TODO: Make the nav bar dynamically assemble because this is hideous
         const userNav = JSON.parse(JSON.stringify(nav));
         userNav.content.push(userWindow);
-        data.css.id = "activeContent";
+        data.css.classes = ["activeContent"];
         let rootData = {
             type: "div",
             css:{
                 id: "rootContent",
-                classes: []
+                classes: ["rootContent"]
             },
             content:[userNav,data]
         };

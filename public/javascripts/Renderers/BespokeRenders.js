@@ -18,6 +18,7 @@ import {
     buildTextarea
 } from "./FormContentRenders";
 import { getContentAncestry } from "../Actions/ActionsHelpers";
+import Content from "../Content";
 
 function buildLogin(data){
     console.log("Login ran");
@@ -85,7 +86,8 @@ function userPane(data) {
         return logout(location, dispatch);
     };
     let onTestHandler = () => {
-        return modifyDispatch(testData, [0, 1, 2, 1, 1, 0], dispatch);
+        //return modifyDispatch(testData, [0, 1, 2, 1, 1, 0], dispatch);
+        console.log(Content.getContentListByClassName("navBar"));
     };
     return(
         <div  {...data.props} className={classnames} id={id}>
@@ -105,6 +107,28 @@ function newElement() {
             <button>Heading</button>
             <button>List</button>
             <button>Table</button>
+        </div>
+    )
+}
+
+function buildElementInspector(){
+    const targetData = Content.target;
+    if (typeof targetData !=="object") return;
+    return (
+        <div className={"inspectorWindow"}>
+            Type: {targetData.type}
+            <div>
+                <label>Style</label>
+                <textArea>{targetData.css.style}</textArea>
+            </div>
+            <ul>
+                Classes:
+                {targetData.css.classes.map((className)=>{
+                    return (
+                        <li>{className}</li>
+                    )
+                })}
+            </ul>
         </div>
     )
 }
@@ -179,6 +203,8 @@ export default function bespokeRenderer(data){
             return userPane(data);
         case "editor":
             return buildEditor(data);
+        case "inspector":
+            return buildElementInspector();
         default:
             return;
     }

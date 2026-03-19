@@ -1,17 +1,15 @@
 {
   "type": "div",
   "css": {
-    "classes": [
-    ],
-    "id": "nav"
+    "classes": ["navBar"
+    ]
   },
   "content": [
     {
       "type": "div",
       "css": {
-        "classes": [
-        ],
-        "id": "Logo"
+        "classes": ["Logo"
+        ]
       },
       "content": [
         {

@@ -5,17 +5,28 @@ import * as inline from "./InlineContentRenders";
 import * as text from "./TextContentRenders";
 import * as media from "./MediaContentRenders";
 import {contentDispatchContext, locationContext} from "../Contexts";
+import Content from "../Content";
+import { addInspector, modifyDispatch } from "../Actions/ActionsHelpers";
 
 export function buildDiv(data){
     if (!helpers.validateStructureElement('div', data)){
         return
     }
     //let id = helpers.validateId(data.css);
-
     const location = useContext(locationContext);
+    const dispatch = useContext(contentDispatchContext);
+    let onclickHandler = (e) => {
+        if (e.defaultPrevented) return;
+        addInspector();
+        Content.target = location;
+        const update = Content.target;
+        modifyDispatch(update, location, dispatch);
+        console.log(e);
+        e.preventDefault();
+    }
     let classnames = helpers.classlist(data.css);
     return (
-        <div {...data.props} className={classnames} id={location.toString()}>
+        <div {...data.props} className={classnames} id={location.toString()} onClick={onclickHandler}>
             {addElements(data.content) }
         </div>
     )
