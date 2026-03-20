@@ -4,6 +4,7 @@
     "classes": ["navBar"
     ]
   },
+  "placement": "navigation",
   "content": [
     {
       "type": "div",

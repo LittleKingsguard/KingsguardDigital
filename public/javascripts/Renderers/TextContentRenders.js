@@ -6,10 +6,9 @@ export function buildP(data){
     if (!helpers.validateTextElement('p', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <p {...data.props} id={id} className={classnames} >
+        <p {...data.props}>
             {addElements(data.content) }
         </p>
     )
@@ -18,10 +17,9 @@ export function buildH1(data){
     if (!helpers.validateTextElement('h1', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h1 {...data.props} id={id} className={classnames} >
+        <h1 {...data.props}>
             {addElements(data.content) }</h1>
     )
 }
@@ -29,10 +27,9 @@ export function buildH2(data){
     if (!helpers.validateTextElement('h2', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h2 {...data.props} id={id} className={classnames} >
+        <h2 {...data.props}>
             {addElements(data.content) }</h2>
     )
 }
@@ -40,10 +37,9 @@ export function buildH3(data){
     if (!helpers.validateTextElement('h3', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h3 {...data.props} id={id} className={classnames} >
+        <h3 {...data.props}>
             {addElements(data.content) }</h3>
     )
 }
@@ -51,10 +47,9 @@ export function buildH4(data){
     if (!helpers.validateTextElement('h4', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h4 {...data.props} id={id} className={classnames} >
+        <h4 {...data.props}>
             {addElements(data.content) }</h4>
     )
 }
@@ -62,10 +57,9 @@ export function buildH5(data){
     if (!helpers.validateTextElement('h5', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h5 {...data.props} id={id} className={classnames} >
+        <h5 {...data.props}>
             {addElements(data.content) }</h5>
     )
 }
@@ -73,10 +67,9 @@ export function buildH6(data){
     if (!helpers.validateTextElement('h6', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <h6 {...data.props} id={id} className={classnames} >
+        <h6 {...data.props}>
             {addElements(data.content) }</h6>
     )
 }
@@ -84,10 +77,9 @@ export function buildLi(data){
     if (!helpers.validateTextElement('li', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <li {...data.props} id={id} className={classnames} >
+        <li {...data.props}>
             {addElements(data.content) }</li>
     )
 }
@@ -95,10 +87,9 @@ export function buildTh(data){
     if (!helpers.validateTextElement('th', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <th {...data.props} id={id} className={classnames} >
+        <th {...data.props}>
             {addElements(data.content) }</th>
     )
 }
@@ -106,10 +97,9 @@ export function buildTd(data){
     if (!helpers.validateTextElement('td', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <td {...data.props} id={id} className={classnames} >
+        <td {...data.props}>
             {addElements(data.content) }</td>
     )
 }

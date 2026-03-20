@@ -12,10 +12,9 @@ export function buildImg(data){
         || typeof data.props.alt !== 'string'){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <img className={classnames} id={id} {...data.props}/>
+        <img {...data.props}/>
     )
 }
 export function buildVideo(data){
@@ -25,10 +24,9 @@ export function buildVideo(data){
         || typeof data.props.src !== 'string'){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <video className={classnames} id={id} {...data.props}/>
+        <video {...data.props}/>
     )
 }
 export function buildCanvas(data){
@@ -37,10 +35,9 @@ export function buildCanvas(data){
         || data.props.height < 0){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <canvas className={classnames} id={id} {...data.props}/>
+        <canvas {...data.props}/>
     )
 }
 export function buildSVG(data){
@@ -50,10 +47,9 @@ export function buildSVG(data){
         || typeof data.props.vectors !== "string"){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+        helpers.genericElementProps(data);
     return (
-        <svg className={classnames} id={id} {...data.props}>
+        <svg {...data.props}>
             {data.props.vectors}
         </svg>
     )

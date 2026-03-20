@@ -45,7 +45,8 @@ export default function addElements(content){
 
 function BuildElements(){
     const location = useContext(locationContext);
-    const data = useContext(dataContext);
+    let data = useContext(dataContext);
+    data.location = location;
     console.log(data); //shows {}
     let type = data.type;
     console.log("Building element: " + type);

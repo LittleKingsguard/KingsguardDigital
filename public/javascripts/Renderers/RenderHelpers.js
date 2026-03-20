@@ -58,3 +58,16 @@ export function validateInlineContents(contents){
     }
     return isValid;
 }
+
+export function validateEditable(data){
+    const editablePlacements = ["main"];
+    return editablePlacements.includes(data.placement);
+}
+
+export function genericElementProps(data){
+    if (typeof data !== "object") return;
+    if (data.props === undefined) data.props = {};
+    data.props.id = data.location.toString();
+    data.props.className = classlist(data.css);
+    //if (data.props.style === undefined) data.props.style = data.css.style;
+}

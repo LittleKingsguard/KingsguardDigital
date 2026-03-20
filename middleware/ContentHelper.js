@@ -20,13 +20,16 @@ function addNavBar(data, user){
         const userNav = JSON.parse(JSON.stringify(nav));
         userNav.content.push(userWindow);
         data.css.classes = ["activeContent"];
+        data.placement = "main";
         let rootData = {
             type: "div",
+            placement: "root",
             css:{
                 id: "rootContent",
                 classes: ["rootContent"]
             },
-            content:[userNav,data]
+            content:[userNav,data], 
+            parent:{}
         };
         return new Content(rootData);
     }

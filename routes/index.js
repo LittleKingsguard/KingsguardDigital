@@ -10,6 +10,7 @@ const loginForm = require('../public/StaticData/LoginPanel.json');
 router.get('/', async function(req, res, next) {
   let userData = user.checkLogin(req);
   let preloadData = new Content(addNavBar(preload, userData));
+  console.log(preloadData);
   res.render('index', {preload: preloadData});
 });
 

@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -112,23 +112,38 @@ function newElement() {
 }
 
 function buildElementInspector(){
-    const targetData = Content.target;
+    let targetData = Content.target;
     if (typeof targetData !=="object") return;
+    const dispatch = useContext(contentDispatchContext);
+    const deleteClassButton = (className) => {
+        return () => {
+            targetData = dropClass(targetData, className);
+            modifyDispatch(targetData, targetData.location, dispatch);
+        }
+    }
+    const addClassButton = () =>{
+        return () => {
+            targetData = addClass(targetData, document.getElementById("newClass").value);
+            modifyDispatch(targetData, targetData.location, dispatch);
+        }
+    }
     return (
         <div className={"inspectorWindow"}>
             Type: {targetData.type}
+            Location: {targetData.location}
             <div>
                 <label>Style</label>
                 <textArea>{targetData.css.style}</textArea>
             </div>
-            <ul>
+            <div>
                 Classes:
                 {targetData.css.classes.map((className)=>{
                     return (
-                        <li>{className}</li>
+                        <div>{className} <button onClick={deleteClassButton(className)}>Delete</button></div>
                     )
                 })}
-            </ul>
+                <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
+            </div>
         </div>
     )
 }

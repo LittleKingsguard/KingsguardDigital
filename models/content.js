@@ -75,6 +75,8 @@ class Content {
         this.content = data.content;
         this.css = data.css;
         this.props = data.props;
+        this.placement = data.placement;
+        this.parent = data.parent;
     }
 
     get json() {

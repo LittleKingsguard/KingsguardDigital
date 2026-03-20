@@ -15,7 +15,9 @@ export function buildDiv(data){
     //let id = helpers.validateId(data.css);
     const location = useContext(locationContext);
     const dispatch = useContext(contentDispatchContext);
+    if (typeof data.placement === "undefined") data.placement = data.parent.placement;
     let onclickHandler = (e) => {
+        if (!helpers.validateEditable(data)) return;
         if (e.defaultPrevented) return;
         addInspector();
         Content.target = location;
@@ -24,9 +26,9 @@ export function buildDiv(data){
         console.log(e);
         e.preventDefault();
     }
-    let classnames = helpers.classlist(data.css);
+    helpers.genericElementProps(data);
     return (
-        <div {...data.props} className={classnames} id={location.toString()} onClick={onclickHandler}>
+        <div {...data.props} onClick={onclickHandler}>
             {addElements(data.content) }
         </div>
     )
@@ -70,10 +72,9 @@ export function buildUnorderedList(data){
     if (!helpers.validateStructureElement('ul', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+    helpers.genericElementProps(data);
     return (
-        <ul {...data.props} className={classnames} id={id} >
+        <ul {...data.props}>
             {addElements(data.content) }
         </ul>
     )
@@ -87,10 +88,9 @@ export function buildAnchor(data){
         console.log("Failed creating anchor:" + JSON.stringify(data));
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
+    helpers.genericElementProps(data);
     return (
-        <a {...data.props} className={classnames} id={id} >
+        <a {...data.props}  >
             {addElements(data.content) }
         </a>
     )

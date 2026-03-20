@@ -19,6 +19,7 @@ export function addText(data){
     const dispatch = useContext(contentDispatchContext);
     console.log(data.content);
     console.log(data.css);
+    if (data.css === undefined) data.css = {};
     let onclickHandler = () => {
         return makeEditable(data, location, dispatch);
     };
@@ -35,11 +36,9 @@ export function addSpan(data){
     if (!helpers.validateInlineElement('span', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <span {...data.props} id={location.toString()} className={classnames} >
+        <span {...data.props}>
             {addElements(data.content) }</span>
     )
 }
@@ -47,11 +46,9 @@ export function addEmphasis(data){
     if (!helpers.validateInlineElement('i', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <em {...data.props} id={location.toString()} className={classnames} >
+        <em {...data.props}>
             {addElements(data.content) }</em>
     )
 }
@@ -59,11 +56,9 @@ export function addStrong(data){
     if (!helpers.validateInlineElement('b', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <strong {...data.props} id={location.toString()} className={classnames} >
+        <strong {...data.props}>
             {addElements(data.content) }</strong>
     )
 }
@@ -71,11 +66,9 @@ export function addCite(data){
     if (!helpers.validateInlineElement('cite', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <cite {...data.props} id={location.toString()} className={classnames} >
+        <cite {...data.props}>
             {addElements(data.content) }</cite>
     )
 }
@@ -83,11 +76,9 @@ export function addMark(data){
     if (!helpers.validateInlineElement('mark', data)){
         return
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <mark {...data.props} id={location.toString()} className={classnames} >
+        <mark {...data.props} >
             {addElements(data.content) }</mark>
     )
 }
@@ -95,12 +86,9 @@ export function addDfn(data){
     if (!helpers.validateInlineElement('dfn', data)){
         return
     }
-
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    helpers.genericElementProps(data);
     return (
-        <dfn {...data.props} id={location.toString()} className={classnames} title={data.props.title} >
+        <dfn {...data.props} title={data.props.title} >
             {addElements(data.content) }</dfn>
     )
 }
