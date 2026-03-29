@@ -100,6 +100,8 @@ export function dataCloner(data){
 }
 
 export function addClass(data, cssClass){ //data is content, cssClass is string containing name of class
+    if (typeof cssClass !== "string") return;
+    if (cssClass === "" || cssClass === " ") return;
     if (typeof data.css === "undefined"){
         data.css = {
             classes: []
@@ -111,6 +113,7 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
     if (data.css.classes.includes(cssClass)) return data;
     else {
         data.css.classes.push(cssClass);
+        console.log(data.css.classes);
         return data;
     }
 
@@ -192,4 +195,8 @@ export function addInspector(dispatch){
     }
     navBar.content.push(inspector);
     modifyDispatch(navBar, navBarLocation, dispatch);
+}
+
+export function setTargetAction(location){
+    return () => Content.target = location;
 }

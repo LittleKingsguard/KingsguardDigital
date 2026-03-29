@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -127,6 +127,7 @@ function buildElementInspector(){
             modifyDispatch(targetData, targetData.location, dispatch);
         }
     }
+    console.log(targetData);
     return (
         <div className={"inspectorWindow"}>
             Type: {targetData.type}
@@ -144,8 +145,33 @@ function buildElementInspector(){
                 })}
                 <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
             </div>
+            <div>
+                Contents:
+                {inspectorContents(targetData.content)}
+            </div>
         </div>
     )
+}
+
+function inspectorContents(content){
+    if (typeof content !== "object") return;
+    if (Array.isArray(content)){
+        return (
+            content.map((content)=>{
+                    return (
+                        <div>
+                            <div>{content.type} <button onClick={setTargetAction(content.location)}>Select</button> </div>
+                        </div>
+                    )
+                })
+        )
+    }
+    else {
+        return (
+            <div>{content.type} <button onClick={setTargetAction(content.location)}>Select</button> </div>
+        )
+    }
+
 }
 
 function buildEditToolbar(){
@@ -190,6 +216,8 @@ function buildEditor(data){
     console.log("Editor Output: ");
     console.log(location);
     console.log(target);
+    console.log(data);
+    data.innerHTML = target.innerHTML;
     let childNodes = target.childNodes;
     console.log(childNodes.toString());
     childNodes.forEach((e)=>{

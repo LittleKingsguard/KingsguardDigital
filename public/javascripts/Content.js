@@ -10,12 +10,19 @@ export default class Content {
     static #content;
     static setContent;
     static #targeted;
+    static #dispatch;
+
     static set target(location){
         let targetData = this.getContentbyLocation(location);
         if (typeof targetData !== "object") return;
         dropClass(this.#targeted, "selected")
         targetData = addClass(targetData, "selected");
         this.#targeted = targetData;
+        this.#dispatch({
+        type: "modify",
+        content: targetData,
+        location: location
+    });
     }
     static get target(){
         return this.#targeted;
@@ -33,6 +40,7 @@ export default class Content {
     static DisplayContent() {
         const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
         Content.#content = content;
+        Content.#dispatch = dispatch;
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
             //console.log(addElements(content));

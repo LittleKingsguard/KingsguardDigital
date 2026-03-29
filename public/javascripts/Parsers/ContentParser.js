@@ -61,5 +61,6 @@ export function parserEntry(element, location){
 }
 
 export function parseCSS(cssTokenList){
-    return cssTokenList.toString().split(" ");
+    let cssClasses = cssTokenList.toString().split(" ");
+    return cssClasses.filter((cssClass) => {return cssClass !== ""});
 }
