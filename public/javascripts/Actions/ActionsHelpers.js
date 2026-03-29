@@ -200,3 +200,21 @@ export function addInspector(dispatch){
 export function setTargetAction(location){
     return () => Content.target = location;
 }
+
+export function rearrangeContent(data, oldIndex, newIndex){
+    if (typeof data !== 'object') return data;
+    if (typeof data.content !== 'object') return data;
+    if (!Array.isArray(data.content)) data.content = [data.content];
+    if (oldIndex < 0 || newIndex < 0) return data;
+    if (oldIndex >= data.content.length || newIndex >= data.content.length) return data;
+    const targetedData = data.content[oldIndex];
+    data.content.splice(oldIndex, 1);
+    data.content.splice(newIndex, 0, targetedData);
+}
+
+export function rearrangeContentAction(data, oldIndex, newIndex, dispatch){
+    return () => {
+        rearrangeContent(data, oldIndex, newIndex)
+        modifyDispatch(data, data.location, dispatch);
+    }
+}

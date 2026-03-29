@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -145,22 +145,25 @@ function buildElementInspector(){
                 })}
                 <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
             </div>
+            <div>Parent: {targetData.type} <button onClick={setTargetAction(targetData.parent.location)}>Select</button></div>
             <div>
                 Contents:
-                {inspectorContents(targetData.content)}
+                {inspectorContents(targetData, dispatch)}
             </div>
         </div>
     )
 }
 
-function inspectorContents(content){
-    if (typeof content !== "object") return;
-    if (Array.isArray(content)){
+function inspectorContents(data, dispatch){
+    if (typeof data.content !== "object") return;
+    if (Array.isArray(data.content)){
         return (
-            content.map((content)=>{
+            data.content.map((content, index)=>{
                     return (
                         <div>
-                            <div>{content.type} <button onClick={setTargetAction(content.location)}>Select</button> </div>
+                            <div>{content.type} 
+                                {inspectorContentButtons(content, index, data.content.length, dispatch)}
+                            </div>
                         </div>
                     )
                 })
@@ -168,10 +171,37 @@ function inspectorContents(content){
     }
     else {
         return (
-            <div>{content.type} <button onClick={setTargetAction(content.location)}>Select</button> </div>
+            <div>{data.content.type} {inspectorContentButtons(content, index, data.content.length, dispatch)} </div>
         )
     }
 
+}
+
+function inspectorContentButtons(content, index, length, dispatch){
+    if (length === 1) return (
+        <>
+            <button onClick={setTargetAction(content.location)}>Select</button> 
+        </>
+    )
+    if (index === 0) return (
+        <>
+            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+        </>
+    )
+    if (index === length -1 ) return (
+        <>
+            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
+        </>
+    )
+    return (
+        <>
+            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+        </>
+    )
 }
 
 function buildEditToolbar(){
