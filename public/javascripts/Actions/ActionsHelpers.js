@@ -218,3 +218,18 @@ export function rearrangeContentAction(data, oldIndex, newIndex, dispatch){
         modifyDispatch(data, data.location, dispatch);
     }
 }
+
+export function deleteContent(data, index){
+    if (typeof data !== 'object') return data;
+    if (typeof data.content !== 'object') return data;
+    if (!Array.isArray(data.content)) data.content = [data.content];
+    if (index < 0) return data;
+    data.content.splice(index, 1);
+}
+
+export function deleteContentAction(data, index, dispatch){
+    return () => {
+        deleteContent(data, index);
+        modifyDispatch(data, data.location, dispatch);
+    }
+}

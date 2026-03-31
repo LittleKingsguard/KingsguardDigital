@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -181,18 +181,21 @@ function inspectorContentButtons(content, index, length, dispatch){
     if (length === 1) return (
         <>
             <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
     if (index === 0) return (
         <>
             <button onClick={setTargetAction(content.location)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
     if (index === length -1 ) return (
         <>
             <button onClick={setTargetAction(content.location)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
     return (
@@ -200,6 +203,7 @@ function inspectorContentButtons(content, index, length, dispatch){
             <button onClick={setTargetAction(content.location)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
 }
