@@ -33,6 +33,7 @@ export default function addElements(content){
     else {
         //console.log(content); //shows {type: 'div', css: {…}, content: Array(3)}
         currentLocation = currentLocation.concat([0]);
+        content.parent = currentContent;
         return (
             <dataContext.Provider value={content}>
                 <locationContext.Provider value={currentLocation}>

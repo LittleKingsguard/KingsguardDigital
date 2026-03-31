@@ -171,7 +171,7 @@ function inspectorContents(data, dispatch){
     }
     else {
         return (
-            <div>{data.content.type} {inspectorContentButtons(content, index, data.content.length, dispatch)} </div>
+            <div>{data.content.type} {inspectorContentButtons(data.content, 0, 1, dispatch)} </div>// treat index as 0 and length = 1 for non-arrays
         )
     }
 
