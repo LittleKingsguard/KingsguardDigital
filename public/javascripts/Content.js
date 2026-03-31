@@ -14,7 +14,7 @@ export default class Content {
 
     static set target(location){
         let targetData = this.getContentbyLocation(location);
-        if (typeof targetData !== "object") return;
+        if (typeof targetData !== "object" || targetData === null) return;
         dropClass(this.#targeted, "selected")
         targetData = addClass(targetData, "selected");
         this.#targeted = targetData;

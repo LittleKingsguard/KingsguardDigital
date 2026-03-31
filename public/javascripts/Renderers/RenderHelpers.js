@@ -25,7 +25,7 @@ export function validateText(type, data){
     return (data.type === type && typeof data.content === 'string');
 }
 export function validateMediaElement(type, data){
-    return (data.type === type && typeof data.css === 'object' && typeof data.content === 'object' && !Array.isArray(data.content));
+    return (data.type === type && typeof data.css === 'object');
 }
 export function validateStructureElement(type, data){
     return (data.type === type && typeof data.css === 'object' && typeof data.content === 'object' && Array.isArray(data.content));

@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -145,17 +145,18 @@ function buildElementInspector(){
                 })}
                 <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
             </div>
-            <div>Parent: {targetData.type} <button onClick={setTargetAction(targetData.parent.location)}>Select</button></div>
+            <div>Parent: {targetData.parent.type} <button onClick={setTargetAction(targetData.parent.location)}>Select</button></div>
             <div>
                 Contents:
                 {inspectorContents(targetData, dispatch)}
+                <button onClick={appendNewContentAction(targetData, "img", dispatch)}>Add image</button>
             </div>
         </div>
     )
 }
 
 function inspectorContents(data, dispatch){
-    if (typeof data.content !== "object") return;
+    if (typeof data.content !== "object") return <>No contents</>;
     if (Array.isArray(data.content)){
         return (
             data.content.map((content, index)=>{
@@ -178,6 +179,7 @@ function inspectorContents(data, dispatch){
 }
 
 function inspectorContentButtons(content, index, length, dispatch){
+    if (content.location === undefined) content.location = [...content.parent.location, index]
     if (length === 1) return (
         <>
             <button onClick={setTargetAction(content.location)}>Select</button> 

@@ -202,8 +202,7 @@ export function setTargetAction(location){
 }
 
 export function rearrangeContent(data, oldIndex, newIndex){
-    if (typeof data !== 'object') return data;
-    if (typeof data.content !== 'object') return data;
+    if (!validateContentStructure(data)) return data;
     if (!Array.isArray(data.content)) data.content = [data.content];
     if (oldIndex < 0 || newIndex < 0) return data;
     if (oldIndex >= data.content.length || newIndex >= data.content.length) return data;
@@ -220,8 +219,7 @@ export function rearrangeContentAction(data, oldIndex, newIndex, dispatch){
 }
 
 export function deleteContent(data, index){
-    if (typeof data !== 'object') return data;
-    if (typeof data.content !== 'object') return data;
+    if (!validateContentStructure(data)) return data;
     if (!Array.isArray(data.content)) data.content = [data.content];
     if (index < 0) return data;
     data.content.splice(index, 1);
@@ -232,4 +230,79 @@ export function deleteContentAction(data, index, dispatch){
         deleteContent(data, index);
         modifyDispatch(data, data.location, dispatch);
     }
+}
+
+export function appendNewContent(data, type){
+    if (!validateContentStructure(data)) return data;
+    if (appendSpecialContent(data, type)) return data;
+    const newContent = {
+        type: type,
+        css: {
+            classes: [],
+            style: {}
+        },
+        props: {},
+        content: {}
+    }
+    data.content.push(newContent);
+    return data;
+}
+
+export function appendNewContentAction(data, type, dispatch){
+    return () => {
+        appendNewContent(data, type);
+        modifyDispatch(data, data.location, dispatch);
+    }
+}
+
+function appendSpecialContent(data, type){
+    switch (type){
+        case "img":
+            /* const imgSource = prompt("Please enter image url:");
+            if (imgSource === null) return false;
+            const height = prompt("Please enter image height:"); 
+            if (height === null) return false;
+            const width = prompt("Please enter image width:"); 
+            if (width === null) return false;
+            const altText = prompt("Please enter image alt text:"); 
+            if (!Array.isArray(data.content)) data.content = [data.content];
+            const newContent = {
+                type: type,
+                css: {
+                    classes: [],
+                    style: {}
+                },
+                props: {
+                    src: imgSource,
+                    alt: altText,
+                    width: width,
+                    height: height
+                }
+            } */
+           const newContent = {
+                type: type,
+                css: {
+                    classes: []
+                },
+                props: {
+                    src: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.O2NM3ORfHp8a8jgOLM05RwHaFs%3Fpid%3DApi&f=1&ipt=a71edc0f4f7a1d1817e1812db328706cbe2d44118d992a50797070acbbb52f17&ipo=images",
+                    alt: "Fairy!",
+                    width: 400,
+                    height: 300
+                },
+                location: [...data.location, data.content.length],
+                parent: data
+            }
+            data.content.push(newContent);
+            return true;
+        default:
+            return false;
+    }
+
+}
+
+function validateContentStructure(data){
+    if (typeof data !== "object") return false;
+    if (typeof data.content !== "object") return false;
+    return true;
 }
