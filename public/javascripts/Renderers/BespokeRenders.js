@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -133,10 +133,6 @@ function buildElementInspector(){
             Type: {targetData.type}
             Location: {targetData.location}
             <div>
-                <label>Style</label>
-                <textArea>{targetData.css.style}</textArea>
-            </div>
-            <div>
                 Classes:
                 {targetData.css.classes.map((className)=>{
                     return (
@@ -151,6 +147,16 @@ function buildElementInspector(){
                 {inspectorContents(targetData, dispatch)}
                 <button onClick={appendNewContentAction(targetData, "img", dispatch)}>Add image</button>
             </div>
+            <div>
+                <label>New content type:</label>
+                <select id="NewContentPicker">
+                    <option value="text">Text</option>
+                    <option value="div">Div</option>
+                    <option value="ul">Unordered List</option>
+                    <option value="img">Image</option>
+                </select>
+                <button onClick={appendNewContentPickerAction(targetData, dispatch)}>Add Content</button>
+            </div>
         </div>
     )
 }
@@ -160,6 +166,7 @@ function inspectorContents(data, dispatch){
     if (Array.isArray(data.content)){
         return (
             data.content.map((content, index)=>{
+                    if (content.parent !== data) content.parent = data;
                     return (
                         <div>
                             <div>{content.type} 
@@ -171,6 +178,8 @@ function inspectorContents(data, dispatch){
         )
     }
     else {
+        if (Object.keys(data.content).length === 0) return <>No content</>
+
         return (
             <div>{data.content.type} {inspectorContentButtons(data.content, 0, 1, dispatch)} </div>// treat index as 0 and length = 1 for non-arrays
         )
@@ -179,6 +188,7 @@ function inspectorContents(data, dispatch){
 }
 
 function inspectorContentButtons(content, index, length, dispatch){
+    if (Object.keys(content).length === 0) return <></>
     if (content.location === undefined) content.location = [...content.parent.location, index]
     if (length === 1) return (
         <>

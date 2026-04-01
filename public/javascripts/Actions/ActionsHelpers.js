@@ -242,7 +242,9 @@ export function appendNewContent(data, type){
             style: {}
         },
         props: {},
-        content: {}
+        content: {},
+        location: [...data.location, data.content.length],
+        parent: data
     }
     data.content.push(newContent);
     return data;
@@ -250,6 +252,17 @@ export function appendNewContent(data, type){
 
 export function appendNewContentAction(data, type, dispatch){
     return () => {
+        appendNewContent(data, type);
+        modifyDispatch(data, data.location, dispatch);
+    }
+}
+
+
+
+export function appendNewContentPickerAction(data, dispatch){
+    return () => {
+        const type = document.getElementById("NewContentPicker").value;
+        console.log(`Adding element of type: ${type}`);
         appendNewContent(data, type);
         modifyDispatch(data, data.location, dispatch);
     }

@@ -14,7 +14,7 @@ export default function addElements(content){
     if (typeof content === "string") return content;
     if (typeof content !== "object") return;
     let currentLocation = useContext(locationContext); //is empty array
-    console.log("Currentlocation: " + currentLocation.toString());
+    //console.log("Currentlocation: " + currentLocation.toString());
     let currentContent = useContext(dataContext); //is empty object
     if (Array.isArray(content)) {
         return content.map((content, i) => {
@@ -48,11 +48,11 @@ function BuildElements(){
     const location = useContext(locationContext);
     let data = useContext(dataContext);
     data.location = location;
-    console.log(data); //shows {}
+    //console.log(data); //shows {}
     let type = data.type;
-    console.log("Building element: " + type);
-    console.log(location); //shows [0]
-    console.log(data);
+    //console.log("Building element: " + type);
+    //console.log(location); //shows [0]
+    //console.log(data);
     let nonCSSList = ["text", "title"];
     if (typeof type !== 'string') return;
     /*if (Content.active.editMode && !nonCSSList.includes(type) ) {

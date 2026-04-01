@@ -13,12 +13,12 @@ export function addText(data){
     if (!helpers.validateText('text', data)){
         return
     }
-    console.log(data.content);
+    //console.log(data.content);
     if (data.content === "") data.content = "​";
     const location = useContext(locationContext);
     const dispatch = useContext(contentDispatchContext);
-    console.log(data.content);
-    console.log(data.css);
+    //console.log(data.content);
+    //console.log(data.css);
     if (data.css === undefined) data.css = {};
     let onclickHandler = () => {
         return makeEditable(data, location, dispatch);
