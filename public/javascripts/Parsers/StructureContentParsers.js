@@ -1,18 +1,10 @@
-import * as helpers from "./RenderHelpers";
+
 import React, {useContext} from "react";
-import addElements from "./ContentParser"
 import {contentDispatchContext, locationContext} from "../Contexts";
+import { parseNodeList, parseCSS } from "./ContentParser";
 
 export function parseDiv(element, newContent){
     if (element.innerHTML === "") return;
-
-    const location = useContext(locationContext);
-    let classnames = helpers.classlist(data.css);
-    return (
-        <div {...data.props} className={classnames} id={location.toString()}>
-            {addElements(data.content) }
-        </div>
-    )
 }
 
 /* export function buildDivCreator(location){
@@ -51,30 +43,30 @@ export function parseDiv(element, newContent){
 
 export function parseUnorderedList(element, newContent){
     if (element.innerHTML === "") return;
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    return (
-        <ul {...data.props} className={classnames} id={id} >
-            {addElements(data.content) }
-        </ul>
-    )
 }
 
 
-export function parseAnchor(element, newContent){
-    console.log(data.content);
-    if (!helpers.validateStructureElement('a', data)
-        || typeof data.props.url !== 'string'){
-        console.log("Failed creating anchor:" + JSON.stringify(data));
-        return
+export function parseAnchor(element, parentData){
+    console.log(`Parsing anchor with data: ${element.toString()}`)
+    console.log(element);
+    if (element.innerHTML === "") return;
+    console.log(element);
+    let newContent = {
+            type: element.tagName.toLowerCase(),
+            css: {
+                style: element.style,
+                classes: parseCSS(element.classList)
+            },
+            props: {
+                url: element.href
+            }
+        }
+    console.log(newContent);
+    newContent.parent = parentData;
+    if (element.childNodes.length > 0){
+        parseNodeList(element.childNodes, newContent);
     }
-    let id = helpers.validateId(data.css);
-    let classnames = helpers.classlist(data.css);
-    return (
-        <a {...data.props} className={classnames} id={id} >
-            {addElements(data.content) }
-        </a>
-    )
+    parentData.content.push(newContent);
 }
 
 

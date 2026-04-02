@@ -1,5 +1,6 @@
 import { parseText, parseSpan } from "./InlineContentParsers";
 import Content from "../Content";
+import { parseAnchor } from "./StructureContentParsers";
 
 //Creates new content array
 export function parseNodeList(nodeList, parentData){
@@ -28,8 +29,7 @@ export function parseElement(element, parentData){
         css: {
             style: element.style,
             classes: parseCSS(element.classList)
-        },
-        parent: Content.getContentbyLocation(location)
+        }
     }
     console.log(newContent);
     newContent.parent = parentData;
@@ -43,6 +43,7 @@ function checkSpecialHandling(element, parentData){
     const type = element.tagName;
     switch (type.toLowerCase()) {
         case "a": 
+            parseAnchor(element, parentData)
             return true; //TODO: link handling
         case "img":
             return true; //TODO: image handling
