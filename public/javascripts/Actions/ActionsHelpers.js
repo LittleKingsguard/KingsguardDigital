@@ -269,9 +269,10 @@ export function appendNewContentPickerAction(data, dispatch){
 }
 
 function appendSpecialContent(data, type){
+    let newContent = {};
     switch (type){
         case "img":
-            /* const imgSource = prompt("Please enter image url:");
+            const imgSource = prompt("Please enter image url:");
             if (imgSource === null) return false;
             const height = prompt("Please enter image height:"); 
             if (height === null) return false;
@@ -279,7 +280,7 @@ function appendSpecialContent(data, type){
             if (width === null) return false;
             const altText = prompt("Please enter image alt text:"); 
             if (!Array.isArray(data.content)) data.content = [data.content];
-            const newContent = {
+            newContent = {
                 type: type,
                 css: {
                     classes: [],
@@ -290,8 +291,10 @@ function appendSpecialContent(data, type){
                     alt: altText,
                     width: width,
                     height: height
-                }
-            } */
+                },
+                location: [...data.location, data.content.length],
+                parent: data
+            }/* 
            const newContent = {
                 type: type,
                 css: {
@@ -305,6 +308,22 @@ function appendSpecialContent(data, type){
                 },
                 location: [...data.location, data.content.length],
                 parent: data
+            } */
+            data.content.push(newContent);
+            return true;
+        case "text":
+            newContent = {
+                type: "editor",
+                css: {
+                    classes: [],
+                    style: {}
+                },
+                props: {
+                },
+                content: [],
+                location: [...data.location, data.content.length],
+                parent: data,
+                innerHTML: "Your text here."
             }
             data.content.push(newContent);
             return true;
