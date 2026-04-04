@@ -384,4 +384,24 @@ export default class Content {
         }
         return foundArray;
     }
+    static JSONify(data){
+        if (typeof data !== "object") return data.toString();
+        let dataCopy = Content.#innerJSONify(data, []);
+        return JSON.stringify(dataCopy);
+    }
+    static #innerJSONify(data, seenData){//recurses through data tree and deletes circular references
+        if (typeof data !== "object") return data;
+        if (seenData.includes(data)) return "object";
+        seenData.push(data);
+        let dataCopy = {};
+        Object.keys(data).forEach((key) =>{
+            if (key === "parent" || key === "location") return;
+            if (Array.isArray(data[key])){
+                dataCopy[key] = data[key].map((innerData) => Content.#innerJSONify(innerData, seenData));
+            }
+            else dataCopy[key] = Content.#innerJSONify(data[key], seenData);
+        })
+        if (Object.keys(dataCopy).length === 0) return;
+        return dataCopy;
+    }
 }

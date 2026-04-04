@@ -337,7 +337,17 @@ export function formatBlockAction(selector){
     return (e) => {
         e.preventDefault();
         const arg = document.getElementById(selector).value;
-        document.execCommand("formatBlock", false, arg)
+        if (arg === "ul") document.execCommand("insertUnorderedList", false);
+        if (arg === "ol") document.execCommand("insertOrderedList", false);
+        if (arg === "p") document.execCommand("insertParagraph", false);
+        const blockElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
+        if (blockElements.includes(arg)) document.execCommand("formatBlock", false, arg);
+    }
+}
+
+export function defaultPreventer() {
+    return (e) => {
+        e.preventDefault();
     }
 }
 
@@ -345,4 +355,12 @@ function validateContentStructure(data){
     if (typeof data !== "object") return false;
     if (typeof data.content !== "object") return false;
     return true;
+}
+
+export function toggleHiddenAction(targetID){
+    return () => {
+        const targetElement = document.getElementById(targetID);
+        if (targetElement.style.display === "none") targetElement.style.display = "block";
+        else targetElement.style.display = "none";
+    }
 }

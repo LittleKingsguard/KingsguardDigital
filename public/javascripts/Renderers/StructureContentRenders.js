@@ -81,6 +81,18 @@ export function buildUnorderedList(data){
 }
 
 
+export function buildOrderedList(data){
+    if (!helpers.validateStructureElement('ol', data)){
+        return
+    }
+    helpers.genericElementProps(data);
+    return (
+        <ul {...data.props}>
+            {addElements(data.content) }
+        </ul>
+    )
+}
+
 export function buildAnchor(data){
     console.log(data.content);
     if (!helpers.validateStructureElement('a', data)
@@ -116,6 +128,8 @@ export default function structureRenderer(data){
             return buildDiv(data);
         case "ul":
             return buildUnorderedList(data);
+        case "ol":
+            return buildOrderedList(data);
         default:
             return;
     }

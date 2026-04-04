@@ -48,8 +48,8 @@ export function addEmphasis(data){
     }
     helpers.genericElementProps(data);
     return (
-        <em {...data.props}>
-            {addElements(data.content) }</em>
+        <i {...data.props}>
+            {addElements(data.content) }</i>
     )
 }
 export function addStrong(data){
@@ -58,8 +58,8 @@ export function addStrong(data){
     }
     helpers.genericElementProps(data);
     return (
-        <strong {...data.props}>
-            {addElements(data.content) }</strong>
+        <b {...data.props}>
+            {addElements(data.content) }</b>
     )
 }
 export function addCite(data){
@@ -98,6 +98,8 @@ export default function inlineRenderer(data){
         case "text":
             return addText(data);
         case "i":
+            return addEmphasis(data);
+        case "em":
             return addEmphasis(data);
         case "strong":
             return addStrong(data);

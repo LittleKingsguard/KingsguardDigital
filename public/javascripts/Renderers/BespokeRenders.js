@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -157,6 +157,10 @@ function buildElementInspector(){
                 </select>
                 <button onClick={appendNewContentPickerAction(targetData, dispatch)}>Add Content</button>
             </div>
+            <button onClick={toggleHiddenAction("InspectedRawData")}>Show Data</button>
+            <div id="InspectedRawData" style={{display: "none", overflow: "scroll", width: "600px", height: "500px", backgroundColor: "black"}}>
+                {Content.JSONify(targetData)}
+            </div>
         </div>
     )
 }
@@ -241,7 +245,7 @@ function buildEditToolbar(){
             <button onClick={editButtonAction(emAction)}>Italic</button>
             
             <button onClick={()=>{console.log(targeting().id)}}>TargetID</button>
-            <select id={pickerID} onclick={(e) => e.preventDefault()}>
+            <select id={pickerID} onclick={defaultPreventer()}>
                 <option value="h1">H1</option>
                 <option value="h2">H2</option>
                 <option value="h3">H3</option>
@@ -249,6 +253,8 @@ function buildEditToolbar(){
                 <option value="h5">H5</option>
                 <option value="h6">H6</option>
                 <option value="ul">Unordered List</option>
+                <option value="ol">Ordered List</option>
+                <option value="p">Paragraph</option>
             </select>
             <button onClick={formatBlockAction(pickerID)}>Format</button>
             <button onClick={()=>{saveEditButtonAction(targeting(), location, dispatch)}}>Save</button>

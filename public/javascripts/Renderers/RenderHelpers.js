@@ -40,7 +40,7 @@ export function validateInlineElement(type, data){
 }
 export function validateInlineContents(contents){
     let isValid = true;
-    let inlineTypes = ["text", "i", "b", "a", "cite", "dfn", "mark", "span"];
+    let inlineTypes = ["text", "i", "b", "a", "cite", "dfn", "mark", "span", "em", "strong"];
     if (Array.isArray(contents)){
         contents.map((element) => {
             if (typeof element.type !== "string") {
@@ -56,6 +56,7 @@ export function validateInlineContents(contents){
             if (!inlineTypes.includes(contents.type)) isValid = false;
         }
     }
+    if (!isValid) alert(contents);
     return isValid;
 }
 
