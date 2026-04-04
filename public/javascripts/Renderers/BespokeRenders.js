@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -227,9 +227,6 @@ function buildEditToolbar(){
     const emAction = {
         cmd: "italic"
     }
-    const underlineAction = {
-        cmd: "underline"
-    }
     const location = useContext(locationContext);
     const dispatch = useContext(contentDispatchContext);
     let targeting = ()=>{
@@ -237,15 +234,23 @@ function buildEditToolbar(){
     }
     const target = document.getElementById(location.toString());
     console.log(location);
-    console.log
+    const pickerID = `NewFormatBlock${location.toString()}`;
     return (
         <div style={{position: "relative", top: "-30px", margin: "0px 0px -30px 0px", height: "30px"}}>
             <button onClick={editButtonAction(boldAction)}>Bold</button>
             <button onClick={editButtonAction(emAction)}>Italic</button>
-            <button onClick={editButtonAction(underlineAction)}>Underline</button>
-            <button onClick={()=>{console.log(location)}}>Location</button>
-            <button onClick={()=>{console.log(targeting())}}>Target</button>
+            
             <button onClick={()=>{console.log(targeting().id)}}>TargetID</button>
+            <select id={pickerID} onclick={(e) => e.preventDefault()}>
+                <option value="h1">H1</option>
+                <option value="h2">H2</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+                <option value="h5">H5</option>
+                <option value="h6">H6</option>
+                <option value="ul">Unordered List</option>
+            </select>
+            <button onClick={formatBlockAction(pickerID)}>Format</button>
             <button onClick={()=>{saveEditButtonAction(targeting(), location, dispatch)}}>Save</button>
         </div>
     )

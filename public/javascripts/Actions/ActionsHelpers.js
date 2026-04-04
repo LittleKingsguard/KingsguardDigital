@@ -333,6 +333,14 @@ function appendSpecialContent(data, type){
 
 }
 
+export function formatBlockAction(selector){
+    return (e) => {
+        e.preventDefault();
+        const arg = document.getElementById(selector).value;
+        document.execCommand("formatBlock", false, arg)
+    }
+}
+
 function validateContentStructure(data){
     if (typeof data !== "object") return false;
     if (typeof data.content !== "object") return false;
