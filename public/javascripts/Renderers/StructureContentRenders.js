@@ -113,6 +113,8 @@ export function buildTitle(data){
     if (data.type !== "title" || typeof data.content !== 'string'){
         return
     }
+    Content.title = data;
+    console.log(`The title should be: ${Content.title.content}`)
     return (
         <title {...data.props}>{data.content}</title>
     )

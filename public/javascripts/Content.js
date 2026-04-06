@@ -11,6 +11,10 @@ export default class Content {
     static setContent;
     static #targeted;
     static #dispatch;
+    static title;
+    static #CSSSheet;
+    static #CSSClassList;
+    static #CSSElementOwners;
 
     static set target(location){
         let targetData = this.getContentbyLocation(location);
@@ -34,13 +38,40 @@ export default class Content {
     static get active(){
         return this.#content;
     }
-
-
-
+    static get CSS(){
+        return this.#CSSSheet;
+    }
+    static set CSS(sheet){
+        console.log(`Checking CSS`)
+        console.log(sheet)
+        console.log(this.#CSSSheet)
+        if (this.#CSSSheet === undefined) {
+            console.log(`Attempting to set CSS`)
+            console.log(sheet)
+            this.#CSSSheet = sheet;
+            console.log(this.#CSSSheet)
+        }
+        if (this.#CSSSheet instanceof CSSStyleSheet){
+            console.log(`Attempting to clear CSS. ${this.#CSSSheet.cssRules.length} rules remaining`)
+            while (this.#CSSSheet.cssRules.length > 0){
+            console.log(`Attempting to delete CSS rule. ${this.#CSSSheet.cssRules.length} rules remaining`)
+                this.#CSSSheet.deleteRule(0);
+            }
+            this.#CSSClassList = [];
+            this.#CSSElementOwners = [];
+        }
+    }
+    static get CSSClasses(){
+        return this.#CSSClassList;
+    }
+    static get CSSElementOwners(){
+        return this.#CSSElementOwners;
+    }
     static DisplayContent() {
         const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
         Content.#content = content;
         Content.#dispatch = dispatch;
+        Content.CSS = document.getElementById('mainCSS').sheet;
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
             //console.log(addElements(content));
@@ -403,5 +434,21 @@ export default class Content {
         })
         if (Object.keys(dataCopy).length === 0) return;
         return dataCopy;
+    }
+    static addCSSClass(classInfo, data){//classInfo expects name (string) and style(object) props
+        if (typeof classInfo !== "object") return {success: false, status: "BadInfo"};
+        if (typeof classInfo.name !== "string") return {success: false, status: "BadInfo"};
+        if (typeof classInfo.style !== "string") return {success: false, status: "BadInfo"};
+        if (this.#CSSClassList.includes(classInfo.name)) return {success: false, status: "ClassExists"};
+        let index = null;
+        try {
+            index = this.#CSSSheet.insertRule(classInfo.style)
+            this.#CSSClassList.unshift(classInfo.name);
+            this.#CSSElementOwners.unshift({name: classInfo.name, owner: data});
+        }
+        catch {
+            return {success: false, status: "InsertFail"};
+        }
+        return {success: true, status: index}; //returns the index of the added rule
     }
 }

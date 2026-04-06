@@ -26,7 +26,13 @@ function addNavBar(data, user){
             placement: "root",
             css:{
                 id: "rootContent",
-                classes: ["rootContent"]
+                classes: ["rootContent"],
+                classDef: [
+                    {
+                        name: "rootContent",
+                        style: ".activeContent {  float: right;  text-align: left;  background: azure;  margin-left: 150px;  height: 100%;}"
+                    }
+                ]
             },
             content:[userNav,data], 
             parent:{}

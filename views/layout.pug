@@ -2,7 +2,7 @@ doctype html
 html
   head
     //title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/style.css', id='mainCSS')
     - var preloadString = typeof preload === "undefined" ? JSON.stringify({}) : JSON.stringify(preload);
     script window.preloadContent = !{preloadString};
     //script console.log(window.preloadContent);

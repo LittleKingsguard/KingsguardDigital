@@ -3,6 +3,12 @@
   "css": {
     "classes": [
       "Profile"
+    ],
+    "classDef": [
+      {
+        "name": ".Profile",
+        "style": ".Profile {  max-width: 1350px;}"
+      }
     ]
   },
   "content": [
@@ -15,6 +21,12 @@
       "css": {
         "classes": [
           "ProfileLead"
+        ],
+        "classDef": [
+          {
+            "name": ".ProfileLead",
+            "style": ".ProfileLead {  position: sticky;  top: 0;  color: White;  background: darkgrey;  overflow: hidden;  padding: 20px 20px 20px 20px;}"
+          }
         ]
       },
       "content": [
@@ -23,6 +35,12 @@
           "css": {
             "classes": [
               "ProfileLeadLeft"
+            ],
+            "classDef": [
+              {
+                "name": ".ProfileLeadLeft",
+                "style": ".ProfileLeadLeft {  float: left;  text-align: left;  color: White;  background: darkgrey;}"
+              }
             ]
           },
           "content": [
@@ -57,6 +75,12 @@
           "css": {
             "classes": [
               "ProfileLeadRight"
+            ],
+            "classDef": [
+              {
+                "name": ".ProfileLeadRight",
+                "style": ".ProfileLeadRight {  float: right;  text-align: right;  color: White;  background: darkgrey;}"
+              }
             ]
           },
           "content": [
@@ -115,6 +139,12 @@
       "css": {
         "classes": [
           "ProfileBody"
+        ],
+        "classDef": [
+          {
+            "name": ".ProfileBody",
+            "style": ".ProfileBody {  padding: 20px 10px 10px 20px;}"
+          }
         ]
       },
       "content": [
@@ -123,6 +153,12 @@
           "css": {
             "classes": [
               "ProfileSummary"
+            ],
+            "classDef": [
+              {
+                "name": ".ProfileSummary",
+                "style": ".ProfileSummary {  clear: both;}"
+              }
             ]
           },
           "content": [{
@@ -135,6 +171,12 @@
           "css": {
             "classes": [
               "ExpertiseContainer"
+            ],
+            "classDef": [
+              {
+                "name": ".ExpertiseContainer",
+                "style": ".ExpertiseContainer{  padding-top: 20px;}"
+              }
             ]
           },
           "content": [
@@ -301,6 +343,12 @@
                   "css": {
                     "classes": [
                       "ExperienceLead"
+                    ],
+                    "classDef": [
+                      {
+                        "name": ".ExperienceLead",
+                        "style": ".ExperienceLead{  overflow: hidden;  padding: 15px;  background: lightgray;}"
+                      }
                     ]
                   },
                   "content":[
@@ -309,6 +357,12 @@
                       "css": {
                         "classes": [
                           "ExperienceLeadLeft"
+                        ],
+                        "classDef": [
+                          {
+                            "name": ".ExperienceLeadLeft",
+                            "style": ".ExperienceLeadLeft{  float: left;}"
+                          }
                         ]
                       },
                       "content": [
@@ -341,6 +395,12 @@
                       "css": {
                         "classes": [
                           "ExperienceLeadRight"
+                        ],
+                        "classDef": [
+                          {
+                            "name": ".ExperienceLeadRight",
+                            "style": ".ExperienceLeadRight{  float: right;}"
+                          }
                         ]
                       },
                       "content": [
@@ -375,6 +435,12 @@
                   "css": {
                     "classes": [
                       "ExperienceBody"
+                    ],
+                    "classDef": [
+                      {
+                        "name": ".ExperienceBody",
+                        "style": ".ExperienceBody{  clear: both;  padding: 0 15px 0 15px;}"
+                      }
                     ]
                   },
                   "content": [

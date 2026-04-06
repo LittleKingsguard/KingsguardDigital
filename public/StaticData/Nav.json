@@ -2,6 +2,28 @@
   "type": "div",
   "css": {
     "classes": ["navBar"
+    ],
+    "classDef": [
+      {
+        "name": ".navBar",
+        "style": ".navBar {  float: left;  background: lightgray;  height: 100vh;  width: 150px;  position: fixed;}"
+      },
+      {
+        "name": "a",
+        "style": "a {  color: #00B7FF;}"
+      },
+      {
+        "name": "body",
+        "style": "body {  margin: auto;  font: 14px \"Lucida Grande\", Helvetica, Arial, sans-serif;  width: fit-content;  position: center; color: black;}"
+      },
+      {
+        "name": "h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6",
+        "style": "h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {  margin-top: 0;  margin-bottom: 0;}"
+      },
+      {
+        "name": ".selected",
+        "style": ".selected{  box-shadow: 10px 10px rgb(24, 24, 255);}"
+      }
     ]
   },
   "placement": "navigation",
@@ -10,7 +32,13 @@
       "type": "div",
       "css": {
         "classes": ["Logo"
-        ]
+        ],
+      "classDef": [
+        {
+          "name": ".Logo",
+          "style": ".Logo {  text-align: center;  background: black;  color: blue;  padding: 15px 0 15px 0;}"
+        }
+      ]
       },
       "content": [
         {
@@ -24,7 +52,13 @@
       "css": {
         "classes": [
           "NavButton"
-        ]
+        ],
+      "classDef": [
+        {
+          "name": ".NavButton",
+          "style": ".NavButton {  padding: 10px 20px 10px 20px;  margin: 1px;  background: gray;}"
+        }
+      ]
       },
       "content": [
         {

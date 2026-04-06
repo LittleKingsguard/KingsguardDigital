@@ -57,20 +57,24 @@ class Content {
         }
         return data;
     }
+    static validateCSS(data){
+        if (typeof data.css !== "object") data.css = {};
+        if (typeof data.css.id !== "string") data.css.id = "";
+        if (typeof data.css.classes === "string") data.css.classes = [data.css.classes];
+        if (!Array.isArray(data.css.classes)) data.css.classes = [];
+        if (typeof data.css.style !== "object") data.css.style = {};
+        if (!Array.isArray(data.css.classDef)) data.css.classDef = [];
+    }
 
     constructor(data){
-        if (Content.emptyTypes.includes(data.type)) console.log(data);
         if (Array.isArray(data)) return data.map((data) => {return new Content(data);});
         if (typeof data !== 'object') return new Content(badData);
         if (typeof data.type !== 'string' ||
             (typeof data.content === "undefined" && !Content.emptyTypes.includes(data.type))) return new Content(badData);
         if (!Content.validTypes.includes(data.type)) return new Content(badData);
-        if (typeof data.css !== "object") data.css = {};
-        if (typeof data.css.id !== "string") data.css.id = "";
-        if (typeof data.css.classes === "string") data.css.classes = [data.css.classes];
-        if (!Array.isArray(data.css.classes)) data.css.classes = [];
-        data = Content.validateContents(data);
-        data = Content.validateProps(data);
+        Content.validateCSS(data);
+        Content.validateContents(data);
+        Content.validateProps(data);
         this.type = data.type;
         this.content = data.content;
         this.css = data.css;

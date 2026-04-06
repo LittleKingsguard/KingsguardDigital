@@ -1,4 +1,5 @@
 import {login} from "../Actions/User";
+import Content from "../Content";
 
 export function validateId ( css ){
     if (typeof css.id !== 'undefined'){
@@ -71,4 +72,14 @@ export function genericElementProps(data){
     data.props.id = data.location.toString();
     data.props.className = classlist(data.css);
     //if (data.props.style === undefined) data.props.style = data.css.style;
+}
+
+export function createCSSAttributes(data){
+    if (!Array.isArray(data.css.classDef)) return;
+    let newDefs = [];
+    data.css.classDef.forEach((classInfo) =>{
+        const {success, status} = Content.addCSSClass(classInfo, data);
+        if (success) newDefs.push(classInfo);
+    })
+    data.css.classDef = newDefs;
 }

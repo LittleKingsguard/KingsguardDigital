@@ -66,5 +66,8 @@ function BuildElements(){
     if (newElement === undefined) newElement = mediaRenderer(data);
     if (newElement === undefined) newElement = formRenderer(data);
     if (newElement === undefined) newElement = bespokeRenderer(data);
-    return newElement;
+    if (newElement !== undefined){
+        helpers.createCSSAttributes(data);
+        return newElement;
+    }
 }

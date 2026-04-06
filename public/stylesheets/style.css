@@ -1,12 +1,12 @@
-body {
+/* body {
   margin: auto;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   width: fit-content;
   position: center;
-}
+} */
 
 /* TODO Collapse into topbar and stack on content box if window is less than 600px wide */
-.navBar {
+/* .navBar {
   float: left;
   background: lightgray;
   height: 100vh;
@@ -25,10 +25,10 @@ body {
   padding: 10px 20px 10px 20px;
   margin: 1px;
   background: gray;
-}
+} */
 
 /* TODO Remove margin at 600px window or smaller */
-.activeContent {
+/* .activeContent {
   float: right;
   text-align: left;
   background: azure;
@@ -109,4 +109,4 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .selected{
   box-shadow: 10px 10px rgb(24, 24, 255);
-}
+} */
