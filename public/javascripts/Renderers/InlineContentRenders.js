@@ -8,6 +8,7 @@ import {contentDispatchContext, locationContext} from "../Contexts";
 import {useContext} from "react";
 import {makeEditable} from "../Actions/ActionsHelpers";
 import {inputHandler} from "../Actions/NewContent";
+import Content from "../Content";
 
 export function addText(data){
     if (!helpers.validateText('text', data)){
@@ -22,15 +23,21 @@ export function addText(data){
     if (data.css === undefined) data.css = {};
     let onclickHandler = () => {
         return makeEditable(data, location, dispatch);
-    };
-    let onInputHandler = (event) => {
-        return inputHandler(event.nativeEvent, data, location, dispatch);
-    };
-    return (
-        <span id={location.toString()} onDoubleClick={onclickHandler} className ="EditContainer">
-        {data.content}
-    </span>
-    )
+    }
+    if (Content.user.isContributor){
+        return (
+            <span id={location.toString()} onDoubleClick={onclickHandler} className ="EditContainer">
+                {data.content}
+            </span>
+        )
+    }
+    else {
+       return (
+        <span id={location.toString()} className ="EditContainer">
+            {data.content}
+        </span>
+        ) 
+    }
 }
 export function addSpan(data){
     if (!helpers.validateInlineElement('span', data)){

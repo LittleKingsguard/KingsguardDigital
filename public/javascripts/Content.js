@@ -15,6 +15,7 @@ export default class Content {
     static #CSSSheet;
     static #CSSClassList;
     static #CSSElementOwners;
+    static #user;
 
     static set target(location){
         let targetData = this.getContentbyLocation(location);
@@ -62,6 +63,11 @@ export default class Content {
     static get CSSElementOwners(){
         return this.#CSSElementOwners;
     }
+
+    static get user(){
+        return this.#user;
+    }
+
     static DisplayContent() {
         const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
         Content.#content = content;
@@ -70,6 +76,8 @@ export default class Content {
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
             //console.log(addElements(content));
+            if (content.props.user === null) content.props.user = {isContributor: false, isAdmin:false};
+            Content.#user = content.props.user;
             return (
                 <contentDispatchContext.Provider value={dispatch}>
                     <parentContext.Provider value = {null}>

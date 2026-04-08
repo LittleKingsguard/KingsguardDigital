@@ -19,19 +19,28 @@ export function buildDiv(data){
     let onclickHandler = (e) => {
         if (!helpers.validateEditable(data)) return;
         if (e.defaultPrevented) return;
-        addInspector();
-        Content.target = location;/* 
+        Content.target = location;
+        addInspector();/* 
         const update = Content.target;
         modifyDispatch(update, location, dispatch); */
         console.log(e);
         e.preventDefault();
     }
     helpers.genericElementProps(data);
-    return (
-        <div {...data.props} onClick={onclickHandler}>
-            {addElements(data.content) }
-        </div>
-    )
+    if (Content.user.isContributor) {
+        return (
+            <div {...data.props} onClick={onclickHandler}>
+                {addElements(data.content) }
+            </div>
+        )
+    }
+    else {
+        return (
+            <div {...data.props}>
+                {addElements(data.content) }
+            </div>
+        )
+    }
 }
 
 export function buildDivCreator(location){

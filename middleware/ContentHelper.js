@@ -9,9 +9,11 @@ function addNavBar(data, user){
     console.log(user);
     try {
         let userWindow;
+        let userData = null;
         if (user) {
             userWindow = userPane;
             userWindow.content[0].content = user.username;
+            userData = user.json;
         }
         else {
             userWindow = loginForm;
@@ -35,6 +37,7 @@ function addNavBar(data, user){
                 ]
             },
             content:[userNav,data], 
+            props: {user: userData},
             parent:{}
         };
         return new Content(rootData);

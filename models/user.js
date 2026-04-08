@@ -65,7 +65,7 @@ class user {
     };
 
     sendLogin(res) {
-        console.log("sendLogin ran here: " + this.json);
+        console.log("sendLogin ran here: " + JSON.stringify(this.json));
         let options = {
             httpOnly: true, // The cookie is only accessible by the web server
             secure: true,
@@ -97,8 +97,9 @@ class user {
     static checkLogin(req){
         try {
             const userData = jwt.verify(req.cookies.SessionID, process.env.SECRET_ACCESS_TOKEN);
-            //console.log(userData);
-            return new user(userData);
+            const newUser = new user(userData);
+            console.log("checkLogin ran here: " + JSON.stringify(newUser.json));
+            return newUser;
         }
         catch {
             return false;

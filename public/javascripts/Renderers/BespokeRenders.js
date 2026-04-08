@@ -91,7 +91,7 @@ function userPane(data) {
     };
     return(
         <div  {...data.props} className={classnames} id={id}>
-            {addElements(data.content)}
+            {JSON.stringify(Content.user)}
             <button id={"logoutButton"} type={"button"} onClick={onclickHandler}>Logout</button>
             <button id={"testButton"} type={"button"} onClick={onTestHandler}>Modify Test</button>
         </div>
