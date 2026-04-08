@@ -83,3 +83,27 @@ export function createCSSAttributes(data){
     })
     data.css.classDef = newDefs;
 }
+
+export function getCSSData(className){
+    className = "." + className;
+    console.log(`getting CSS data for ${className}`)
+    let targetData = null;
+    console.log(Content.CSSElementOwners.length);
+    Content.CSSElementOwners.forEach((e) => {
+        if (e.name === className) targetData = e.owner;
+        console.log(e.name);
+    })
+    if (targetData === null) return "No value";
+    let cssData = "";
+    let cssIndex = null;
+    targetData.css.classDef.forEach((cssClass, index) => {
+        if (cssClass.name === className) {
+            cssData = cssClass.style;
+            cssIndex = index;
+        }
+    })
+    if (cssIndex === null) return "Not found";
+    const returnObj = {cssStyle: cssData, owner: targetData, index: cssIndex};
+    console.log(returnObj);
+    return returnObj;
+}

@@ -42,9 +42,6 @@ export default class Content {
         return this.#CSSSheet;
     }
     static set CSS(sheet){
-        console.log(`Checking CSS`)
-        console.log(sheet)
-        console.log(this.#CSSSheet)
         if (this.#CSSSheet === undefined) {
             console.log(`Attempting to set CSS`)
             console.log(sheet)
@@ -52,9 +49,7 @@ export default class Content {
             console.log(this.#CSSSheet)
         }
         if (this.#CSSSheet instanceof CSSStyleSheet){
-            console.log(`Attempting to clear CSS. ${this.#CSSSheet.cssRules.length} rules remaining`)
             while (this.#CSSSheet.cssRules.length > 0){
-            console.log(`Attempting to delete CSS rule. ${this.#CSSSheet.cssRules.length} rules remaining`)
                 this.#CSSSheet.deleteRule(0);
             }
             this.#CSSClassList = [];

@@ -115,12 +115,6 @@ function buildElementInspector(){
     let targetData = Content.target;
     if (typeof targetData !=="object") return;
     const dispatch = useContext(contentDispatchContext);
-    const deleteClassButton = (className) => {
-        return () => {
-            targetData = dropClass(targetData, className);
-            modifyDispatch(targetData, targetData.location, dispatch);
-        }
-    }
     const addClassButton = () =>{
         return () => {
             targetData = addClass(targetData, document.getElementById("newClass").value);
@@ -134,11 +128,7 @@ function buildElementInspector(){
             Location: {targetData.location}
             <div>
                 Classes:
-                {targetData.css.classes.map((className)=>{
-                    return (
-                        <div>{className} <button onClick={deleteClassButton(className)}>Delete</button></div>
-                    )
-                })}
+                {targetData.css.classes.map((className)=> inspectorClass(className, targetData, dispatch))}
                 <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
             </div>
             <div>Parent: {targetData.parent.type} <button onClick={setTargetAction(targetData.parent.location)}>Select</button></div>
@@ -157,10 +147,42 @@ function buildElementInspector(){
                 </select>
                 <button onClick={appendNewContentPickerAction(targetData, dispatch)}>Add Content</button>
             </div>
-            <button onClick={toggleHiddenAction("InspectedRawData")}>Show Data</button>
-            <div id="InspectedRawData" style={{display: "none", overflow: "scroll", width: "600px", height: "500px", backgroundColor: "black"}}>
+            <button onClick={toggleHiddenAction("InspectedRawData", () => Content.JSONify(targetData))}>Show Data</button>
+            <div id="InspectedRawData" style={{display: "none", overflow: "scroll", width: "600px", height: "500px", backgroundColor: "grey"}}>
                 {Content.JSONify(targetData)}
             </div>
+        </div>
+    )
+}
+
+function inspectorClass(className, targetData, dispatch){
+    const dataId = `classData${className}`
+    const dataTextId = `classDataText${className}`
+    const deleteClassButton = () => {
+        targetData = dropClass(targetData, className);
+        modifyDispatch(targetData, targetData.location, dispatch);
+    }
+    const refreshClassDisplay = () => {
+        toggleHiddenAction(dataId)();
+        let textArea = document.getElementById(dataTextId);
+        textArea.value = helpers.getCSSData(className).cssStyle;
+    }
+    const updateClass = () => {
+        toggleHiddenAction(dataId)();
+        let textArea = document.getElementById(dataTextId);
+        const cssData = helpers.getCSSData(className);
+        let classOwner = cssData.owner;
+        classOwner.css.classDef[cssData.index] = {name: className, style: textArea.value};
+        modifyDispatch(classOwner, classOwner.location, dispatch);
+    }
+    return (
+        <div>{className} 
+            <div id={dataId} style={{display: "none", width: "150px", backgroundColor: "grey"}}>
+                <textarea id={dataTextId} style={{ paddingTop: "5px", paddingBottom: "5px"}}> </textarea>
+                <button onClick={updateClass}>Update</button>
+            </div>
+            <button onClick={refreshClassDisplay}>Show CSS</button>
+            <button onClick={deleteClassButton}>Delete</button>
         </div>
     )
 }
