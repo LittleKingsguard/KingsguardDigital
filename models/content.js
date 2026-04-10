@@ -89,15 +89,22 @@ class Content {
                 "type": this.type,
                 "css": this.css,
                 "content": this.content,
-                "props": this.props
+                "props": this.props,
+                "placement": this.placement
             }
         )
     }
 
     async save(user){
-        await sql(`INSERT INTO public."Content"(
+        if (this.liveDate === undefined) this.liveDate = Date.now();
+        if (this.isVisible === undefined) this.isVisible = true;
+        console.log(user.json);
+        console.log(`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, ${Date.now()}, ${Date.now()}, ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${this}, ${"JSON"});`)
+	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${JSON.stringify(this.json)}, "JSON");`)
+        await sql`INSERT INTO public."Content"(
+	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
+	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${JSON.stringify(this.json)}, "JSON");`
     }
 }
 module.exports = Content;

@@ -7,7 +7,6 @@ import {buildAnchor} from "./StructureContentRenders";
 import {contentDispatchContext, locationContext} from "../Contexts";
 import {useContext} from "react";
 import {makeEditable} from "../Actions/ActionsHelpers";
-import {inputHandler} from "../Actions/NewContent";
 import Content from "../Content";
 
 export function addText(data){

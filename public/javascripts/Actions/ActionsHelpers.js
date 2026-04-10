@@ -2,7 +2,19 @@ import Content from "../Content";
 import { parseElement, parserEntry } from "../Parsers/ContentParser";
 
 export async function postFetch(url, data) {
-    const bodyString = JSON.stringify(data);
+    let bodyString = "";
+    let dataType = typeof data;
+    switch (dataType){
+        case "object":
+            bodyString = JSON.stringify(data);
+            break;
+        case "string":
+            bodyString = data;
+            break;
+        default:
+            alert("Bad data")
+            return {error: "Bad Data Format"};
+    }
     console.log(bodyString);
     try {
         const response = await fetch(url,{method:"POST",

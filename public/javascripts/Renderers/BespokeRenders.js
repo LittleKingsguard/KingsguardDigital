@@ -19,6 +19,7 @@ import {
 } from "./FormContentRenders";
 import { getContentAncestry } from "../Actions/ActionsHelpers";
 import Content from "../Content";
+import { newContent } from "../Actions/Content";
 
 function buildLogin(data){
     console.log("Login ran");
@@ -87,7 +88,8 @@ function userPane(data) {
     };
     let onTestHandler = () => {
         //return modifyDispatch(testData, [0, 1, 2, 1, 1, 0], dispatch);
-        console.log(Content.getContentListByClassName("navBar"));
+        console.log("Trying to save data");
+        newContent(dispatch);
     };
     return(
         <div  {...data.props} className={classnames} id={id}>
