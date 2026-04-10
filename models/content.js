@@ -1,4 +1,5 @@
 var badData = require('../public/StaticData/TestProfile2.json');
+const sql = require("../db.js");
 
 class Content {
 
@@ -93,6 +94,10 @@ class Content {
         )
     }
 
-
+    async save(user){
+        await sql(`INSERT INTO public."Content"(
+	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
+	VALUES (${user.username}, ${Date.now()}, ${Date.now()}, ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${this}, ${"JSON"});`)
+    }
 }
 module.exports = Content;
