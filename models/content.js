@@ -101,10 +101,10 @@ class Content {
         console.log(user.json);
         console.log(`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${JSON.stringify(this.json)}, "JSON");`)
+	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(this.json)}, "JSON");`)
         await sql`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('ContentKey'), ${JSON.stringify(this.json)}, "JSON");`
+	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(this.json)}, 1);`
     }
 }
 module.exports = Content;
