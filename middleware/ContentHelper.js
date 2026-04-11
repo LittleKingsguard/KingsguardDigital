@@ -48,4 +48,15 @@ function addNavBar(data, user){
     }
 }
 
-module.exports = {addNavBar};
+async function loadFromDB(id) {
+    //const idString = "'" + id.toString() + "'";
+    //console.log(`SQL statement is: ${`Select * FROM public."Content" WHERE "Key" = ${idString}`}`);
+    let dbResponse = await sql`Select * FROM public."Content" WHERE "Key" = ${id};`;
+    if (dbResponse.length !== 1) throw new Error("No content found");
+    let data = dbResponse.pop();
+    const foundContent = new Content(JSON.parse(data.Data));
+    console.log(foundContent.json);
+    return foundContent.json;
+}
+
+module.exports = {addNavBar, loadFromDB};

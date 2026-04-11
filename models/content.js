@@ -99,9 +99,6 @@ class Content {
         if (this.liveDate === undefined) this.liveDate = Date.now();
         if (this.isVisible === undefined) this.isVisible = true;
         console.log(user.json);
-        console.log(`INSERT INTO public."Content"(
-	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(this.json)}, "JSON");`)
         await sql`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
 	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(this.json)}, 1);`
