@@ -4,6 +4,7 @@ import {useReducer} from "react";
 import {dataContext,locationContext, contentDispatchContext, parentContext} from "./Contexts.js";
 import {addClass, dropClass, validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
+import { findAllPlacements, parseDataIntoPlacements } from "./PlacementAssmbler.js";
 
 export default class Content {
 
@@ -16,6 +17,7 @@ export default class Content {
     static #CSSClassList;
     static #CSSElementOwners;
     static #user;
+    static #placementList = [];
 
     static set target(location){
         let targetData = this.getContentbyLocation(location);
@@ -42,7 +44,7 @@ export default class Content {
     static get CSS(){
         return this.#CSSSheet;
     }
-    static set CSS(sheet){
+    static set CSS(sheet){ //Deletes CSSData if exists, otherwise adds new sheet.
         if (this.#CSSSheet === undefined) {
             console.log(`Attempting to set CSS`)
             console.log(sheet)
@@ -63,12 +65,18 @@ export default class Content {
     static get CSSElementOwners(){
         return this.#CSSElementOwners;
     }
-
     static get user(){
         return this.#user;
     }
+    static get placements(){
+        return this.#placementList;
+    }
 
     static DisplayContent() {
+        if (Array.isArray(window.preloadContent)){
+            findAllPlacements(window.preloadContent[0]);//In this case preloadContent is [format, data, user]
+            parseDataIntoPlacements(window.preloadContent[1]);
+        }
         const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
         Content.#content = content;
         Content.#dispatch = dispatch;
@@ -453,5 +461,11 @@ export default class Content {
             return {success: false, status: "InsertFail"};
         }
         return {success: true, status: index}; //returns the index of the added rule
+    }
+    static addPlacement(placementData){
+        this.#placementList.push(placementData);
+    }
+    static clearPlacements(){
+        this.#placementList = [];
     }
 }

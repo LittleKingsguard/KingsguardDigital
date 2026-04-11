@@ -43,38 +43,28 @@ export function buildDiv(data){
     }
 }
 
-export function buildDivCreator(location){
-    if (!helpers.validateStructureElement('div', data)){
+export function buildPlacement(data){
+    if (!helpers.validateStructureElement('placement', data)){
         return
     }
+    //let id = helpers.validateId(data.css);
+    const location = useContext(locationContext);
     const dispatch = useContext(contentDispatchContext);
-    let onclickHandler = () => {
-        let CSSId = document.getElementById("ElementID").value;
-        let classlist = document.getElementById("ElementClass").value.split(" ");
-        let propsData = JSON.parse(document.getElementById("CustomCSS").value);
-        let data = {
-            type: "div",
-            css: {
-                id: CSSId,
-                classes: classlist
-            },
-            props: propsData,
-            content: []
-        };
-        return insertDispatch(data, location, dispatch);
-    };
-    return (
-        <div id={"CreatorPane"}>
-            <h3>Create Div</h3>
-            <h4>CSS</h4>
-            <div>
-                <input id={"ElementID"} type={"text"} name={"ElementID"} placeholder={"Element ID"}/>
-                <input id={"ElementClass"} type={"text"} name={"ElementClass"} placeholder={"Element Classes"}/>
-                <textarea id={"CustomCSS"} name={"CustomCSS"} placeholder={"JSON data containing element-specific CSS"}/>
-                <button id={"CreateButton"} type={"button"} onClick={onclickHandler}>Log In</button>
+    helpers.genericElementProps(data);
+    if (Content.user.isContributor) {
+        return (
+            <div {...data.props} onClick={onclickHandler}>
+                {addElements(data.content) }
             </div>
-        </div>
-    )
+        )
+    }
+    else {
+        return (
+            <div {...data.props}>
+                {addElements(data.content) }
+            </div>
+        )
+    }
 }
 
 export function buildUnorderedList(data){
@@ -141,6 +131,8 @@ export default function structureRenderer(data){
             return buildUnorderedList(data);
         case "ol":
             return buildOrderedList(data);
+        case "placement":
+            return buildPlacement(data);
         default:
             return;
     }
