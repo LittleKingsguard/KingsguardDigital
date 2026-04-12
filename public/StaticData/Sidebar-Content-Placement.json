@@ -1,0 +1,175 @@
+{
+  "type": "div",
+  "placement": "root",
+  "css":{
+      "id": "rootContent",
+      "classes": ["rootContent"],
+      "classDef": [
+          {
+              "name": ".activeContent",
+              "style": ".activeContent {  float: right;  text-align: left;  background: azure;  margin-left: 150px;  height: 100%;}"
+          }
+      ]
+  },
+  "content":[
+    {
+      "type": "div",
+      "css": {
+        "classes": ["navBar"
+        ],
+        "classDef": [
+          {
+            "name": ".navBar",
+            "style": ".navBar {  float: left;  background: lightgray;  height: 100vh;  width: 150px;  position: fixed;}"
+          },
+          {
+            "name": "a",
+            "style": "a {  color: #00B7FF;}"
+          },
+          {
+            "name": "body",
+            "style": "body {  margin: auto;  font: 14px \"Lucida Grande\", Helvetica, Arial, sans-serif;  width: fit-content;  position: center; color: black;}"
+          },
+          {
+            "name": "h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6",
+            "style": "h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {  margin-top: 0;  margin-bottom: 0;}"
+          },
+          {
+            "name": ".selected",
+            "style": ".selected{  box-shadow: 10px 10px rgb(24, 24, 255);}"
+          }
+        ]
+      },
+      "placement": "navigation",
+      "content": [
+        {
+          "type": "div",
+          "css": {
+            "classes": ["Logo"
+            ],
+          "classDef": [
+            {
+              "name": ".Logo",
+              "style": ".Logo {  text-align: center;  background: black;  color: blue;  padding: 15px 0 15px 0;}"
+            }
+          ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Logo"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ],
+          "classDef": [
+            {
+              "name": ".NavButton",
+              "style": ".NavButton {  padding: 10px 20px 10px 20px;  margin: 1px;  background: gray;}"
+            }
+          ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "About Me"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Blog"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Projects"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Gallery"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Photo"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "css": {
+            "classes": [
+              "NavButton"
+            ]
+          },
+          "content": [
+            {
+              "type": "text",
+              "content": "Games"
+            }
+          ]
+        }
+      ]
+    },
+  {
+    "type": "placement",
+    "css": {
+      "classes": [
+        "Profile"
+      ],
+      "classDef": [
+        {
+          "name": ".Profile",
+          "style": ".Profile {  max-width: 1350px;}"
+        }
+      ]
+    },
+    "props":{
+      "name": "profile"
+    }
+  }
+  ], 
+  "props": {}
+}

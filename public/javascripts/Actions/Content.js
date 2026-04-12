@@ -6,5 +6,5 @@ export async function newContent(dispatch) {//username/password are used for log
     const returnString = await postFetch(url, Content.JSONify(Content.active));
     console.log(returnString);
     if (returnString.error) alert(returnString.error);
-    else loadDispatch(returnString, dispatch);
+    //else loadDispatch(returnString, dispatch);
 }
