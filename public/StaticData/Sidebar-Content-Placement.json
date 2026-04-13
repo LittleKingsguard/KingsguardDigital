@@ -154,7 +154,7 @@
       ]
     },
   {
-    "type": "placement",
+    "type": "div",
     "css": {
       "classes": [
         "Profile"
@@ -168,7 +168,52 @@
     },
     "props":{
       "name": "profile"
-    }
+    },
+    "content":[
+      {
+        "type": "placement",
+        "css": {
+          "classes":[]
+        },
+        "props": {
+          "name": "title"
+        }
+      },
+      {
+        "type": "placement",
+        "css": {
+          "classes": [
+            "ProfileLead"
+          ],
+          "classDef": [
+            {
+              "name": ".ProfileLead",
+              "style": ".ProfileLead {  position: sticky;  top: 0;  color: White;  background: darkgrey;  overflow: hidden;  padding: 20px 20px 20px 20px;}"
+            }
+          ]
+        },
+        "props": {
+          "name": "header"
+        }
+      },
+      {
+        "type": "placement",
+        "css": {
+          "classes": [
+            "ProfileBody"
+          ],
+          "classDef": [
+            {
+              "name": ".ProfileBody",
+              "style": ".ProfileBody {  padding: 20px 10px 10px 20px;}"
+            }
+          ]
+        },
+        "props": {
+          "name": "main"
+        }
+      }
+    ]
   }
   ], 
   "props": {}

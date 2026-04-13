@@ -41,6 +41,7 @@ export function findAllPlacements(format){
 
 export function parseDataIntoPlacements(data){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
+    if (Array.isArray(data)) return data.map(parseDataIntoPlacements);
     if (typeof data.type !== "string" || typeof data.content !== "object") throw new Error("Bad data - data is not content");
     if (data.type = "placement") includePlacement(data);
     data.contentParent = "root";

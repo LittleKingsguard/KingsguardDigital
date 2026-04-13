@@ -12,12 +12,14 @@ class Content {
 
     static validateContents(data){
         if (this.textTypes.includes(data.type) && typeof data.content !== 'string') {
+            console.log(`Bad data -- Type is ${data.type}, expects string content, instead contains ${typeof data.content}`);
             data.content = "Bad data";
             return data;
         }
         if (this.textTypes.includes(data.type)) return data;
         if (this.emptyTypes.includes(data.type)) return data;
         if (typeof data.content !== 'object') {
+            console.log(`Bad data -- Type is ${data.type}, expects object content, instead contains ${typeof data.content}`);
             data.content = badData;
             return data;
         }
@@ -69,10 +71,19 @@ class Content {
 
     constructor(data){
         if (Array.isArray(data)) return data.map((data) => {return new Content(data);});
-        if (typeof data !== 'object') return new Content(badData);
+        if (typeof data !== 'object') {
+            console.log(`Bad data -- Data is ${typeof data}, expects object`);
+            return new Content(badData);
+        }
         if (typeof data.type !== 'string' ||
-            (typeof data.content === "undefined" && !Content.emptyTypes.includes(data.type))) return new Content(badData);
-        if (!Content.validTypes.includes(data.type)) return new Content(badData);
+            (typeof data.content === "undefined" && !Content.emptyTypes.includes(data.type))){
+                console.log(`Bad data -- Type is ${data.type}, expects any content, instead contains ${typeof data.content}`);
+                return new Content(badData);
+            }
+        if (!Content.validTypes.includes(data.type)){
+            console.log(`Bad data -- Type is ${data.type}, expects any of ${this.validTypes}`);
+            return new Content(badData);
+        }
         Content.validateCSS(data);
         Content.validateContents(data);
         Content.validateProps(data);
@@ -95,13 +106,22 @@ class Content {
         )
     }
 
-    async save(user){
-        if (this.liveDate === undefined) this.liveDate = Date.now();
-        if (this.isVisible === undefined) this.isVisible = true;
+    static async save(content, user, liveDate = Date.now(), isVisible = true){
         console.log(user.json);
+        if(typeof content !== "object") throw new Error("Data is not object");
+        if (Array.isArray(content)){
+            content = content.map((data) => {
+                let newContent = new Content(data);
+                return newContent.json;
+            });
+        }
+        else {
+            let newContent = new Content(content);
+            content = newContent.json;
+        }
         await sql`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, NOW(), NOW(), ${this.liveDate}, ${this.isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(this.json)}, 1);`
+	VALUES (${user.username}, NOW(), NOW(), ${liveDate}, ${isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(content)}, 6);`
     }
 }
 module.exports = Content;

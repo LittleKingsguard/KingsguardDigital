@@ -17,9 +17,8 @@ import {
     buildOutput, buildSelect,
     buildTextarea
 } from "./FormContentRenders";
-import { getContentAncestry } from "../Actions/ActionsHelpers";
+import { getContentAncestry, newContent } from "../Actions/ActionsHelpers";
 import Content from "../Content";
-import { newContent } from "../Actions/Content";
 
 function buildLogin(data){
     console.log("Login ran");

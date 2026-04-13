@@ -3,7 +3,7 @@ const Content = require('./content.js')
 
 class Format {
     constructor (data){
-        if (typeof data.Formatting === "object") this.format = new Content(data.format);
+        if (typeof data.Formatting === "object") this.format = new Content(data.Formatting);
         else throw new Error ("Format not provided");
         if (typeof data.Description === "string") this.description = data.Description;
         else this.description = "Description not loaded";
