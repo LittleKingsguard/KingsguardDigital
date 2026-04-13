@@ -26,7 +26,11 @@ router.post('/new', async function(req, res, next) {
 });
 
 router.get('/test', async function(req, res, next) {
-  res.render('index', {preload: await contentHelper.loadFromDB(1)});
+  let userData = user.checkLogin(req);
+  let preloadData = await contentHelper.loadFromDB(2);
+  preloadData.push(userData);
+  console.log(preloadData);
+  res.render('index', {preload: preloadData});
 });
 
 router.post('/save', async function(req, res, next) {

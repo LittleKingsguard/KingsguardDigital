@@ -1,7 +1,7 @@
 import Content from "./Content";
 
 export function getPlacementObjectbyName(placementName){
-    if (typeof placementData.props.name !== "string") throw new Error("Bad data - Placement name is not string");
+    if (typeof placementName !== "string") throw new Error(`Bad data - Placement name is not string -- Found ${placementName}`);
     let foundPlacement = {success: false, placement: null};
     Content.placements.forEach((placement) => {
         if (placement.props.name === placementName) foundPlacement = {success: true, placement: placement};
@@ -10,16 +10,17 @@ export function getPlacementObjectbyName(placementName){
 }
 
 export function includePlacement(placementData){
-    let foundPlacement = getPlacementObjectbyName(placementData.props.name);
-    if (foundPlacement.success) return;
+    console.log(placementData);
+    let {success, placement} = getPlacementObjectbyName(placementData.props.name);
+    if (success) return;
     Content.addPlacement(placementData);
 }
 
-export function addToPlacement(placementName, data){
-    let foundPlacement = getPlacementObjectbyName(placementName);
-    if (foundPlacement.success){
+export function addToPlacement(data){
+    let {success, placement} = getPlacementObjectbyName(data.placement);
+    if (success){
         if (!Array.isArray(placement.content)) placement.content = [placement.content];
-        foundPlacement.content.push(data);
+        placement.content.push(data);
     }
     else {
         throw new Error("placement not found");
@@ -29,6 +30,7 @@ export function addToPlacement(placementName, data){
 export function findAllPlacements(format){
     if (typeof format !== "object") return;
     if (typeof format.type !== "string") return;
+    if (typeof format.content === "string") return;
     if (typeof format.content !== "object") format.content = [];
     if (!Array.isArray(format.content)) format.content = [format.content];
     if (format.type !== "placement") {
@@ -42,12 +44,12 @@ export function findAllPlacements(format){
 export function parseDataIntoPlacements(data){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (Array.isArray(data)) return data.map(parseDataIntoPlacements);
-    if (typeof data.type !== "string" || typeof data.content !== "object") throw new Error("Bad data - data is not content");
-    if (data.type = "placement") includePlacement(data);
+    if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
+    if (data.type === "placement") includePlacement(data);
     data.contentParent = "root";
     if (typeof data.placement === "string"){
         try {
-            addToPlacement(data, data.placement);
+            addToPlacement(data);
         }
         catch (error) {
             console.log(error);
@@ -64,7 +66,7 @@ export function parseDataIntoPlacements(data){
 function parseDataIntoPlacementsHelper(data){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
-    if (data.type = "placement") includePlacement(data);
+    if (data.type === "placement") includePlacement(data);
     if (typeof data.placement === "string" && data.placement !== data.contentParent.placement){ //If not in different placement from parent, it is already included in tree
         try {
             addToPlacement(data, data.placement);

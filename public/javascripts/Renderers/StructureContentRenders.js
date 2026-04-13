@@ -53,7 +53,7 @@ export function buildPlacement(data){
     helpers.genericElementProps(data);
     if (Content.user.isContributor) {
         return (
-            <div {...data.props} onClick={onclickHandler}>
+            <div {...data.props}>
                 {addElements(data.content) }
             </div>
         )

@@ -73,26 +73,47 @@ export default class Content {
     }
 
     static DisplayContent() {
+        console.log(window.preloadContent);
+        let content = null;
+        let dispatch = null;
         if (Array.isArray(window.preloadContent)){
+            [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent[1]);
+            Content.#content = content;
+            Content.#dispatch = dispatch;
             findAllPlacements(window.preloadContent[0]);//In this case preloadContent is [format, data, user]
             parseDataIntoPlacements(window.preloadContent[1]);
+            Content.#user = window.preloadContent[2];
+            Content.CSS = document.getElementById('mainCSS').sheet;
+            if (content === null || Object.keys(content).length === 0) console.log("No content");
+            else {
+                //console.log(addElements(content));
+                return (
+                    <contentDispatchContext.Provider value={dispatch}>
+                        <parentContext.Provider value = {null}>
+                            {addElements(window.preloadContent[0])}
+                        </parentContext.Provider>
+                    </contentDispatchContext.Provider>
+                );
+            }
         }
-        const [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
-        Content.#content = content;
-        Content.#dispatch = dispatch;
-        Content.CSS = document.getElementById('mainCSS').sheet;
-        if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
-            //console.log(addElements(content));
+            [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
+            Content.#content = content;
+            Content.#dispatch = dispatch;
             if (content.props.user === null) content.props.user = {isContributor: false, isAdmin:false};
             Content.#user = content.props.user;
-            return (
-                <contentDispatchContext.Provider value={dispatch}>
-                    <parentContext.Provider value = {null}>
-                        {addElements(content)}
-                    </parentContext.Provider>
-                </contentDispatchContext.Provider>
-            );
+            Content.CSS = document.getElementById('mainCSS').sheet;
+            if (content === null || Object.keys(content).length === 0) console.log("No content");
+            else {
+                //console.log(addElements(content));
+                return (
+                    <contentDispatchContext.Provider value={dispatch}>
+                        <parentContext.Provider value = {null}>
+                            {addElements(content)}
+                        </parentContext.Provider>
+                    </contentDispatchContext.Provider>
+                );
+            }
         }
     }
 

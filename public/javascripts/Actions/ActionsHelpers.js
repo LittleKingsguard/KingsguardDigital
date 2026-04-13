@@ -379,7 +379,7 @@ export function toggleHiddenAction(targetID){
 
 export async function newContent(dispatch) {//username/password are used for login. location is passed to dispatch
     const url = "http://localhost:3000/content/saveContent/";
-    const returnString = await postFetch(url, Content.JSONify(Content.active));
+    //const returnString = await postFetch(url, Content.JSONify(Content.active));
     console.log(returnString);
     if (returnString.error) alert(returnString.error);
     //else loadDispatch(returnString, dispatch);

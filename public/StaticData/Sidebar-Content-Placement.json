@@ -188,7 +188,7 @@
           "classDef": [
             {
               "name": ".ProfileLead",
-              "style": ".ProfileLead {  position: sticky;  top: 0;  color: White;  background: darkgrey;  overflow: hidden;  padding: 20px 20px 20px 20px;}"
+              "style": ".ProfileLead {  position: sticky;  top: 0;  color: White;  background: darkgrey;  overflow: hidden;  padding: 20px 20px 20px 20px;  margin-left: 150px;}"
             }
           ]
         },
@@ -200,7 +200,8 @@
         "type": "placement",
         "css": {
           "classes": [
-            "ProfileBody"
+            "ProfileBody",
+            "activeContent"
           ],
           "classDef": [
             {
