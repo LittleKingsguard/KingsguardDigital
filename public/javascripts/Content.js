@@ -76,6 +76,7 @@ export default class Content {
         console.log(window.preloadContent);
         let content = null;
         let dispatch = null;
+        Content.clearPlacements();
         if (Array.isArray(window.preloadContent)){
             [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent[1]);
             Content.#content = content;
@@ -487,6 +488,7 @@ export default class Content {
         this.#placementList.push(placementData);
     }
     static clearPlacements(){
+        this.#placementList.forEach(placement => delete placement.content);
         this.#placementList = [];
     }
 }

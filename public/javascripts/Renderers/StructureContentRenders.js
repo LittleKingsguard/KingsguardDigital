@@ -20,9 +20,9 @@ export function buildDiv(data){
         if (!helpers.validateEditable(data)) return;
         if (e.defaultPrevented) return;
         Content.target = location;
-        addInspector();/* 
+        addInspector();
         const update = Content.target;
-        modifyDispatch(update, location, dispatch); */
+        modifyDispatch(update, location, dispatch);
         console.log(e);
         e.preventDefault();
     }
@@ -48,21 +48,25 @@ export function buildPlacement(data){
         return
     }
     //let id = helpers.validateId(data.css);
-    const location = useContext(locationContext);
+    const location = [data.props.name];
     const dispatch = useContext(contentDispatchContext);
     helpers.genericElementProps(data);
     if (Content.user.isContributor) {
         return (
-            <div {...data.props}>
-                {addElements(data.content) }
-            </div>
+            <locationContext.Provider value={location}>
+                <div {...data.props}>
+                    {addElements(data.content) }
+                </div>
+            </locationContext.Provider>
         )
     }
     else {
         return (
-            <div {...data.props}>
-                {addElements(data.content) }
-            </div>
+            <locationContext.Provider value={location}>
+                <div {...data.props}>
+                    {addElements(data.content) }
+                </div>
+            </locationContext.Provider>
         )
     }
 }

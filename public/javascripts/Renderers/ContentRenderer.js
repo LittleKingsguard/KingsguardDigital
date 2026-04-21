@@ -13,16 +13,19 @@ import bespokeRenderer from "./BespokeRenders"
 export default function addElements(content){
     if (typeof content === "string") return content;
     if (typeof content !== "object") return;
-    let currentLocation = useContext(locationContext); //is empty array
-    //console.log("Currentlocation: " + currentLocation.toString());
+    let currentLocation = useContext(locationContext); //initialized as empty array
+    console.log("Currentlocation: " + currentLocation.toString());
     let currentContent = useContext(dataContext); //is empty object
     if (Array.isArray(content)) {
         return content.map((content, i) => {
             content.parent = currentContent;
+            let nextLocation;
+            if (content.type === "placement") nextLocation = [content.props.name];
+            else nextLocation = currentLocation.concat([i]);
             return (
                 <parentContext.Provider value={currentContent}>
                     <dataContext.Provider value={content}>
-                        <locationContext.Provider value={currentLocation.concat([i])}>
+                        <locationContext.Provider value={nextLocation}>
                             <BuildElements />
                         </locationContext.Provider>
                     </dataContext.Provider>
@@ -32,7 +35,8 @@ export default function addElements(content){
     }
     else {
         //console.log(content); //shows {type: 'div', css: {…}, content: Array(3)}
-        currentLocation = currentLocation.concat([0]);
+        if (content.type === "placement") currentLocation = [content.props.name];
+        else currentLocation = currentLocation.concat([0]);
         content.parent = currentContent;
         return (
             <dataContext.Provider value={content}>
