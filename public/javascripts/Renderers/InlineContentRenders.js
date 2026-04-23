@@ -15,7 +15,7 @@ export function addText(data){
     }
     //console.log(data.content);
     if (data.content === "") data.content = "​";
-    const location = useContext(locationContext);
+    const location = data.location;
     const dispatch = useContext(contentDispatchContext);
     //console.log(data.content);
     //console.log(data.css);

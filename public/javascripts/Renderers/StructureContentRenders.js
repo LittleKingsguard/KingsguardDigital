@@ -13,7 +13,7 @@ export function buildDiv(data){
         return
     }
     //let id = helpers.validateId(data.css);
-    const location = useContext(locationContext);
+    const location = data.location;
     const dispatch = useContext(contentDispatchContext);
     if (typeof data.placement === "undefined") data.placement = data.parent.placement;
     let onclickHandler = (e) => {

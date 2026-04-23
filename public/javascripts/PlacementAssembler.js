@@ -1,8 +1,8 @@
 import Content from "./Content";
 
 export function getPlacementObjectbyName(placementName){
-    if (typeof placementName !== "string") throw new Error(`Bad data - Placement name is not string -- Found ${placementName}`);
     let foundPlacement = {success: false, placement: null};
+    if (typeof placementName !== "string") foundPlacement.error = Error(`Bad data - Placement name is not string -- Found ${placementName}`);
     Content.placements.forEach((placement) => {
         if (placement.props.name === placementName) foundPlacement = {success: true, placement: placement};
     })
@@ -27,21 +27,27 @@ export function addToPlacement(data){
     }
 }
 
-export function findAllPlacements(format){
+export function findAllPlacements(format, i = 0, parent = {}){
     if (typeof format !== "object") return;
     if (typeof format.type !== "string") return;
+    if (Array.isArray(parent.location)) format.location = [...parent.location, i];
+    else format.location = [i];
+    format.parent = parent;
     if (typeof format.content === "string") return;
     if (typeof format.content !== "object") format.content = [];
     if (!Array.isArray(format.content)) format.content = [format.content];
+    if (Array.isArray(parent.location)) format.location = [...parent.location, i];
+    else format.location = [i];
+    format.parent = parent;
     if (format.type !== "placement") {
-        format.content.forEach(findAllPlacements)
+        format.content.forEach((content, childIndex) => findAllPlacements(content, childIndex, format));
     }
     else {
         includePlacement(format)
     }
 }
 
-export function parseDataIntoPlacements(data){
+export function parseDataIntoPlacements(data, i = 0){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (Array.isArray(data)) return data.map(parseDataIntoPlacements);
     if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
@@ -56,14 +62,15 @@ export function parseDataIntoPlacements(data){
         }
     }
     if (!Array.isArray(data.content)) data.content = [data.content];
-    data.content.forEach((childData) => {
+    data.location = [i];
+    data.content.forEach((childData, childIndex) => {
         if (typeof childData !== "object") return;
         childData.contentParent = data;
-        parseDataIntoPlacementsHelper(childData);
+        parseDataIntoPlacementsHelper(childData, childIndex);
     })
 }
 
-function parseDataIntoPlacementsHelper(data){
+function parseDataIntoPlacementsHelper(data, i){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
     if (data.type === "placement") includePlacement(data);
@@ -75,11 +82,12 @@ function parseDataIntoPlacementsHelper(data){
             console.log(error);
         }
     }
+    data.location = [...data.contentParent.location, i];
     if (typeof data.content !== "object") return; //Only iterate through content with children
     if (!Array.isArray(data.content)) data.content = [data.content]; //Make child iterable if not already;
-    data.content.forEach((childData) => {
+    data.content.forEach((childData, childIndex) => {
         if (typeof childData !== "object") return; //Text strings cannot have different placements
         childData.contentParent = data; //Set data parent for checking placement
-        parseDataIntoPlacementsHelper(childData); //Recurse through tree
+        parseDataIntoPlacementsHelper(childData, childIndex); //Recurse through tree
     })
 }

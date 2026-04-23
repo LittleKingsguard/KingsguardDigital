@@ -57,8 +57,13 @@ function checkSpecialHandling(element, parentData){
 
 export function parserEntry(element, location){
     const parent = Content.getContentbyLocation(location);
+    console.log("Starting parse at parent:");
+    console.log(parent);
     parseElement(element, parent);
-    return parent.content.pop();
+    let newData = parent.content.pop();
+    parent.content = newData.content;
+    parent.type = "div";
+    return parent;
 }
 
 export function parseCSS(cssTokenList){

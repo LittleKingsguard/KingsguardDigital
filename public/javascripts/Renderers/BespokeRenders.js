@@ -247,14 +247,14 @@ function inspectorContentButtons(content, index, length, dispatch){
     )
 }
 
-function buildEditToolbar(){
+function buildEditToolbar(data){
     const boldAction = {
         cmd: "bold"
     }
     const emAction = {
         cmd: "italic"
     }
-    const location = useContext(locationContext);
+    const location = data.location;
     const dispatch = useContext(contentDispatchContext);
     let targeting = ()=>{
         return document.getElementById(location.toString());
@@ -287,8 +287,8 @@ function buildEditToolbar(){
 
 function buildEditor(data){
     console.log("Build Editor ran");
-    const location = useContext(locationContext);
-    const ancestry = getContentAncestry(location);
+    const location = data.location;
+    //const ancestry = getContentAncestry(location);
     let classnames = helpers.classlist(data.css);
     const handleChange = (() => {
     // Handle content change
@@ -306,7 +306,7 @@ function buildEditor(data){
     });
   return (
     <>
-        {buildEditToolbar()}
+        {buildEditToolbar(data)}
       <ContentEditable
         html={data.innerHTML}
         id={location.toString()}

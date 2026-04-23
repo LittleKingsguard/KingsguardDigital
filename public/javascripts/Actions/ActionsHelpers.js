@@ -64,7 +64,9 @@ export function deleteDispatch(location, dispatch){
 export function validateRecur(data, location){
     console.log("Validating recurrence at: " + location + " in data: ");
     console.log(data);
+    console.log(`Is data array? ${Array.isArray(data)}`);
     let returnvalue = true;
+    if (Array.isArray(data) && location[0] < data.length) return returnvalue; 
     if (Array.isArray(data.content)){
         if (location[0] >= data.content.length) returnvalue = false; //Prevents out of range error
     }
@@ -79,7 +81,9 @@ export function validateRecur(data, location){
 export function validateLocation(location){
     if (!Array.isArray(location)) return false;
     let isNumber = location.length !== 0;
-    location.forEach((e)=>{
+    let treePath = [...location];
+    if (typeof treePath[0] === "string") treePath.shift();
+    treePath.forEach((e)=>{
         if (!Number.isInteger(e) || e < 0) isNumber = false;
     });
     return isNumber;
@@ -151,15 +155,17 @@ export function dropClass(data, cssClass){
 }
 
 export function makeEditable(data, location, dispatch){
-    const ancestry = getContentAncestry(location);
+    console.log(data);
+    //const ancestry = getContentAncestry(location);
     let foundDiv = false;
     let divDepth = 0;
+    let targetDiv = data;
     while (!foundDiv){
-        if (divDepth >= ancestry.length) break;
-        if(ancestry[divDepth].type === "div") foundDiv = true;
-        else divDepth++;
+        if (divDepth >= location.length) break;
+        if(targetDiv.type === "div") foundDiv = true;
+        else targetDiv = targetDiv.contentParent;
     }
-    const targetLocation = location.slice(0 , location.length - divDepth);
+    const targetLocation = targetDiv.location;
     console.log(targetLocation);
     const targetElement = document.getElementById(targetLocation);
     data = Content.getContentbyLocation(targetLocation);

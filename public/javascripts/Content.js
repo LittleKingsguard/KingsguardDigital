@@ -4,7 +4,7 @@ import {useReducer} from "react";
 import {dataContext,locationContext, contentDispatchContext, parentContext} from "./Contexts.js";
 import {addClass, dropClass, validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
-import { findAllPlacements, parseDataIntoPlacements } from "./PlacementAssmbler.js";
+import { findAllPlacements, getPlacementObjectbyName, parseDataIntoPlacements } from "./PlacementAssembler.js";
 
 export default class Content {
 
@@ -18,6 +18,7 @@ export default class Content {
     static #CSSElementOwners;
     static #user;
     static #placementList = [];
+    static #format;
 
     static set target(location){
         let targetData = this.getContentbyLocation(location);
@@ -81,7 +82,8 @@ export default class Content {
             [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent[1]);
             Content.#content = content;
             Content.#dispatch = dispatch;
-            findAllPlacements(window.preloadContent[0]);//In this case preloadContent is [format, data, user]
+            Content.#format = window.preloadContent[0];
+            findAllPlacements(Content.#format);//In this case preloadContent is [format, data, user]
             parseDataIntoPlacements(window.preloadContent[1]);
             Content.#user = window.preloadContent[2];
             Content.CSS = document.getElementById('mainCSS').sheet;
@@ -135,7 +137,7 @@ export default class Content {
                 //TODO: Allow delete element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content = Content.deleteContent(action.location.slice(1), content);
+                    content = Content.deleteContent(action.location, content);
                     console.log(content);
                     //return dataCloner(content);
                     return content;
@@ -145,7 +147,7 @@ export default class Content {
                 //TODO: Allow insert element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content = Content.insertContent(action.location.slice(1), content, action.content);
+                    content = Content.insertContent(action.location, content, action.content);
                     console.log(content);
                     return dataCloner(content);
                 }
@@ -157,7 +159,7 @@ export default class Content {
                 //TODO Allow modify element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content = Content.modifyContent(action.location.slice(1), content, action.content);
+                    content = Content.modifyContent(action.location, content, action.content);
                     console.log(content);
                     //return dataCloner(content);
                     return content;
@@ -181,12 +183,25 @@ export default class Content {
         console.log(data);
         let index = location[0];
         let caseType = null;
-        let newContent = {...content};
+        let newContent;
+        if (Array.isArray(content)) newContent = [...content];
+        else newContent = {...content};
         caseType = this.checkLocation(location, content);
         console.log(caseType);
 
         switch (caseType){
             case "invalid":
+                break;
+            case "rootAction":
+                console.log("Modifying content at index " + index);
+                content.splice(index, 1, data);
+                newContent = [...content];
+                break;
+            case "rootRecur":
+                if (!validateRecur(content, location)) break;
+                console.log("Recurring at index " + index);
+                content[index] = this.modifyContent(location.slice(1), content[index], data);
+                newContent = [...content];
                 break;
             case "arrayAction":
                 console.log("Modifying content at index " + index);
@@ -355,6 +370,13 @@ export default class Content {
         let caseType = null;
         let index = location[0];
         if (location.length === 0) caseType = "invalid";
+        if (Array.isArray(content)) {
+            if (index > content.length) caseType = "invalid";
+            else caseType = "rootRecur";
+            if (location.length === 1) caseType = "rootAction";
+            console.log(caseType);
+            return caseType;
+        }
         if (Array.isArray(content.content)){
             if (index >= content.content.length) caseType = "invalid";
             if (location.length === 1) caseType = "arrayAction";
@@ -371,7 +393,12 @@ export default class Content {
     static getContentbyLocation(location){
         if (!validateLocation(location)) return null;
         if (!validateRecur(this.#content,location)) return null;
-        return this.getContentbyLocationHelper(location.slice(1), this.#content);
+        if (Array.isArray(this.#content)) {
+            if (this.#content.length <= location[0]) return null;
+            if (location.length === 1) return this.#content[location[0]];
+            return this.getContentbyLocationHelper(location.slice(1), this.#content[location[0]]);
+        }
+        else return this.getContentbyLocationHelper(location.slice(1), this.#content);
     }
     static getContentbyLocationHelper(location, content){
         let caseType = this.checkLocation(location, content);
@@ -395,7 +422,13 @@ export default class Content {
                 if (!validateRecur(content, location)) return null;
                 console.log("Recurring at index " + index);
                 return this.getContentbyLocationHelper(location.slice(1), content.content);
-                break;
+            case "rootRecur":
+                if (!validateRecur(content, location)) return null;
+                console.log("Recurring at index " + index);
+                return this.getContentbyLocationHelper(location.slice(1), content[index]);
+            case "rootAction":
+                console.log("Retrieving content");
+                return content[index];
             default:
                 return null;
         }
