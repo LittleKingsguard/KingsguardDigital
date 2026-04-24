@@ -61,6 +61,7 @@ export function parseDataIntoPlacements(data, i = 0){
             console.log(error);
         }
     }
+    if (typeof data.content !== "object") return; //Only iterate through content with children
     if (!Array.isArray(data.content)) data.content = [data.content];
     data.location = [i];
     data.content.forEach((childData, childIndex) => {
