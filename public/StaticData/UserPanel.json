@@ -9,6 +9,6 @@
     "type": "text",
     "content": ""
   }],
-  "props":{}
-
+  "props":{},
+  "placement": "main"
 }

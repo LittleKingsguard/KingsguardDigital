@@ -7,6 +7,7 @@ const contentHelper = require('../middleware/ContentHelper.js');
 const formatTestData = require('../public/StaticData/Sidebar-Content-Placement.json');
 const contentTestData = require('../public/StaticData/TestProfile Save.json');
 const Format = require('../models/format.js');
+const userPane = require('../public/StaticData/UserPanel.json');
 
 router.post('/new', async function(req, res, next) {
   console.log("This should run");
@@ -28,6 +29,8 @@ router.post('/new', async function(req, res, next) {
 router.get('/test', async function(req, res, next) {
   let userData = user.checkLogin(req);
   let preloadData = await contentHelper.loadFromDB(2);
+  if (userData) preloadData[1].push(userPane);
+  else preloadData[1].push(loginForm);
   preloadData.push(userData);
   console.log(preloadData);
   res.render('index', {preload: preloadData});

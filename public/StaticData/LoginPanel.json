@@ -4,5 +4,7 @@
     "classes": [
     ],
     "id": "login"
-  }
+  },
+  "props":{},
+  "placement": "main"
 }
