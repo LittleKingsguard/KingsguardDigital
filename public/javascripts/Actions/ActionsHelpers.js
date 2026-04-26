@@ -1,5 +1,6 @@
 import Content from "../Content";
 import { parseElement, parserEntry } from "../Parsers/ContentParser";
+import {flushSync} from "react-dom";
 
 export async function postFetch(url, data) {
     let bodyString = "";
@@ -211,8 +212,14 @@ export function addInspector(dispatch){
     insertDispatch(inspector, Content.active.length, dispatch);
 }
 
-export function setTargetAction(location){
-    return () => Content.target = location;
+export function setTargetAction(data){
+    if (data.type === "placement"){
+        return () => {
+            data = addClass(data, "selected");
+            Content.target = null;
+        }
+    }
+    return () => Content.target = data;
 }
 
 export function rearrangeContent(data, oldIndex, newIndex){

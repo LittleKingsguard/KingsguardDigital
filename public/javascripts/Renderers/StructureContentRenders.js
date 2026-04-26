@@ -19,7 +19,7 @@ export function buildDiv(data){
     let onclickHandler = (e) => {
         if (!helpers.validateEditable(data)) return;
         if (e.defaultPrevented) return;
-        Content.target = location;
+        Content.target = data;
         addInspector(dispatch);
         const update = Content.target;
         modifyDispatch(update, location, dispatch);

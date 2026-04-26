@@ -90,8 +90,9 @@ function userPane(data) {
         console.log("Trying to save data");
         newContent(dispatch);
     };
+    helpers.genericElementProps(data);
     return(
-        <div  {...data.props} className={classnames} id={id}>
+        <div  {...data.props}>
             {JSON.stringify(Content.user)}
             <button id={"logoutButton"} type={"button"} onClick={onclickHandler}>Logout</button>
             <button id={"testButton"} type={"button"} onClick={onTestHandler}>Modify Test</button>
@@ -112,7 +113,7 @@ function newElement() {
     )
 }
 
-function buildElementInspector(){
+function buildElementInspector(data){
     let targetData = Content.target;
     if (typeof targetData !=="object") return;
     const dispatch = useContext(contentDispatchContext);
@@ -123,16 +124,18 @@ function buildElementInspector(){
         }
     }
     console.log(targetData);
+    addClass(data, "inspectorWindow");
+    helpers.genericElementProps(data);
     return (
-        <div className={"inspectorWindow"}>
+        <div {...data.props}>
             Type: {targetData.type}
             Location: {targetData.location}
-            <div>
+            <div >
                 Classes:
                 {targetData.css.classes.map((className)=> inspectorClass(className, targetData, dispatch))}
                 <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
             </div>
-            <div>Parent: {targetData.parent.type} <button onClick={setTargetAction(targetData.parent.location)}>Select</button></div>
+            <div>Parent: {targetData.parent.type} <button onClick={setTargetAction(targetData.parent)}>Select</button></div>
             <div>
                 Contents:
                 {inspectorContents(targetData, dispatch)}
@@ -219,20 +222,20 @@ function inspectorContentButtons(content, index, length, dispatch){
     if (content.location === undefined) content.location = [...content.parent.location, index]
     if (length === 1) return (
         <>
-            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={setTargetAction(content)}>Select</button> 
             <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
     if (index === 0) return (
         <>
-            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={setTargetAction(content)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
             <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
     )
     if (index === length -1 ) return (
         <>
-            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={setTargetAction(content)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
             <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
         </>
@@ -327,7 +330,7 @@ export default function bespokeRenderer(data){
         case "editor":
             return buildEditor(data);
         case "inspector":
-            return buildElementInspector();
+            return buildElementInspector(data);
         default:
             return;
     }

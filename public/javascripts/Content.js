@@ -20,15 +20,33 @@ export default class Content {
     static #placementList = [];
     static #format;
 
-    static set target(location){
-        let targetData = this.getContentbyLocation(location);
-        if (typeof targetData !== "object" || targetData === null) return;
+    static set target(data){
+        if (data === null) {
+            dropClass(this.#targeted, "selected");
+            let inspector = this.getContentListByType("inspector");
+            console.log(`Found inspector at ${inspector[0].location}`);
+            let actionArray = [{
+                    type: "modify",
+                    content: this.#targeted,
+                    location: this.#targeted.location
+                }];
+            if (inspector.length > 0){
+                actionArray.push({
+                    type: "delete",
+                    location: inspector[0].location
+                })
+            }
+            actionArray.forEach((action => this.#dispatch(action)));
+            this.#targeted = null;
+            return;
+        }
+        if (typeof data !== "object") return;
         dropClass(this.#targeted, "selected")
-        targetData = addClass(targetData, "selected");
-        this.#targeted = targetData;
+        data = addClass(data, "selected");
+        this.#targeted = data;
         this.#dispatch({
         type: "modify",
-        content: targetData,
+        content: data,
         location: location
     });
     }
@@ -117,7 +135,7 @@ export default class Content {
                 //TODO: Allow delete element
                 console.log(content);
                 if (validateLocation(action.location)) {
-                    content = Content.deleteContent(action.location, content);
+                    content = Content.deleteContent(action.location[0]);
                     console.log(content);
                     //return dataCloner(content);
                     return content;
@@ -226,49 +244,19 @@ export default class Content {
         return content;
     }
     /*
-    location is target node's path within content tree from current node. Must be Array of ints of length >0
-    content is current node of content tree
-    data is content to insert in target node. Any existing content at location will be appended.
-    returns content unmodified if location cannot be reached
-    */
-    static deleteContent(location, content){
-        console.log("Checking location to delete: " + location + ", length: " + location.length);
-        console.log(content);
-        let index = location[0];
-        let caseType = null;
-        let newContent = {...content};
-        caseType = this.checkLocation(location, content);
-        console.log(caseType);
+    location is index in Content array where data will be deleted. Must be integer, will fail if exceeds size of array.
+    returns content unmodified if location cannot be reached.
 
-        switch (caseType){
-            case "invalid":
-                break;
-            case "arrayAction":
-                console.log("Deleting content at index " + index);
-                content.content.splice(index, 1);
-                newContent.content = [...content.content];
-                break;
-            case "arrayRecur":
-                if (!validateRecur(content, location)) break;
-                console.log("Recurring at index " + index);
-                content.content[index] = this.deleteContent(location.slice(1), content.content[index]);
-                newContent.content = [...content.content];
-                break;
-            case "objectAction":
-                console.log("Deleting content");
-                newContent.content = [];
-                break;
-            case "objectRecur":
-                if (!validateRecur(content, location)) break;
-                console.log("Recurring at index " + index);
-                content.content = this.deleteContent(location.slice(1), content.content);
-                newContent.content = {...content};
-                break;
-            default:
-                break;
-        }
-        console.log(newContent);
-        return newContent;
+    Used to delete content at root level of array. For deleting content in child nodes, instead modify parent.
+    */
+    static deleteContent(location){
+        console.log("Checking location to delete: " + location + ", length: " + location.length);
+        if (!Number.isInteger(location)) console.error(`Location for deleting content is not an integer. Received ${location}`);
+        if (location >= this.#content.length) console.error(`Location for deleting content is out of range. Received ${location}, maximum is ${this.#content.length}`);
+        const content = this.#content.toSpliced(location, 1);
+
+        console.log(content);
+        return content;
     }
 
     static checkLocation(location, content){
@@ -342,8 +330,8 @@ export default class Content {
     static getContentListByType(type){
         if (typeof type !== "string") return null;
         let foundContent = [];
-        this.#content.forEach(content => {
-            foundContent = foundContent.concat(this.getContentListByTypeHelper(type, content, [0]))
+        this.#content.forEach((content, index) => {
+            foundContent = foundContent.concat(this.getContentListByTypeHelper(type, content, [index]))
         });
         return foundContent;
     }
