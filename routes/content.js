@@ -28,7 +28,7 @@ router.post('/new', async function(req, res, next) {
 
 router.get('/test', async function(req, res, next) {
   let userData = user.checkLogin(req);
-  let preloadData = await contentHelper.loadFromDB(2);
+  let preloadData = await contentHelper.loadFromDB(5);
   if (userData) preloadData[1].push(userPane);
   else preloadData[1].push(loginForm);
   preloadData.push(userData);
@@ -40,7 +40,7 @@ router.post('/save', async function(req, res, next) {
   let userData = user.checkLogin(req);
   let newFormatData = {
     Formatting: formatTestData,
-    Description: "Amended default article format with header as different placement from main text",
+    Description: "Amended default article format with header as different placement from main text and placement in Navigation menu, attempting save as json",
     Creator: userData.username,
     ID: -1
   }
@@ -59,7 +59,7 @@ router.post('/saveContent', async function(req, res, next) {
     let newContent = new Content(contentTestData);
     try {
       console.log(newContent);
-      //Content.save(newContent, userData);
+      Content.save(newContent, userData);
       res.send(newContent);
     }
     catch (exception) {

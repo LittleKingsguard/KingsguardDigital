@@ -121,7 +121,7 @@ class Content {
         }
         await sql`INSERT INTO public."Content"(
 	"Creator", "CreatedDate", "UpdatedDate", "LiveDate", "IsVisible", "Key", "Data", "Format")
-	VALUES (${user.username}, NOW(), NOW(), ${liveDate}, ${isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(content)}, 6);`
+	VALUES (${user.username}, NOW(), NOW(), ${liveDate}, ${isVisible}, nextval('public."ContentKey"'), ${JSON.stringify(content)}, 8);`
     }
 }
 module.exports = Content;

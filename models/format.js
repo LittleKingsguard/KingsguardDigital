@@ -27,7 +27,7 @@ class Format {
         console.log(user.json);
         await sql`INSERT INTO public."Formats"(
 	"Creator", "ID", "Formatting", "Description")
-	VALUES (${user.username}, nextval('public."FormatKey"'), ${JSON.stringify(this.format.json)}, ${this.description});`
+	VALUES (${user.username}, nextval('public."FormatKey"'), ${this.format.json}, ${this.description});`
     }
 
     static async loadFromDB(id){

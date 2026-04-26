@@ -150,7 +150,16 @@
               "content": "Games"
             }
           ]
+        },
+        {
+        "type": "placement",
+        "css": {
+          "classes":[]
+        },
+        "props": {
+          "name": "navEnd"
         }
+      }
       ]
     },
   {

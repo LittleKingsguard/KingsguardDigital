@@ -203,16 +203,12 @@ export function saveEditButtonAction(target, location, dispatch){
 export function addInspector(dispatch){
     const existingInspectors = Content.getContentListByType("inspector");
     if (existingInspectors.length > 0) return;
-    let navBarArray = Content.getContentListByClassName("navBar");
-    if (navBarArray.length !== 1) return;
-    let navBar = navBarArray[0].data;
-    let navBarLocation = navBarArray[0].location;
     const inspector = {
         type: "inspector",
-        css:{classes: []}
+        css:{classes: []},
+        placement: "navEnd"
     }
-    navBar.content.push(inspector);
-    modifyDispatch(navBar, navBarLocation, dispatch);
+    insertDispatch(inspector, Content.active.length, dispatch);
 }
 
 export function setTargetAction(location){
@@ -385,7 +381,7 @@ export function toggleHiddenAction(targetID){
 
 export async function newContent(dispatch) {//username/password are used for login. location is passed to dispatch
     const url = "http://localhost:3000/content/saveContent/";
-    //const returnString = await postFetch(url, Content.JSONify(Content.active));
+    const returnString = await postFetch(url, Content.JSONify(Content.active));
     console.log(returnString);
     if (returnString.error) alert(returnString.error);
     //else loadDispatch(returnString, dispatch);

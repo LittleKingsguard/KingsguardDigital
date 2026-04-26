@@ -20,7 +20,7 @@ export function buildDiv(data){
         if (!helpers.validateEditable(data)) return;
         if (e.defaultPrevented) return;
         Content.target = location;
-        addInspector();
+        addInspector(dispatch);
         const update = Content.target;
         modifyDispatch(update, location, dispatch);
         console.log(e);

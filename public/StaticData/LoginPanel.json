@@ -6,5 +6,5 @@
     "id": "login"
   },
   "props":{},
-  "placement": "main"
+  "placement": "navEnd"
 }

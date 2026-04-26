@@ -75,48 +75,28 @@ export default class Content {
 
     static DisplayContent() {
         console.log(window.preloadContent);
+        if (typeof Content.active !== "object") Content.active = window.preloadContent[1];
         let content = null;
         let dispatch = null;
         Content.clearPlacements();
-        if (Array.isArray(window.preloadContent)){
-            [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent[1]);
-            Content.#content = content;
-            Content.#dispatch = dispatch;
-            Content.#format = window.preloadContent[0];
-            findAllPlacements(Content.#format);//In this case preloadContent is [format, data, user]
-            parseDataIntoPlacements(window.preloadContent[1]);
-            Content.#user = window.preloadContent[2];
-            Content.CSS = document.getElementById('mainCSS').sheet;
-            if (content === null || Object.keys(content).length === 0) console.log("No content");
-            else {
-                //console.log(addElements(content));
-                return (
-                    <contentDispatchContext.Provider value={dispatch}>
-                        <parentContext.Provider value = {null}>
-                            {addElements(window.preloadContent[0])}
-                        </parentContext.Provider>
-                    </contentDispatchContext.Provider>
-                );
-            }
-        }
+        [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
+        Content.#content = content;
+        Content.#dispatch = dispatch;
+        Content.#format = window.preloadContent[0];
+        findAllPlacements(Content.#format);//In this case preloadContent is [format, data, user]
+        parseDataIntoPlacements(Content.active);
+        Content.#user = window.preloadContent[2];
+        Content.CSS = document.getElementById('mainCSS').sheet;
+        if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
-            [content, dispatch] = useReducer(Content.ContentReducer, window.preloadContent);
-            Content.#content = content;
-            Content.#dispatch = dispatch;
-            if (content.props.user === null) content.props.user = {isContributor: false, isAdmin:false};
-            Content.#user = content.props.user;
-            Content.CSS = document.getElementById('mainCSS').sheet;
-            if (content === null || Object.keys(content).length === 0) console.log("No content");
-            else {
-                //console.log(addElements(content));
-                return (
-                    <contentDispatchContext.Provider value={dispatch}>
-                        <parentContext.Provider value = {null}>
-                            {addElements(content)}
-                        </parentContext.Provider>
-                    </contentDispatchContext.Provider>
-                );
-            }
+            //console.log(addElements(content));
+            return (
+                <contentDispatchContext.Provider value={dispatch}>
+                    <parentContext.Provider value = {null}>
+                        {addElements(window.preloadContent[0])}
+                    </parentContext.Provider>
+                </contentDispatchContext.Provider>
+            );
         }
     }
 
@@ -146,12 +126,9 @@ export default class Content {
             case "insert": //action has type, location, content. Location is Array as above, content is new element to be inserted at that position
                 //TODO: Allow insert element
                 console.log(content);
-                if (validateLocation(action.location)) {
-                    content = Content.insertContent(action.location, content, action.content);
-                    console.log(content);
-                    return dataCloner(content);
-                }
-                else return content;
+                content = Content.insertContent(action.location, action.content);
+                console.log(content);
+                return content;
             case "relocate": //action has type, oldLocation, newLocation. Content is unchanged.
                 //TODO Allow relocate element
                 return content;
@@ -229,94 +206,22 @@ export default class Content {
         }
         console.log(newContent);
         return newContent;
-        /*
-        if (Array.isArray(content.content)){
-            console.log("This was Array");
-            if (index >= content.content.length) return content;
-            if (location.length === 0){
-                console.log("Setting content to: " + data);
-                content = data;
-            }
-            if (location.length === 1) {
-                console.log("Setting content to: " + data);
-                content.content[index] = data;
-            }
-            else content.content[index] = this.modifyContent(location.slice(1), content.content[index], data);
-        }
-        else{
-            console.log("This was not Array");
-            if (location.length === 0) {
-                console.log("Setting content to: " + data);
-                content = data;
-            }
-            else {
-                if (index !== 0) return content;
-                content.content = this.modifyContent(location.slice(1), content.content, data);
-            }
-        }
-        console.log(content);
-        return content;
-        */
     }
 
     /*
-    location is target node's path within content tree from current node. Must be Array of ints of length >0
-    content is current node of content tree
-    data is content to insert in target node. Any existing content at location will be appended.
+    location is index in Content array where data will be added. Must be integer, will add to end if great size of array.
+    data is content to insert in active content array.
     returns content unmodified if location cannot be reached
-    */
-    static insertContent(location, content, data){
-        console.log("Checking location to insert: " + location + ", length: " + location.length);
-        console.log(content);
-        let index = location[0];
-        let caseType = null;
-        if (Array.isArray(content.content)){
-            if (index > content.content.length) caseType = "invalid";
-            if (location.length === 0) caseType = "arrayStart";
-            if (location.length === 1) caseType = "arrayInsert";
-            if (caseType === null) caseType = "arrayRecur";
-        }
-        else {
-            if (location.length === 0) caseType = "objectInsertImplicit";
-            if (location.length === 1) caseType = "objectInsertExplicit";
-            if (location.length === 1 && index > 1) caseType = "invalid";
-            if (caseType === null) caseType = "objectRecur";
-        }
-        console.log(caseType);
 
-        switch (caseType){
-            case "invalid":
-                break;
-            case "arrayStart":
-                console.log("Inserting content: " + data + "at index 0");
-                content.content = [data, ...content.content];
-                break;
-            case "arrayInsert":
-                console.log("Inserting content: " + data + "at index " + index);
-                content.content.splice(index, 0, data);
-                break;
-            case "arrayRecur":
-                if (!validateRecur(content, location)) break;
-                console.log("Recurring at index " + index);
-                content.content[index] = this.insertContent(location.slice(1), content.content[index], data);
-                break;
-            case "objectInsertImplicit":
-                console.log("Setting object content to: " + [data, content.content]);
-                content.content = [data, content.content];
-                break;
-            case "objectInsertExplicit":
-                if (index === 1) content.content = [content.content, data];
-                if (index === 0) content.content = [data, content.content];
-                console.log("Setting object content to: " + content.content);
-                break;
-            case "objectRecur":
-                if (!validateRecur(content, location)) break;
-                console.log("Recurring at index " + index);
-                content.content = this.insertContent(location.slice(1), content.content, data);
-                break;
-            default:
-                break;
-        }
+    Used to add additional content at root level of array. For adding content in child nodes, instead modify parent.
+    */
+    static insertContent(location, data){
+        console.log("Checking location to insert: " + location + ", length: " + location.length);
+        if (!Number.isInteger(location)) console.error(`Location for inserting content is not an integer. Received ${location}`);
+        if (typeof data !== "object") console.error(`Data to insert is not an object. Received ${data}`);
+        console.log(data);
+        const content = this.#content.toSpliced(location, 0, data);
+
         console.log(content);
         return content;
     }
@@ -436,7 +341,11 @@ export default class Content {
     }
     static getContentListByType(type){
         if (typeof type !== "string") return null;
-        return this.getContentListByTypeHelper(type, this.#content, [0]);
+        let foundContent = [];
+        this.#content.forEach(content => {
+            foundContent = foundContent.concat(this.getContentListByTypeHelper(type, content, [0]))
+        });
+        return foundContent;
     }
     static getContentListByTypeHelper(type, content, location){
         let foundArray = [];
