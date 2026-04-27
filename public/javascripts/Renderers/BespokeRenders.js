@@ -115,7 +115,10 @@ function newElement() {
 
 function buildElementInspector(data){
     let targetData = Content.target;
+    console.log("Target is:");
+    console.log(targetData);
     if (typeof targetData !=="object") return;
+    if (targetData.type === "placement") return buildPlacementInspector(data);
     const dispatch = useContext(contentDispatchContext);
     const addClassButton = () =>{
         return () => {
@@ -218,6 +221,76 @@ function inspectorContents(data, dispatch){
 }
 
 function inspectorContentButtons(content, index, length, dispatch){
+    if (Object.keys(content).length === 0) return <></>
+    if (content.location === undefined) content.location = [...content.parent.location, index]
+    if (length === 1) return (
+        <>
+            <button onClick={setTargetAction(content)}>Select</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
+        </>
+    )
+    if (index === 0) return (
+        <>
+            <button onClick={setTargetAction(content)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
+        </>
+    )
+    if (index === length -1 ) return (
+        <>
+            <button onClick={setTargetAction(content)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
+        </>
+    )
+    return (
+        <>
+            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
+            <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
+            <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
+        </>
+    )
+}
+
+function buildPlacementInspector(data){
+    let targetData = Content.target;
+    console.log("Target is:");
+    console.log(targetData);
+    if (typeof targetData !=="object") return;
+    const dispatch = useContext(contentDispatchContext);
+    addClass(data, "inspectorWindow");
+    helpers.genericElementProps(data);
+    return (
+        <div {...data.props}>
+            Type: {targetData.type}
+            Location: {targetData.location}
+            <div>
+                Contents:
+                {inspectorContents(targetData, dispatch)}
+                <button onClick={appendNewContentAction(targetData, "img", dispatch)}>Add image</button>
+            </div>
+        </div>
+    )
+}
+
+function placementContents(data, dispatch){
+    if (typeof data.content !== "object") return <>No contents</>;
+    return (
+        data.content.map((content, index)=>{
+            if (content.parent !== data) content.parent = data;
+            return (
+                <div>
+                    <div>{content.type} 
+                        {inspectorContentButtons(content, index, data.content.length, dispatch)}
+                    </div>
+                </div>
+            )
+        })
+    )
+}
+
+function placementButtons(content, index, length, dispatch){
     if (Object.keys(content).length === 0) return <></>
     if (content.location === undefined) content.location = [...content.parent.location, index]
     if (length === 1) return (

@@ -212,13 +212,13 @@ export function addInspector(dispatch){
     insertDispatch(inspector, Content.active.length, dispatch);
 }
 
-export function setTargetAction(data){
+export function setTargetAction(data){/* 
     if (data.type === "placement"){
         return () => {
             data = addClass(data, "selected");
             Content.target = null;
         }
-    }
+    } */
     return () => Content.target = data;
 }
 
@@ -233,6 +233,9 @@ export function rearrangeContent(data, oldIndex, newIndex){
 }
 
 export function rearrangeContentAction(data, oldIndex, newIndex, dispatch){
+    if (data.type === "placement") return () => {
+        rearrangeInPlacement(data, oldIndex, newIndex, dispatch);
+    }
     return () => {
         rearrangeContent(data, oldIndex, newIndex)
         modifyDispatch(data, data.location, dispatch);
@@ -247,6 +250,7 @@ export function deleteContent(data, index){
 }
 
 export function deleteContentAction(data, index, dispatch){
+    if (data.type === "placement") return () => deleteFromPlacement(data.content[index], dispatch);
     return () => {
         deleteContent(data, index);
         modifyDispatch(data, data.location, dispatch);
@@ -392,4 +396,34 @@ export async function newContent(dispatch) {//username/password are used for log
     console.log(returnString);
     if (returnString.error) alert(returnString.error);
     //else loadDispatch(returnString, dispatch);
+}
+
+export function rearrangeInPlacement(parent, currentIndex, newIndex, dispatch){
+    if (typeof parent !== "object" 
+        || !Number.isInteger(currentIndex) 
+        || !Number.isInteger(newIndex)) return console.error(new Error("Rearrange in placement received invalid inputs"));
+    if (parent.type !== "placement") return console.error(new Error("Rearrange in placement not targeted in placement"));
+    if (currentIndex < 0 || currentIndex >= parent.content.length) return console.error(new Error("Rearrange in placement targeted out of range"));
+    if (newIndex < 0 || newIndex >= parent.content.length) return console.error(new Error("Rearrange in placement trying to move out of range"));
+    let actionArray = [];
+    let targetLocation = parent.content[newIndex].location[0];
+    let deleteLocation = parent.content[currentIndex].location[0];
+    if (targetLocation <= deleteLocation) deleteLocation++;
+    else targetLocation++;
+    actionArray.push({
+        type: "insert",
+        content: parent.content[currentIndex],
+        location: targetLocation
+    });
+    actionArray.push({
+        type: "delete",
+        location: deleteLocation
+    });
+    actionArray.forEach(dispatch);
+}
+
+export function deleteFromPlacement(data, dispatch){
+    if (typeof data !== "object") return console.error(new Error("Delete from placement received invalid inputs"));
+    if (!validateLocation(data.location)) return console.error(new Error("Delete from placement received invalid location"));
+    deleteDispatch(data.location[0], dispatch);
 }

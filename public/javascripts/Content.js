@@ -1,6 +1,7 @@
 import React from "react";
 import addElements from "./Renderers/ContentRenderer.js"
 import {useReducer} from "react";
+import {flushSync} from "react-dom";
 import {dataContext,locationContext, contentDispatchContext, parentContext} from "./Contexts.js";
 import {addClass, dropClass, validateLocation} from "./Actions/ActionsHelpers.js";
 import {dataCloner, validateRecur} from "./Actions/ActionsHelpers";
@@ -47,7 +48,7 @@ export default class Content {
         this.#dispatch({
         type: "modify",
         content: data,
-        location: location
+        location: data.location
     });
     }
     static get target(){
@@ -134,17 +135,14 @@ export default class Content {
             case "delete": //action has type, location. Location is Array of path through data.content... to the node to be deleted.
                 //TODO: Allow delete element
                 console.log(content);
-                if (validateLocation(action.location)) {
-                    content = Content.deleteContent(action.location[0]);
-                    console.log(content);
-                    //return dataCloner(content);
-                    return content;
-                }
-                else return content;
+                content = Content.deleteContent(content, action.location);
+                console.log(content);
+                //return dataCloner(content);
+                return content;
             case "insert": //action has type, location, content. Location is Array as above, content is new element to be inserted at that position
                 //TODO: Allow insert element
                 console.log(content);
-                content = Content.insertContent(action.location, action.content);
+                content = Content.insertContent(action.location, action.content, content);
                 console.log(content);
                 return content;
             case "relocate": //action has type, oldLocation, newLocation. Content is unchanged.
@@ -233,15 +231,15 @@ export default class Content {
 
     Used to add additional content at root level of array. For adding content in child nodes, instead modify parent.
     */
-    static insertContent(location, data){
+    static insertContent(location, data, content){
         console.log("Checking location to insert: " + location + ", length: " + location.length);
         if (!Number.isInteger(location)) console.error(`Location for inserting content is not an integer. Received ${location}`);
         if (typeof data !== "object") console.error(`Data to insert is not an object. Received ${data}`);
         console.log(data);
-        const content = this.#content.toSpliced(location, 0, data);
+        const newContent = content.toSpliced(location, 0, data);
 
-        console.log(content);
-        return content;
+        console.log(newContent);
+        return newContent;
     }
     /*
     location is index in Content array where data will be deleted. Must be integer, will fail if exceeds size of array.
@@ -249,14 +247,15 @@ export default class Content {
 
     Used to delete content at root level of array. For deleting content in child nodes, instead modify parent.
     */
-    static deleteContent(location){
+    static deleteContent(content, location){
         console.log("Checking location to delete: " + location + ", length: " + location.length);
         if (!Number.isInteger(location)) console.error(`Location for deleting content is not an integer. Received ${location}`);
-        if (location >= this.#content.length) console.error(`Location for deleting content is out of range. Received ${location}, maximum is ${this.#content.length}`);
-        const content = this.#content.toSpliced(location, 1);
-
+        if (location >= content.length) console.error(`Location for deleting content is out of range. Received ${location}, maximum is ${content.length}`);
         console.log(content);
-        return content;
+        const newContent = content.toSpliced(location, 1);
+
+        console.log(newContent);
+        return newContent;
     }
 
     static checkLocation(location, content){
