@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -100,16 +100,18 @@ function userPane(data) {
     )
 }
 
-function newElement() {
+function newElement(newContentSelectorID) {
     console.log("New Element ran");
     return (
-        <div className={"newElement"}>
-            <button>Div</button>
-            <button>Media</button>
-            <button>Heading</button>
-            <button>List</button>
-            <button>Table</button>
-        </div>
+        <>
+        <label>New content type:</label>
+        <select id={newContentSelectorID}>
+            <option value="text">Text</option>
+            <option value="div">Div</option>
+            <option value="ul">Unordered List</option>
+            <option value="img">Image</option>
+        </select>
+        </>
     )
 }
 
@@ -129,6 +131,7 @@ function buildElementInspector(data){
     console.log(targetData);
     addClass(data, "inspectorWindow");
     helpers.genericElementProps(data);
+    let newContentSelectorID = "NewContentPicker";
     return (
         <div {...data.props}>
             Type: {targetData.type}
@@ -145,14 +148,8 @@ function buildElementInspector(data){
                 <button onClick={appendNewContentAction(targetData, "img", dispatch)}>Add image</button>
             </div>
             <div>
-                <label>New content type:</label>
-                <select id="NewContentPicker">
-                    <option value="text">Text</option>
-                    <option value="div">Div</option>
-                    <option value="ul">Unordered List</option>
-                    <option value="img">Image</option>
-                </select>
-                <button onClick={appendNewContentPickerAction(targetData, dispatch)}>Add Content</button>
+                {newElement(newContentSelectorID)}
+                <button onClick={appendNewContentPickerAction(targetData, newContentSelectorID, dispatch)}>Add Content</button>
             </div>
             <button onClick={toggleHiddenAction("InspectedRawData", () => Content.JSONify(targetData))}>Show Data</button>
             <div id="InspectedRawData" style={{display: "none", overflow: "scroll", width: "600px", height: "500px", backgroundColor: "grey"}}>
@@ -261,6 +258,7 @@ function buildPlacementInspector(data){
     const dispatch = useContext(contentDispatchContext);
     addClass(data, "inspectorWindow");
     helpers.genericElementProps(data);
+    let newContentSelector = "newContentSelector"
     return (
         <div {...data.props}>
             Type: {targetData.type}
@@ -268,9 +266,20 @@ function buildPlacementInspector(data){
             <div>
                 Contents:
                 {inspectorContents(targetData, dispatch)}
-                <button onClick={appendNewContentAction(targetData, "img", dispatch)}>Add image</button>
+                <button onClick={addDivToPlacement(targetData, dispatch)}>Add Content</button>
             </div>
         </div>
+    )
+}
+
+function placementSelector(id){
+    return (
+        <select id={id}>
+            {Content.placements.map(placement => {
+                return (<option value={placement.props.name}>{placement.props.name}</option>)
+                })
+            }
+        </select>
     )
 }
 

@@ -284,9 +284,9 @@ export function appendNewContentAction(data, type, dispatch){
 
 
 
-export function appendNewContentPickerAction(data, dispatch){
+export function appendNewContentPickerAction(data, selectorID, dispatch){
     return () => {
-        const type = document.getElementById("NewContentPicker").value;
+        const type = document.getElementById(selectorID).value;
         console.log(`Adding element of type: ${type}`);
         appendNewContent(data, type);
         modifyDispatch(data, data.location, dispatch);
@@ -426,4 +426,21 @@ export function deleteFromPlacement(data, dispatch){
     if (typeof data !== "object") return console.error(new Error("Delete from placement received invalid inputs"));
     if (!validateLocation(data.location)) return console.error(new Error("Delete from placement received invalid location"));
     deleteDispatch(data.location[0], dispatch);
+}
+
+export function addDivToPlacement(placement, dispatch){
+    if (!Content.placements.includes(placement)) return;
+    return () => {
+            const newContent = {
+            type: "div",
+            css: {
+                classes: [],
+                style: {}
+            },
+            props: {},
+            content: [],
+            placement: placement.props.name
+        }
+        insertDispatch(newContent, Content.active.length, dispatch);
+    }
 }
