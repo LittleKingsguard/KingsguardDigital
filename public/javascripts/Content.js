@@ -19,7 +19,9 @@ export default class Content {
     static #CSSElementOwners;
     static #user;
     static #placementList = [];
-    static #format;
+    static format;
+    static isEditingFormat = false;
+    static hiddenContent = [];
 
     static set target(data){
         if (data === null) {
@@ -93,6 +95,7 @@ export default class Content {
     }
 
     static DisplayContent() {
+        if (Content.isEditingFormat === true) return Content.DisplayFormat();
         console.log(window.preloadContent);
         if (typeof Content.active !== "object") Content.active = window.preloadContent[1];
         let content = null;
@@ -101,11 +104,35 @@ export default class Content {
         [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
         Content.#content = content;
         Content.#dispatch = dispatch;
-        Content.#format = window.preloadContent[0];
-        findAllPlacements(Content.#format);//In this case preloadContent is [format, data, user]
+        Content.format = window.preloadContent[0];
+        findAllPlacements(Content.format);//In this case preloadContent is [format, data, user]
         parseDataIntoPlacements(Content.active);
         Content.#user = window.preloadContent[2];
         Content.CSS = document.getElementById('mainCSS').sheet;
+        if (content === null || Object.keys(content).length === 0) console.log("No content");
+        else {
+            //console.log(addElements(content));
+            return (
+                <contentDispatchContext.Provider value={dispatch}>
+                    <parentContext.Provider value = {null}>
+                        {addElements(window.preloadContent[0])}
+                    </parentContext.Provider>
+                </contentDispatchContext.Provider>
+            );
+        }
+    }
+
+    static DisplayFormat(){
+        console.log(window.preloadContent);
+        let content = null;
+        let dispatch = null;
+        if (typeof Content.active !== "object") Content.active = window.preloadContent[0];
+        [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
+        Content.#content = content;
+        Content.#dispatch = dispatch;
+        Content.#user = window.preloadContent[2];
+        Content.CSS = document.getElementById('mainCSS').sheet;
+        Content.clearPlacements();
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
             //console.log(addElements(content));

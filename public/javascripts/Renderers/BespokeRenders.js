@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement, toggleFormatEditAction} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -133,7 +133,7 @@ function buildElementInspector(data){
     helpers.genericElementProps(data);
     let newContentSelectorID = "NewContentPicker";
     return (
-        <div {...data.props}>
+        <div {...data.props} onclick={defaultPreventer()}>
             Type: {targetData.type}
             Location: {targetData.location}
             <div >
@@ -155,6 +155,7 @@ function buildElementInspector(data){
             <div id="InspectedRawData" style={{display: "none", overflow: "scroll", width: "600px", height: "500px", backgroundColor: "grey"}}>
                 {Content.JSONify(targetData)}
             </div>
+            <button onClick={toggleFormatEditAction(dispatch)}>Edit Format</button>
         </div>
     )
 }
@@ -260,7 +261,7 @@ function buildPlacementInspector(data){
     helpers.genericElementProps(data);
     let newContentSelector = "newContentSelector"
     return (
-        <div {...data.props}>
+        <div {...data.props} onclick={(e) => e.preventDefault()}>
             Type: {targetData.type}
             Location: {targetData.location}
             <div>
@@ -348,7 +349,7 @@ function buildEditToolbar(data){
     console.log(location);
     const pickerID = `NewFormatBlock${location.toString()}`;
     return (
-        <div style={{position: "relative", top: "-30px", margin: "0px 0px -30px 0px", height: "30px"}}>
+        <div style={{position: "relative", top: "-30px", margin: "0px 0px -30px 0px", height: "30px"}} onclick={(e) => e.preventDefault()}>
             <button onClick={editButtonAction(boldAction)}>Bold</button>
             <button onClick={editButtonAction(emAction)}>Italic</button>
             
@@ -398,6 +399,7 @@ function buildEditor(data){
         className={classnames}
         disabled={false}
         onChange={handleChange}
+        onclick={(e) => e.preventDefault()}
       />
     </>
   );

@@ -62,7 +62,8 @@ export function validateInlineContents(contents){
 }
 
 export function validateEditable(data){
-    const editablePlacements = ["main"];
+    const editablePlacements = Content.placements.map((placement) => {return placement.props.name});
+    if (Content.isEditingFormat) return true;
     return editablePlacements.includes(data.placement);
 }
 

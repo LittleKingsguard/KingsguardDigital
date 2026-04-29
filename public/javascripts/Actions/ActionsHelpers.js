@@ -444,3 +444,21 @@ export function addDivToPlacement(placement, dispatch){
         insertDispatch(newContent, Content.active.length, dispatch);
     }
 }
+
+export function toggleFormatEditAction(dispatch){
+    if (Content.isEditingFormat) {
+        return (e) => {
+            Content.isEditingFormat = false;
+            Content.active = Content.hiddenContent;
+            loadDispatch(Content.hiddenContent, dispatch);
+            e.preventDefault();
+        }
+    }
+    return (e) => {
+        Content.isEditingFormat = true;
+        Content.hiddenContent = Content.active;
+        Content.active = Content.format;
+        loadDispatch(Content.format, dispatch);
+        e.preventDefault();
+    }
+}
