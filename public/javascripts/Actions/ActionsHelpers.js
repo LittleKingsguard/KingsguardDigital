@@ -219,7 +219,10 @@ export function setTargetAction(data){/*
             Content.target = null;
         }
     } */
-    return () => Content.target = data;
+    return (e) => {
+        e.preventDefault();
+        Content.target = data;
+    }
 }
 
 export function rearrangeContent(data, oldIndex, newIndex){
@@ -236,8 +239,9 @@ export function rearrangeContentAction(data, oldIndex, newIndex, dispatch){
     if (data.type === "placement") return () => {
         rearrangeInPlacement(data, oldIndex, newIndex, dispatch);
     }
-    return () => {
+    return (e) => {
         rearrangeContent(data, oldIndex, newIndex)
+        e.preventDefault();
         modifyDispatch(data, data.location, dispatch);
     }
 }
@@ -251,8 +255,9 @@ export function deleteContent(data, index){
 
 export function deleteContentAction(data, index, dispatch){
     if (data.type === "placement") return () => deleteFromPlacement(data.content[index], dispatch);
-    return () => {
+    return (e) => {
         deleteContent(data, index);
+        e.preventDefault();
         modifyDispatch(data, data.location, dispatch);
     }
 }
@@ -276,8 +281,9 @@ export function appendNewContent(data, type){
 }
 
 export function appendNewContentAction(data, type, dispatch){
-    return () => {
+    return (e) => {
         appendNewContent(data, type);
+        e.preventDefault();
         modifyDispatch(data, data.location, dispatch);
     }
 }
@@ -285,10 +291,11 @@ export function appendNewContentAction(data, type, dispatch){
 
 
 export function appendNewContentPickerAction(data, selectorID, dispatch){
-    return () => {
+    return (e) => {
         const type = document.getElementById(selectorID).value;
         console.log(`Adding element of type: ${type}`);
         appendNewContent(data, type);
+        e.preventDefault();
         modifyDispatch(data, data.location, dispatch);
     }
 }
@@ -383,10 +390,11 @@ function validateContentStructure(data){
 }
 
 export function toggleHiddenAction(targetID){
-    return () => {
+    return (e) => {
         const targetElement = document.getElementById(targetID);
         if (targetElement.style.display === "none") targetElement.style.display = "block";
         else targetElement.style.display = "none";
+        e.preventDefault();
     }
 }
 
@@ -430,7 +438,7 @@ export function deleteFromPlacement(data, dispatch){
 
 export function addDivToPlacement(placement, dispatch){
     if (!Content.placements.includes(placement)) return;
-    return () => {
+    return (e) => {
             const newContent = {
             type: "div",
             css: {
@@ -441,6 +449,7 @@ export function addDivToPlacement(placement, dispatch){
             content: [],
             placement: placement.props.name
         }
+        e.preventDefault();
         insertDispatch(newContent, Content.active.length, dispatch);
     }
 }
@@ -454,11 +463,24 @@ export function toggleFormatEditAction(dispatch){
             e.preventDefault();
         }
     }
+    let inspectorPane = {
+        type: "inspector",
+        css: {
+            classes: [],
+            style: {
+                position: "fixed",
+                top: 0,
+                right: 0
+            }
+        },
+        props: {}
+    }
     return (e) => {
         Content.isEditingFormat = true;
         Content.hiddenContent = Content.active;
         Content.active = Content.format;
-        loadDispatch(Content.format, dispatch);
+        Content.format.content.unshift(inspectorPane);
+        loadDispatch([Content.format], dispatch);
         e.preventDefault();
     }
 }

@@ -126,13 +126,14 @@ export default class Content {
         console.log(window.preloadContent);
         let content = null;
         let dispatch = null;
-        if (typeof Content.active !== "object") Content.active = window.preloadContent[0];
+        if (typeof Content.active !== "object") Content.active = [window.preloadContent[0]];
         [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
         Content.#content = content;
         Content.#dispatch = dispatch;
         Content.#user = window.preloadContent[2];
         Content.CSS = document.getElementById('mainCSS').sheet;
         Content.clearPlacements();
+        findAllPlacements(Content.format);
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
             //console.log(addElements(content));
@@ -356,6 +357,7 @@ export default class Content {
     static getContentListByType(type){
         if (typeof type !== "string") return null;
         let foundContent = [];
+        console.log(this.#content);
         this.#content.forEach((content, index) => {
             foundContent = foundContent.concat(this.getContentListByTypeHelper(type, content, [index]))
         });

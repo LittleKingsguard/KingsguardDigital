@@ -243,7 +243,7 @@ function inspectorContentButtons(content, index, length, dispatch){
     )
     return (
         <>
-            <button onClick={setTargetAction(content.location)}>Select</button> 
+            <button onClick={setTargetAction(content)}>Select</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index-1, dispatch)}>Up</button> 
             <button onClick={rearrangeContentAction(content.parent, index, index+1, dispatch)}>Down</button> 
             <button onClick={deleteContentAction(content.parent, index, dispatch)}>Delete</button> 
