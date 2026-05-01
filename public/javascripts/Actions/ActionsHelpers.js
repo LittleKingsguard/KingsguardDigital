@@ -137,7 +137,7 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
 }
 
 export function dropClass(data, cssClass){
-    if (typeof data === "undefined") return;
+    if (typeof data === "undefined" || data === null) return;
     if (typeof data.css === "undefined"){
         data.css = {
             classes: []
@@ -457,6 +457,7 @@ export function addDivToPlacement(placement, dispatch){
 export function toggleFormatEditAction(dispatch){
     if (Content.isEditingFormat) {
         return (e) => {
+            Content.target = null;
             Content.isEditingFormat = false;
             Content.active = Content.hiddenContent;
             loadDispatch(Content.hiddenContent, dispatch);
@@ -476,6 +477,7 @@ export function toggleFormatEditAction(dispatch){
         props: {}
     }
     return (e) => {
+        Content.target = null;
         Content.isEditingFormat = true;
         Content.hiddenContent = Content.active;
         Content.active = Content.format;

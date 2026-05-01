@@ -119,7 +119,7 @@ function buildElementInspector(data){
     let targetData = Content.target;
     console.log("Target is:");
     console.log(targetData);
-    if (typeof targetData !=="object") return;
+    if (typeof targetData !=="object" || targetData === null) return;
     if (targetData.type === "placement") return buildPlacementInspector(data);
     const dispatch = useContext(contentDispatchContext);
     const addClassButton = () =>{

@@ -34,10 +34,21 @@ export default class Content {
                     location: this.#targeted.location
                 }];
             if (inspector.length > 0){
-                actionArray.push({
-                    type: "delete",
-                    location: inspector[0].location
-                })
+                if (inspector[0].location.length === 1) {
+                        actionArray.push({
+                            type: "delete",
+                            location: inspector[0].location
+                        })
+                }
+                else {
+                    let newParent = inspector[0].data.parent;
+                    newParent.content.splice(inspector[0].location[inspector[0].location.length], 1);
+                    actionArray.push({
+                        type: "modify",
+                        location: newParent.location,
+                        content: {...newParent}
+                    })
+                }
             }
             actionArray.forEach((action => this.#dispatch(action)));
             this.#targeted = null;
