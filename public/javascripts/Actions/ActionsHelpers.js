@@ -486,3 +486,18 @@ export function toggleFormatEditAction(dispatch){
         e.preventDefault();
     }
 }
+
+export async function saveFormat(dispatch){
+    const url = "http://localhost:3000/content/saveFormat/";
+    let formatData;
+    if (Content.isEditingFormat) formatData = Content.JSONify(Content.active);
+    else {
+        Content.clearPlacements();
+        formatData = Content.JSONify(Content.format);
+    }
+    console.log(formatData);
+    const returnString = await postFetch(url, formatData);
+    console.log(returnString);
+    if (returnString.error) alert(returnString.error);
+    //else loadDispatch(returnString, dispatch);
+}

@@ -36,13 +36,20 @@ router.get('/test', async function(req, res, next) {
   res.render('index', {preload: preloadData});
 });
 
-router.post('/save', async function(req, res, next) {
+router.post('/saveFormat', async function(req, res, next) {
   let userData = user.checkLogin(req);
-  let newFormatData = {
+  /* let newFormatData = {
     Formatting: formatTestData,
     Description: "Amended default article format with header as different placement from main text and placement in Navigation menu, attempting save as json",
     Creator: userData.username,
     ID: -1
+  } */
+ console.log(req.body);
+  let newFormatData = {
+    Formatting: req.body,
+    Description: req.body.props.formatDescription,
+    Creator: userData.username,
+    ID: req.body.props.formatID
   }
   let newFormat = new Format(newFormatData);
   console.log("Trying to save format");

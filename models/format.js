@@ -25,9 +25,20 @@ class Format {
 
     async save(user){
         console.log(user.json);
-        await sql`INSERT INTO public."Formats"(
-	"Creator", "ID", "Formatting", "Description")
-	VALUES (${user.username}, nextval('public."FormatKey"'), ${this.format.json}, ${this.description});`
+        if (this.id < 1) {
+            await sql`INSERT INTO public."Formats"(
+            "Creator", "ID", "Formatting", "Description")
+            VALUES (${user.username}, nextval('public."FormatKey"'), ${this.format.json}, ${this.description});`
+        }
+        else {
+            console.log("SQL command:");
+            console.log(`UPDATE public."Formats" SET
+            "Creator"=${user.username}, "Formatting"=${this.format.json}, "Description"=${this.description}
+            WHERE "ID"=${this.id};`)
+            await sql`UPDATE public."Formats" SET
+            "Creator"=${user.username}, "Formatting"=${this.format.json}, "Description"=${this.description}
+            WHERE "ID"=${this.id};`
+        }
     }
 
     static async loadFromDB(id){

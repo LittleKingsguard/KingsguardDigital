@@ -62,7 +62,7 @@ async function loadFromDB(id) {
     const formatData = {
         Formatting: data.Formatting,
         ID: data.ID,
-        Decription: data.Decription,
+        Description: data.Description,
         Creator: data.Creator
     }
     const foundFormat = new Format(formatData);

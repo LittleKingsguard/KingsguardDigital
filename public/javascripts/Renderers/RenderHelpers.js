@@ -63,7 +63,7 @@ export function validateInlineContents(contents){
 
 export function validateEditable(data){
     const editablePlacements = Content.placements.map((placement) => {return placement.props.name});
-    if (Content.isEditingFormat) return true;
+    if (Content.isEditingFormat && data.location.length !== 1) return true;
     return editablePlacements.includes(data.placement);
 }
 
@@ -73,6 +73,11 @@ export function genericElementProps(data){
     data.props.id = data.location.toString();
     data.props.className = classlist(data.css);
     if (data.props.style === undefined) data.props.style = data.css.style;
+    if (typeof data.props.style !== "object"){
+        console.error("The following element has incorrect style formatting:");
+        console.error(data);
+        data.props.style = {};
+    }
 }
 
 export function createCSSAttributes(data){

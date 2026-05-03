@@ -6,7 +6,7 @@ import * as text from "./TextContentRenders";
 import {login, logout, register} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
-import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement, toggleFormatEditAction} from "../Actions/ActionsHelpers";
+import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement, toggleFormatEditAction, saveFormat} from "../Actions/ActionsHelpers";
 import {useRef, useState, useEffect} from "react";
 import {
     buildDatalist, buildFieldset, buildForm,
@@ -88,7 +88,7 @@ function userPane(data) {
     let onTestHandler = () => {
         //return modifyDispatch(testData, [0, 1, 2, 1, 1, 0], dispatch);
         console.log("Trying to save data");
-        newContent(dispatch);
+        saveFormat(Content.active, dispatch);
     };
     helpers.genericElementProps(data);
     return(
@@ -163,17 +163,18 @@ function buildElementInspector(data){
 function inspectorClass(className, targetData, dispatch){
     const dataId = `classData${className}`
     const dataTextId = `classDataText${className}`
-    const deleteClassButton = () => {
+    const deleteClassButton = (e) => {
+        e.preventDefault();
         targetData = dropClass(targetData, className);
         modifyDispatch(targetData, targetData.location, dispatch);
     }
-    const refreshClassDisplay = () => {
-        toggleHiddenAction(dataId)();
+    const refreshClassDisplay = (e) => {
+        toggleHiddenAction(dataId)(e);
         let textArea = document.getElementById(dataTextId);
         textArea.value = helpers.getCSSData(className).cssStyle;
     }
-    const updateClass = () => {
-        toggleHiddenAction(dataId)();
+    const updateClass = (e) => {
+        toggleHiddenAction(dataId)(e);
         let textArea = document.getElementById(dataTextId);
         const cssData = helpers.getCSSData(className);
         let classOwner = cssData.owner;
@@ -181,7 +182,7 @@ function inspectorClass(className, targetData, dispatch){
         modifyDispatch(classOwner, classOwner.location, dispatch);
     }
     return (
-        <div>{className} 
+        <div onclick={defaultPreventer()}>{className} 
             <div id={dataId} style={{display: "none", width: "150px", backgroundColor: "grey"}}>
                 <textarea id={dataTextId} style={{ paddingTop: "5px", paddingBottom: "5px"}}> </textarea>
                 <button onClick={updateClass}>Update</button>
@@ -212,7 +213,7 @@ function inspectorContents(data, dispatch){
         if (Object.keys(data.content).length === 0) return <>No content</>
 
         return (
-            <div>{data.content.type} {inspectorContentButtons(data.content, 0, 1, dispatch)} </div>// treat index as 0 and length = 1 for non-arrays
+            <div onclick={defaultPreventer()}>{data.content.type} {inspectorContentButtons(data.content, 0, 1, dispatch)} </div>// treat index as 0 and length = 1 for non-arrays
         )
     }
 
