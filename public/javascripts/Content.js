@@ -440,6 +440,7 @@ export default class Content {
     static addCSSClass(classInfo, data){//classInfo expects name (string) and style(object) props
         if (typeof classInfo !== "object") return {success: false, status: "BadInfo"};
         if (typeof classInfo.name !== "string") return {success: false, status: "BadInfo"};
+        if (Array.from(classInfo.name)[0] !== '.') classInfo.name = '.' + classInfo.name;
         if (typeof classInfo.style !== "string") return {success: false, status: "BadInfo"};
         if (this.#CSSClassList.includes(classInfo.name)) return {success: false, status: "ClassExists"};
         let index = null;
