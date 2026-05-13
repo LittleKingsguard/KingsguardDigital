@@ -5,6 +5,9 @@ const Content = require("../models/content.js");
 var preload = require('../public/StaticData/TestProfile.json');
 const {addNavBar} = require("../middleware/ContentHelper.js");
 const loginForm = require('../public/StaticData/LoginPanel.json');
+const setupForm = require('../public/StaticData/SetupLogin.json');
+const setupFormat = require('../public/StaticData/SetupFormat.json');
+const {findAnyUsers} = require('../middleware/userHelpers.js');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
@@ -28,6 +31,13 @@ router.post('/new', async function(req, res, next) {
     }
   }
   res.render('index', {preload: preloadData});
+});
+
+router.get('/firstTimeSetup', async function(req, res, next) {
+  console.log(await findAnyUsers());
+  console.log("This should be after the first false");
+  if (await findAnyUsers()) res.send({error: "Users already present, please log in"});
+  else res.render('index', {preload: [setupFormat, setupForm, false]})
 });
 
 module.exports = router;

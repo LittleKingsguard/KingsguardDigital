@@ -3,7 +3,7 @@ import React from "react";
 import ContentEditable from 'react-contenteditable';
 import addElements from "./ContentRenderer"
 import * as text from "./TextContentRenders";
-import {login, logout, register} from "../Actions/User";
+import {login, logout, register, firstTimeSetUp} from "../Actions/User";
 import {useContext} from "react";
 import {locationContext, contentDispatchContext} from "../Contexts";
 import {modifyDispatch, insertDispatch, deleteDispatch, editButtonAction, saveEditButtonAction, dropClass, addClass, setTargetAction, rearrangeContentAction, deleteContentAction, appendNewContentAction, appendNewContentPickerAction, formatBlockAction, defaultPreventer, toggleHiddenAction, addDivToPlacement, toggleFormatEditAction, saveFormat} from "../Actions/ActionsHelpers";
@@ -28,7 +28,7 @@ function buildLogin(data){
     }
     let id = helpers.validateId(data.css);
     let classnames = helpers.classlist(data.css);
-    const location = useContext(locationContext);
+    const location = data.location;
     const dispatch = useContext(contentDispatchContext);
     let onclickHandler = () => {
         let username = document.getElementById("username").value;
@@ -63,6 +63,37 @@ function buildLogin(data){
                     <button id={"registerButton"} type={"button"} onClick={onclickRegister}>Register</button>
                 </form>
             </div>
+        </div>
+    )
+}
+
+function buildSetup(data){
+    console.log("Setup ran");
+    console.log(data);
+    if (!helpers.validateEmptyElement('AdminSetup', data)){
+        return
+    }
+    let id = helpers.validateId(data.css);
+    let classnames = helpers.classlist(data.css);
+    const location = useContext(locationContext);
+    const dispatch = useContext(contentDispatchContext);
+    let onclickRegister = () => {
+        let username = document.getElementById("registerUsername").value;
+        let password = document.getElementById("registerPassword").value;
+        let email = document.getElementById("registerEmail").value;
+        return firstTimeSetUp(username, email, password, location, dispatch);
+    };
+    return (
+        <div {...data.props} className={classnames} id={id}>
+            <form>
+                <label>Username:</label>
+                <input id={"registerUsername"} type={"text"} name={"username"} placeholder={"Username"}/>
+                <label>Password:</label>
+                <input  id={"registerPassword"} type={"password"} name={"password"} placeholder={"Password"}/>
+                <label>Email:</label>
+                <input  id={"registerEmail"} type={"email"} name={"email"} placeholder={"person@example.com"}/>
+                <button id={"registerButton"} type={"button"} onClick={onclickRegister}>Register</button>
+            </form>
         </div>
     )
 }
@@ -416,6 +447,8 @@ export default function bespokeRenderer(data){
             return buildEditor(data);
         case "inspector":
             return buildElementInspector(data);
+        case "AdminSetup":
+            return buildSetup(data);
         default:
             return;
     }

@@ -35,3 +35,18 @@ export async function logout(location, dispatch) {
     console.log(returnString);
     loadDispatch(returnString, dispatch);
 }
+
+export async function firstTimeSetUp(username,email, password, location, dispatch) {//username/password/email are used for login. location is passed to dispatch
+    const url = "http://localhost:3000/login/newAdmin";
+    const body = {
+        username: username,
+        password: password,
+        email: email
+    };
+    console.log("Body sent: ");
+    console.log(body);
+    const returnString = await postFetch(url, body);
+    console.log(returnString);
+    if (returnString.errorMessages) alert(returnString.errorMessages);
+    else loadDispatch(returnString, dispatch);
+}

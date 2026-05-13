@@ -1,0 +1,11 @@
+[{
+  "type": "AdminSetup",
+  "css": {
+    "classes": [
+      "AdminSetup"
+    ],
+    "id": "AdminSetup"
+  },
+  "props":{},
+  "placement": "Admin"
+}]

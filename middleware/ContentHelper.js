@@ -54,7 +54,7 @@ async function loadFromDB(id) {
     //console.log(`SQL statement is: ${`Select * FROM public."Content" WHERE "Key" = ${idString}`}`);
     let dbResponse = await sql`SELECT *
 	FROM public."Content" JOIN public."Formats" ON  public."Content"."Format" = public."Formats"."ID" WHERE "Key" = ${id};`;
-    if (dbResponse.length !== 1) throw new Error("No content found");
+    if (dbResponse.length !== 1) return [{}, []];
     let data = dbResponse.pop();
     console.log("Recieved data from DB:");
     console.log(data);

@@ -39,4 +39,10 @@ async function getUserData(Username, user) {
     return user;
 }
 
-module.exports = {addUser,login,getUserData};
+async function findAnyUsers(){
+    let userData = await sql`SELECT * FROM public."Users" LIMIT 1`;
+    console.log("This is the raw data from sql: " + JSON.stringify(userData) + "with length: " + userData.length > 0);
+    return userData.length > 0;
+}
+
+module.exports = {addUser,login,getUserData, findAnyUsers};

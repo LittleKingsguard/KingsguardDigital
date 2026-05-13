@@ -6,7 +6,7 @@ const {scrypt, randomBytes} = require("node:crypto");
 const {passwordStrength} = require('check-password-strength');
 const jwt = require('jsonwebtoken');
 const user = require("../models/user.js");
-var {login,getUserData} = require("../middleware/userHelpers.js");
+var {login, getUserData, findAnyUsers} = require("../middleware/userHelpers.js");
 
 router.post('/new', async function(req, res, next) {
     let body = {};
@@ -31,6 +31,43 @@ router.post('/new', async function(req, res, next) {
             username: req.body.username,
             email: req.body.email,
             createdDate: Date.now()
+        };
+        user.cryptUser(new user(userData), req.body.password, res, body);
+    }
+    else {
+        res.send(body);
+    }
+});
+
+router.post('/newAdmin', async function(req, res, next) {
+    let body = {};
+    body.errorMessages = [];
+    let hasError = false;
+    if (await findAnyUsers()) {
+        hasError = true;
+        body.errorMessages.push("Setup already complete");
+    }
+    if (req.body.username === ""){
+        body.errorMessages.push("Please provide username");
+        hasError = true;
+    }
+    if (req.body.email === ""){
+        body.errorMessages.push("Please provide email");
+        hasError = true;
+    }
+    if (passwordStrength(req.body.password).value === "Too weak"){
+        body.errorMessages.push("Password too weak");
+        hasError = true;
+    }
+    if (!hasError){
+        //console.log(req.body);
+        //console.log(await cryptUser(req.body));
+        let userData = {
+            username: req.body.username,
+            email: req.body.email,
+            createdDate: Date.now(),
+            isAdmin: true,
+            isContributor: true
         };
         user.cryptUser(new user(userData), req.body.password, res, body);
     }
