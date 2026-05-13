@@ -10,6 +10,9 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var contentRouter = require('./routes/content')
 
+var dbScripts = require('./db_scripts')
+dbScripts();
+
 var app = express();
 
 // view engine setup
