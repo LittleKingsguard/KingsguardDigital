@@ -159,6 +159,79 @@ async function createAll(){
 
      await sql`ALTER SEQUENCE public."FormatKey"
         OWNER TO postgres;`
+
+    //-- Table: public.Components
+
+    //-- DROP TABLE IF EXISTS public."Components";
+
+    await sql`CREATE TABLE IF NOT EXISTS public."Components"
+    (
+        "Creator" text COLLATE pg_catalog."default" NOT NULL,
+        "ID" integer NOT NULL,
+        "Data" jsonb NOT NULL,
+        "Name" text NOT NULL,
+        "Description" text COLLATE pg_catalog."default",
+        CONSTRAINT "Components_pkey" PRIMARY KEY ("ID"),
+        CONSTRAINT "CreatorIsUser" FOREIGN KEY ("Creator")
+            REFERENCES public."Users" ("Username") MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;`
+
+     await sql`ALTER TABLE IF EXISTS public."Components"
+        OWNER to postgres;`
+
+    //-- SEQUENCE: public.ComponentKey
+
+    //-- DROP SEQUENCE IF EXISTS public."ComponentKey";
+
+    await sql`CREATE SEQUENCE IF NOT EXISTS public."ComponentKey"
+        INCREMENT 1
+        START 1
+        MINVALUE 1
+        MAXVALUE 9223372036854775807
+        CACHE 1;`
+
+     await sql`ALTER SEQUENCE public."ComponentKey"
+        OWNED BY public."Components"."ID";`
+
+     await sql`ALTER SEQUENCE public."ComponentKey"
+        OWNER TO postgres;`
+
+    //-- Table: public.ComponentMappings
+
+    //-- DROP TABLE IF EXISTS public."ComponentMappings";
+
+    await sql`CREATE TABLE IF NOT EXISTS public."component_content_mapping" (
+            content_id text NOT NULL,
+            component_id int NOT NULL,
+            CONSTRAINT component_content_mapping_pk PRIMARY KEY (content_id,component_id),
+            CONSTRAINT "component_content_mapping_content_fk" FOREIGN KEY ("content_id")
+            REFERENCES public."Content" ("Key") MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE,
+            CONSTRAINT "component_content_mapping_components_fk" FOREIGN KEY ("component_id")
+            REFERENCES public."Components" ("ID") MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE
+        );`
+
+    
+    await sql`CREATE TABLE IF NOT EXISTS public."component_format_mapping" (
+            format_id int NOT NULL,
+            component_id int NOT NULL,
+            CONSTRAINT component_format_mapping_pk PRIMARY KEY (format_id,component_id),
+            CONSTRAINT "component_format_mapping_format_fk" FOREIGN KEY ("format_id")
+            REFERENCES public."Formats" ("ID") MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE,
+            CONSTRAINT "component_format_mapping_components_fk" FOREIGN KEY ("component_id")
+            REFERENCES public."Components" ("ID") MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE CASCADE
+        );`
 }
 
 module.exports = createAll
