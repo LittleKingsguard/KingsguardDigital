@@ -72,7 +72,7 @@ async function createAll(){
 
     //-- Table: public.Content
 
-    //-- DROP TABLE IF EXISTS public."Content";
+    //await sql`DROP TABLE IF EXISTS public."Content";`
 
     await sql`CREATE TABLE IF NOT EXISTS public."Content"
     (
@@ -84,6 +84,7 @@ async function createAll(){
         "Key" text COLLATE pg_catalog."default" NOT NULL,
         "Data" jsonb NOT NULL,
         "Format" integer NOT NULL,
+        "Headers" text,
         CONSTRAINT "Content_pkey" PRIMARY KEY ("Key"),
         CONSTRAINT "CreatorIsUser" FOREIGN KEY ("Creator")
             REFERENCES public."Users" ("Username") MATCH SIMPLE

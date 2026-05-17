@@ -69,7 +69,7 @@ class Content {
         if (!Array.isArray(data.css.classDef)) data.css.classDef = [];
     }
 
-    constructor(data){
+    constructor(data){//Content metadata goes in separate json obj for now
         if (Array.isArray(data)) return data.map((data) => {return new Content(data);});
         if (typeof data !== 'object') {
             console.log(`Bad data -- Data is ${typeof data}, expects object`);

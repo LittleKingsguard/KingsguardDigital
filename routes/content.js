@@ -29,11 +29,11 @@ router.post('/new', async function(req, res, next) {
 router.get('/test', async function(req, res, next) {
   let userData = user.checkLogin(req);
   let preloadData = await contentHelper.loadFromDB(5);
-  if (userData) preloadData[1].push(userPane);
-  else preloadData[1].push(loginForm);
-  preloadData.push(userData);
+  if (userData) preloadData.content.push(userPane);
+  else preloadData.content.push(loginForm);
+  preloadData.user = userData;
   console.log(preloadData);
-  res.render('index', {preload: preloadData});
+  res.render('index', {preload: preloadData, headers: preloadData.headers});
 });
 
 router.post('/saveFormat', async function(req, res, next) {

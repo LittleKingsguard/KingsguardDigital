@@ -3,25 +3,25 @@ const Content = require('./content.js')
 
 class Component {
     constructor (data){
-        if (typeof data.content === "object") this.content = new Content(data.content);
+        if (typeof data.component === "object") this.component = new Content(data.component);
         else throw new Error ("Format not provided");
-        if (typeof data.Description === "string") this.description = data.Description;
+        if (typeof data.compDescription === "string") this.description = data.compDescription;
         else this.description = "Description not loaded";
-        if (typeof data.Name === "string") this.name = data.Name;
+        if (typeof data.compName === "string") this.name = data.compName;
         else this.name = "Name not loaded";
-        if (typeof data.ID === "number") this.id = data.ID;
+        if (typeof data.compID === "number") this.id = data.compID;
         else throw new Error ("Format ID not provided");
-        if (typeof data.Creator === "string") this.creator = data.Creator;
+        if (typeof data.compCreator === "string") this.creator = data.compCreator;
         else this.creator = "Creator not loaded";
     }
 
     get json() {
-        let returnJSON = this.format;
+        let returnJSON = this.component;
         if (returnJSON.props === undefined) returnJSON.props = {};
         returnJSON.props.formatID = this.id;
         returnJSON.props.componentName = this.name;
-        returnJSON.props.formatDescription = this.description;
-        returnJSON.props.formatCreator = this.creator;
+        returnJSON.props.componentDescription = this.description;
+        returnJSON.props.componentCreator = this.creator;
 
         return returnJSON.json;
     }
@@ -36,10 +36,10 @@ class Component {
         else {
             console.log("SQL command:");
             console.log(`UPDATE public."Formats" SET
-            "Creator"=${user.username}, "Data"=${this.content.json},"Name"=${this.name}, "Description"=${this.description}
+            "Creator"=${user.username}, "Data"=${this.component.json},"Name"=${this.name}, "Description"=${this.description}
             WHERE "ID"=${this.id};`)
             await sql`UPDATE public."Formats" SET
-            "Creator"=${user.username}, "Data"=${this.content.json},"Name"=${this.name}, "Description"=${this.description}
+            "Creator"=${user.username}, "Data"=${this.component.json},"Name"=${this.name}, "Description"=${this.description}
             WHERE "ID"=${this.id};`
         }
     }

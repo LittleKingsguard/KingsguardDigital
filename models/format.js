@@ -3,13 +3,13 @@ const Content = require('./content.js')
 
 class Format {
     constructor (data){
-        if (typeof data.Formatting === "object") this.format = new Content(data.Formatting);
+        if (typeof data.format === "object") this.format = new Content(data.format);
         else throw new Error ("Format not provided");
-        if (typeof data.Description === "string") this.description = data.Description;
+        if (typeof data.formatDescription === "string") this.description = data.formatDescription;
         else this.description = "Description not loaded";
-        if (typeof data.ID === "number") this.id = data.ID;
+        if (typeof data.formatID === "number") this.id = data.formatID;
         else throw new Error ("Format ID not provided");
-        if (typeof data.Creator === "string") this.creator = data.Creator;
+        if (typeof data.formatCreator === "string") this.creator = data.formatCreator;
         else this.creator = "Creator not loaded";
     }
 
