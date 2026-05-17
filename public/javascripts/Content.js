@@ -106,19 +106,20 @@ export default class Content {
     }
 
     static DisplayContent() {
+        Content.isEditingFormat = window.preloadContent.metadata.isEditingFormat;
         if (Content.isEditingFormat === true) return Content.DisplayFormat();
         console.log(window.preloadContent);
-        if (typeof Content.active !== "object") Content.active = window.preloadContent[1];
+        if (typeof Content.active !== "object") Content.active = window.preloadContent.content;
         let content = null;
         let dispatch = null;
         Content.clearPlacements();
         [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
         Content.#content = content;
         Content.#dispatch = dispatch;
-        Content.format = window.preloadContent[0];
+        Content.format = window.preloadContent.format;
         findAllPlacements(Content.format);//In this case preloadContent is [format, data, user]
         parseDataIntoPlacements(Content.active);
-        Content.#user = window.preloadContent[2];
+        Content.#user = window.preloadContent.user;
         Content.CSS = document.getElementById('mainCSS').sheet;
         if (content === null || Object.keys(content).length === 0) console.log("No content");
         else {
