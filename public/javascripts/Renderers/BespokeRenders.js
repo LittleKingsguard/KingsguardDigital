@@ -148,6 +148,7 @@ function newElement(newContentSelectorID) {
 
 function buildElementInspector(data){
     let targetData = Content.target;
+    if (targetData === undefined) targetData = Content.format;
     console.log("Target is:");
     console.log(targetData);
     if (typeof targetData !=="object" || targetData === null) return;

@@ -140,6 +140,7 @@ export default class Content {
         let dispatch = null;
         if (typeof Content.active !== "object") Content.active = window.preloadContent.content;
         [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
+        Content.format = window.preloadContent.format;
         Content.#content = content;
         Content.#dispatch = dispatch;
         Content.#user = window.preloadContent.user;

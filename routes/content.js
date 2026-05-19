@@ -8,6 +8,7 @@ const formatTestData = require('../public/StaticData/Sidebar-Content-Placement.j
 const contentTestData = require('../public/StaticData/TestProfile Save.json');
 const Format = require('../models/format.js');
 const userPane = require('../public/StaticData/UserPanel.json');
+const newFormat = require('../public/StaticData/NewFormat.json');
 
 router.post('/new', async function(req, res, next) {
   console.log("This should run");
@@ -34,6 +35,19 @@ router.get('/test', async function(req, res, next) {
   preloadData.user = userData;
   console.log(preloadData);
   res.render('index', {preload: preloadData, headers: preloadData.headers});
+});
+
+router.get('/newFormat', async function(req, res, next) {
+  let userData = user.checkLogin(req);
+  let preloadData = {
+    format: newFormat,
+    content: [userPane],
+    user: userData,
+    metadata: {isEditingFormat: true},
+    headers: ""
+  }
+  if (userData) res.render('index', {preload: preloadData, headers: preloadData.headers});
+  else res.redirect("http://localhost:3000/login/loginPage");
 });
 
 router.post('/saveFormat', async function(req, res, next) {

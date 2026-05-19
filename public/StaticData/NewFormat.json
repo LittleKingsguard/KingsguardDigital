@@ -1,0 +1,29 @@
+{
+  "type": "div",
+  "placement": "root",
+  "css":{
+      "id": "rootContent",
+      "classes": ["rootContent"],
+      "classDef": [
+          {
+              "name": ".activeContent",
+              "style": ".activeContent {  float: right;  text-align: left;  background: azure;  margin-left: 150px;  height: 100%;}"
+          }
+      ]
+  },
+  "content":[
+    {
+        "type": "inspector",
+        "css": {
+            "classes": [],
+            "style": {
+                "position": "fixed",
+                "top": 0,
+                "right": 0
+            }
+        },
+        "props": {}
+    }
+  ], 
+  "props": {}
+}
