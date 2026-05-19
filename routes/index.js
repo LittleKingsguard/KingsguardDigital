@@ -37,7 +37,7 @@ router.get('/firstTimeSetup', async function(req, res, next) {
   console.log(await findAnyUsers());
   console.log("This should be after the first false");
   if (await findAnyUsers()) res.send({error: "Users already present, please log in"});
-  else res.render('index', {preload: [setupFormat, setupForm, false]})
+  else res.render('index', {preload: {format: setupFormat, content: setupForm, user: false}})
 });
 
 module.exports = router;

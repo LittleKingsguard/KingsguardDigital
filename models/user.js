@@ -95,6 +95,7 @@ class user {
         res.send(preloadData);
     }
     static checkLogin(req){
+        console.log("checklogin ran here");
         try {
             const userData = jwt.verify(req.cookies.SessionID, process.env.SECRET_ACCESS_TOKEN);
             const newUser = new user(userData);
@@ -102,6 +103,7 @@ class user {
             return newUser;
         }
         catch {
+            console.log("checklogin did not find user");
             return false;
         }
     }

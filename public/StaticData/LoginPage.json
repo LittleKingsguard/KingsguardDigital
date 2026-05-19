@@ -1,0 +1,10 @@
+{
+  "type": "login",
+  "css": {
+    "classes": [
+    ],
+    "id": "login"
+  },
+  "props":{},
+  "placement": "Admin"
+}

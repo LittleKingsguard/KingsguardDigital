@@ -127,7 +127,7 @@ export default class Content {
             return (
                 <contentDispatchContext.Provider value={dispatch}>
                     <parentContext.Provider value = {null}>
-                        {addElements(window.preloadContent[0])}
+                        {addElements(Content.format)}
                     </parentContext.Provider>
                 </contentDispatchContext.Provider>
             );
@@ -138,11 +138,11 @@ export default class Content {
         console.log(window.preloadContent);
         let content = null;
         let dispatch = null;
-        if (typeof Content.active !== "object") Content.active = [window.preloadContent[0]];
+        if (typeof Content.active !== "object") Content.active = window.preloadContent.content;
         [content, dispatch] = useReducer(Content.ContentReducer, Content.active);
         Content.#content = content;
         Content.#dispatch = dispatch;
-        Content.#user = window.preloadContent[2];
+        Content.#user = window.preloadContent.user;
         Content.CSS = document.getElementById('mainCSS').sheet;
         Content.clearPlacements();
         findAllPlacements(Content.format);
@@ -152,7 +152,7 @@ export default class Content {
             return (
                 <contentDispatchContext.Provider value={dispatch}>
                     <parentContext.Provider value = {null}>
-                        {addElements(window.preloadContent[0])}
+                        {addElements(Content.format)}
                     </parentContext.Provider>
                 </contentDispatchContext.Provider>
             );

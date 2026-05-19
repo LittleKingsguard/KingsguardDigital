@@ -7,6 +7,8 @@ const {passwordStrength} = require('check-password-strength');
 const jwt = require('jsonwebtoken');
 const user = require("../models/user.js");
 var {login, getUserData, findAnyUsers} = require("../middleware/userHelpers.js");
+const loginPage = require('../public/StaticData/LoginPage.json');
+const setupFormat = require('../public/StaticData/SetupFormat.json');
 
 router.post('/new', async function(req, res, next) {
     let body = {};
@@ -96,6 +98,22 @@ router.post('/logout', (req, res, next) => {
     const logoutUser = user.checkLogin(req);
     if (logoutUser) logoutUser.sendLogout(res);
     else res.send({error: "Not logged in"});
+});
+
+router.get('/loginPage', (req, res, next) => {
+    const logoutUser = user.checkLogin(req);
+    if (logoutUser) logoutUser.sendLogout(res);
+    else {
+        const preloadData = {
+            format: setupFormat,
+            content: loginPage,
+            components: [],
+            metadata: {},
+            user: false
+        }
+        res.render('index', {preload: preloadData})
+    }
+
 });
 
 module.exports = router;
