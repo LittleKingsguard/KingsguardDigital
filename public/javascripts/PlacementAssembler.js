@@ -39,11 +39,34 @@ export function findAllPlacements(format, i = 0, parent = {}){
     if (Array.isArray(parent.location)) format.location = [...parent.location, i];
     else format.location = [i];
     format.parent = parent;
-    if (format.type !== "placement") {
-        format.content.forEach((content, childIndex) => findAllPlacements(content, childIndex, format));
+    switch (format.type){
+        case "placement":
+            includePlacement(format);
+            break;
+        case "component":
+            format = insertComponent(data);
+            findAllPlacements(format, 0, parent);
+            break;
+        default:
+            format.content.forEach((content, childIndex) => findAllPlacements(content, childIndex, format));
+            break;
     }
+}
+
+export function insertComponent(data){
+    if (typeof data !== "object") return;
+    if (data.type !== "component") return;
+    if (typeof data.props !== 'object') return;
+    if (typeof data.props.componentName !== "string") return;
+    let foundComponent = false;
+    Content.componentList.forEach(component => {
+        if (component.props.componentName === data.props.componentName) foundComponent = component;
+    })
+    if (foundComponent !== false) return component;
     else {
-        includePlacement(format)
+        console.log("Missing component");
+        console.error(data);
+        return data;
     }
 }
 
@@ -51,6 +74,7 @@ export function parseDataIntoPlacements(data, i = 0){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (Array.isArray(data)) return data.map(parseDataIntoPlacements);
     if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
+    if (data.type === "component") data = insertComponent(data);
     if (data.type === "placement") includePlacement(data);
     data.contentParent = "root";
     if (typeof data.placement === "string"){
@@ -74,6 +98,7 @@ export function parseDataIntoPlacements(data, i = 0){
 function parseDataIntoPlacementsHelper(data, i){
     if (typeof data !== "object") throw new Error("Bad data - content is not an object");
     if (typeof data.type !== "string") throw new Error("Bad data - data is not content");
+    if (data.type === "component") data = insertComponent(data);
     if (data.type === "placement") includePlacement(data);
     if (typeof data.placement === "string" && data.placement !== data.contentParent.placement){ //If not in different placement from parent, it is already included in tree
         try {

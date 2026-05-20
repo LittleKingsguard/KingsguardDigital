@@ -8,7 +8,7 @@ class Content {
         "h5","h6","title","li","th","td","img","video","svg","canvas","div","ul", "login", "userPane","placement"];
     static propTypes = ["a","dfn","img","video","svg","canvas", "form", "input", "button", "textarea"];
     static textTypes = ["text", "title", "textarea", "label", "button"];
-    static emptyTypes= ["input", "login", "placement"];
+    static emptyTypes= ["input", "login", "placement", "component"];
 
     static validateContents(data){
         if (this.textTypes.includes(data.type) && typeof data.content !== 'string') {

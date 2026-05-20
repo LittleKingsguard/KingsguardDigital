@@ -22,6 +22,7 @@ export default class Content {
     static format;
     static isEditingFormat = false;
     static hiddenContent = [];
+    static componentList = [];
 
     static set target(data){
         if (data === null) {
@@ -117,6 +118,7 @@ export default class Content {
         Content.#content = content;
         Content.#dispatch = dispatch;
         Content.format = window.preloadContent.format;
+        Content.componentList = window.proloadContent.components;
         findAllPlacements(Content.format);//In this case preloadContent is [format, data, user]
         parseDataIntoPlacements(Content.active);
         Content.#user = window.preloadContent.user;
