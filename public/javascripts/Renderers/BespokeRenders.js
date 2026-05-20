@@ -132,7 +132,6 @@ function userPane(data) {
 }
 
 function newElement(newContentSelectorID) {
-    console.log("New Element ran");
     return (
         <>
         <label>New content type:</label>
@@ -156,12 +155,12 @@ function buildElementInspector(data){
     const dispatch = useContext(contentDispatchContext);
     const addClassButton = () =>{
         return () => {
-            targetData = addClass(targetData, document.getElementById("newClass").value);
+            targetData = addClass(targetData, document.getElementById("newClass").value, document.getElementById("newClassStyle").value);
             modifyDispatch(targetData, targetData.location, dispatch);
         }
     }
     console.log(targetData);
-    addClass(data, "inspectorWindow");
+    //addClass(data, "inspectorWindow");
     helpers.genericElementProps(data);
     let newContentSelectorID = "NewContentPicker";
     return (
@@ -171,7 +170,7 @@ function buildElementInspector(data){
             <div >
                 Classes:
                 {targetData.css.classes.map((className)=> inspectorClass(className, targetData, dispatch))}
-                <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <button onClick={addClassButton()}>Add Class</button></div>
+                <div><input id={"newClass"} name={"newClass"} placeholder={"New Class"}/> <textarea id={"newClassStyle"} placeholder={".NewClass: {style}"}></textarea><button onClick={addClassButton()}>Add Class</button></div>
             </div>
             <div>Parent: {targetData.parent.type} <button onClick={setTargetAction(targetData.parent)}>Select</button></div>
             <div>

@@ -116,7 +116,7 @@ export function dataCloner(data){
     return JSON.parse(JSON.stringify(data));
 }
 
-export function addClass(data, cssClass){ //data is content, cssClass is string containing name of class
+export function addClass(data, cssClass, cssClassStyle){ //data is content, cssClass is string containing name of class
     if (typeof cssClass !== "string") return;
     if (cssClass === "" || cssClass === " ") return;
     if (typeof data.css === "undefined"){
@@ -130,6 +130,10 @@ export function addClass(data, cssClass){ //data is content, cssClass is string 
     if (data.css.classes.includes(cssClass)) return data;
     else {
         data.css.classes.push(cssClass);
+        if (!Content.CSSClasses.includes(cssClass)){
+            if (Array.isArray(data.css.classDef)) data.css.classDef.push({name: cssClass, style: cssClassStyle});
+            else data.css.classDef = [{name: cssClass, style: ""}];
+        }
         console.log(data.css.classes);
         return data;
     }

@@ -86,6 +86,7 @@ export function createCSSAttributes(data){
     data.css.classDef.forEach((classInfo) =>{
         const {success, status} = Content.addCSSClass(classInfo, data);
         if (success) newDefs.push(classInfo);
+        else console.log(status);
     })
     data.css.classDef = newDefs;
 }

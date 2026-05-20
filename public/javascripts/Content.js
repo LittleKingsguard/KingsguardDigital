@@ -439,11 +439,11 @@ export default class Content {
         if (Object.keys(dataCopy).length === 0) return;
         return dataCopy;
     }
-    static addCSSClass(classInfo, data){//classInfo expects name (string) and style(object) props
-        if (typeof classInfo !== "object") return {success: false, status: "BadInfo"};
-        if (typeof classInfo.name !== "string") return {success: false, status: "BadInfo"};
+    static addCSSClass(classInfo, data){//classInfo is object with name (string) and style(string) props
+        if (typeof classInfo !== "object") return {success: false, status: "BadInfo - Not Object"};
+        if (typeof classInfo.name !== "string") return {success: false, status: "BadInfo - Name is invalid type"};
         if (Array.from(classInfo.name)[0] !== '.') classInfo.name = '.' + classInfo.name;
-        if (typeof classInfo.style !== "string") return {success: false, status: "BadInfo"};
+        if (typeof classInfo.style !== "string") return {success: false, status: "BadInfo - Style is invalid type"};
         if (this.#CSSClassList.includes(classInfo.name)) return {success: false, status: "ClassExists"};
         let index = null;
         try {
